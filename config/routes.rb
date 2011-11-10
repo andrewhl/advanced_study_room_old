@@ -1,4 +1,12 @@
 Asr::Application.routes.draw do
+  get "pages/home"
+  get "pages/contact"
+  get "pages/about"
+  get "pages/league"
+  get "pages/results"
+  get "pages/prizes"
+  get "pages/news"
+
   devise_for :users
 
   # The priority is based upon order of creation:
