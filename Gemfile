@@ -6,7 +6,7 @@ gem 'rails', '3.1.1'
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-gem 'devise', '1.1.rc0'
+gem 'devise', '1.4.9'
 
 gem "rspec-rails", :group => [:test, :development]
 
@@ -40,5 +40,7 @@ group :test do
   gem 'spork', '> 0.9.0.rc'
   gem 'guard-spork'
   gem 'guard-rspec'
+  gem 'guard-pow'
   gem 'growl_notify'
+  gem "spork", "> 0.9.0.rc"
 end

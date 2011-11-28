@@ -1,13 +1,18 @@
 Asr::Application.routes.draw do
-  get "pages/home"
-  get "pages/contact"
-  get "pages/about"
-  get "pages/league"
-  get "pages/results"
-  get "pages/prizes"
-  get "pages/news"
+  
+  resources :pages
+  
+  match '/contact', :to => 'pages#contact'
+  match '/home', :to => 'pages#home'
+  match '/about', :to => 'pages#about'
+  match '/league', :to => 'pages#league'
+  match '/results', :to => 'pages#results'
+  match '/prizes', :to => 'pages#prizes'
+  match '/news', :to => 'pages#news'
 
   devise_for :users
+  
+  root :to => "pages#home"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

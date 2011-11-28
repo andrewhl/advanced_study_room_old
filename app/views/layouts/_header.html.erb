@@ -1,0 +1,22 @@
+<header>
+
+  <nav class="round">
+    <ul>
+      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "About", about_path %></li>
+      <!-- <% if user_signed_in? %>
+	  <li><%= link_to "Users", users_path %></li>
+      <li><%= link_to "Profile", current_user %></li>
+	  <li><%= link_to "Settings", edit_user_path(current_user) %></l1>
+      <% end %> -->
+    </ul>
+    <div>
+      <% if user_signed_in? %>
+	  Signed in as <%= current_user.email %>. Not you?
+	    <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
+	  <% else %>
+	    <%= link_to "Sign up", new_user_registration_path %> or <%= link_to "sign in", new_user_session_path %>
+	  <% end %>
+	</div>
+  </nav>
+</header>
