@@ -1,0 +1,61 @@
+The Advanced Study Room
+The Advanced Study Room (ASR) is known throughout KGS because of the league. But it has much more potential than being only a room with a league. We envision a community website where players as well as teachers can have a place in which they can do anything that is related to go.
+This document is made for the purpose of telling what the future ASR website should entail.
+
+Date: 4 march 2011
+Version: 0.2
+
+The landing page
+The site’s main page. Displays registration and login section. Should also include information about the league, and a panel for new events, news, updates, community buzz, polls, twitter/facebook feeds, etc. 
+My home
+This is the place where a registered account lands. There will be multiple roles: user, event-creator , teacher,  administrator. Depending on the role you’ll see different information. In general, it will have the following things:
+User profile; users can edit name, DoB, KGS nickname, gender, address, email/phone, etc… whatever personal information they want, except probably we won’t let them change their ASR username
+personal point tally/statistics/history/progression
+personal go statistics/history/progression
+event/game history
+awards/trophies (e.g., from tournaments)
+messages, every account has a message box which they can use to communicate privately with teachers for example
+upcoming personal events, can be a list or in calendar form
+achievements
+Events
+We’ll have many in various forms, both official ASR-sanctioned ones and smaller individual ones put on my ASR members. Students can take part in events by signing up for them, and teachers or people with proper certification can ‘host’ events. Here is a list of events:
+League
+Tournament
+Lecture
+Study session
+Inter-room/club match
+Fun/miscellaneous events (e.g., weird game analysis, one-colour go match, etc…)
+Special event (for instance a 7d rengo or goodwill games)
+Offline tournament, it's possible to accommodate for offline tournaments on the site, we can even integrate those tournaments in the players’ history if they participated. Offline tournaments must be recognized by the Go association in their country.
+Every event has an email notification system to inform players of their upcoming event. Organizers of an event can set their own time for dropping out or signing up.
+ASR RPG
+Let's be fuzzy about this one, it's basically an Role Playing Game with go elements in it. You can develop your character and buy stuff for him in the points shop. Think MMORPG meets Hikaru no Go. Or who knows, maybe it won’t be go themed. Ideas are welcome. Maybe you use points to buy fusekis/josekis, so you can develop a character in a fictional professional go career, and you have to play against other people’s characters, and you actually have to use your josekis/fusekis intelligently. Lots of possibilities here. We could even do a sims model where points go towards buying clothing/furniture, that kind of thing. Or it could be a more traditional RPG…
+Points
+The points system is a reward system for doing things on the site like finishing a set of tsumego or playing in a tournament. The points earned can be redeemed in the points shop. You can spend points to buy teaching games (if offered by teachers, aka can be out of stock) but also buy stuff for your character in the ASR RPG.
+Actions that receive points:
+Playing league games
+Playing in and especially winning tournaments
+Offering teaching games + game reviews
+Offering just game reviews (idea: we have an archive go games people would like reviewed, and someone reviews them and re-submits the game, earning points… this is currently being done by the Go Teaching Ladder, I believe, but I’m not sure if it’s still active. Why not borrow the idea? It’s fun and solid, and we can reinforce it with points!)
+Offering demonstrations on some go related topic
+Solving tsumego
+Using a fuseki of the month (seriously, demonstrate that you used a fuseki of the month and we’ll reward you with extra points)
+Using a joseki of the month! Why not start that too?
+School/dojo
+The School/dojo part of the site is a place where students can learn in various ways. They can earn points by doing things in this part of the site.
+Main parts of the school/dojo are:
+Gobooks, the idea is to emphasize on explaining a general part of go and do tsumego on it if possible
+Offering teaching games/game reviews
+Demonstrations
+Full go courses (suggested course titles: Understanding Taisha; Attack and Defense, etc…)
+Putting on a non-hierarchical approach to pedagogy. This might not work because go is so hierarchical, but people can put on a study-session, so it’s not constructed as a “class”, where the topic of study is the “Large Avalanche Joseki”, and everyone comes together in an attempt to understand it. It’s a process thing, without a clear teacher, but redeemable for points for all who participate.
+Audiolessons
+Videolessons
+Tsumego
+The system keeps tracks of statistics like how many problems you've done, how many were successful, time spent per problem and total time for a player doing problems. 
+Forum
+Speaks for itself. A place to talk about go events, ask questions, do other stuff, just general talk or off topic.
+Community
+In here you can look up other players, see their info, or history.
+Imagine a series of rows containing user data. Profile thumbnails, point score, latest tweets, latest achievements, latest wins/losses in the League, latest tournament result, etc., etc., etc. Any short-form pertinent information can be collected here and displayed line-by-line for each player, sortable by headers like “points” or “highest score”, so you can scan everyone in the league quickly. When logged in, your “line” will be outlined in blue or something, so you can see easily where you stand in relation to everyone else.
+
