@@ -6,7 +6,7 @@ class CreateMatches < ActiveRecord::Migration
       t.text :b_KGS_name
       t.text :white
       t.text :black
-      t.int :move_number
+      t.integer :move_number
       t.text :komi
       t.text :handicap
       t.boolean :reviewed
