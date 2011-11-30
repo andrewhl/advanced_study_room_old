@@ -1,6 +1,7 @@
 Asr::Application.routes.draw do
   
   resources :pages
+  resources :users
   
   match '/contact', :to => 'pages#contact'
   match '/home', :to => 'pages#home'

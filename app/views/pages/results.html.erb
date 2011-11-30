@@ -1,2 +1,78 @@
 
-<p>Find me in app/views/pages/results.html.erb</p>
+<h2>Database Schema for League Matches</h2>
+<table>
+
+	<th>ID</th>
+	<th>Date</th>
+	<th>Result</th>
+	<th>White Player</th>
+	<th>Black Player</th>
+	<th># of Moves</th>
+	<th>Komi</th>
+	<th>Handicap</th>
+	<th>Reviewed</th>
+	<th>SGF</th>
+	
+	<tr>
+		<td>1</td>
+		<td>February 20, 2012</td>
+		<td>W+R</td>
+		<td>Mac</td>
+		<td>Dorkinsky</td>
+		<td>234</td>
+		<td>6.5</td>
+		<td>None</td>
+		<td>No</td>
+		<td>Link</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>January 10, 2012</td>
+		<td>B+5.5</td>
+		<td>Geezer</td>
+		<td>Hullabaloo</td>
+		<td>310</td>
+		<td>0.5</td>
+		<td>3H</td>
+		<td>Yes</td>
+		<td>Link</td>
+	</tr>
+</table>
+
+<h2>Database Schema for Users</h2>
+<table>
+
+	<th>ID</th>
+	<th>Date Created</th>
+	<th>Name</th>
+	<th>Email</th>
+	<th>Password (encrypted)</th>
+	<th>Points</th>
+	<th>Rank</th>
+	<th>Level</th>
+	
+	<tr>
+		<td>1</td>
+		<td>February 20, 2012</td>
+		<td>Boozer</td>
+		<td>boozer@gmail.com</td>
+		<td>nebejg@UBfiu3h8391f3(*#3f932bif2)</td>
+		<td>30400</td>
+		<td>5k</td>
+		<td>4</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>January 10, 2012</td>
+		<td>Homie</td>
+		<td>homie@gmail.com</td>
+		<td>efjioej28)(#0hf3b2of208fhn.,nlshfa980230f</td>
+		<td>4929</td>
+		<td>1k</td>
+		<td>8</td>
+	</tr>
+</table>
+
+<h2>Database Schema for User ==> Has Many</h2>
+
+User ==> Has Many Awards, Achievements, Points, Events, Followers, Messages, Teachers

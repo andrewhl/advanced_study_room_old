@@ -7,16 +7,20 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-   
+   	
     <div class="container">
+		<div class="clear">
+		<%= render 'layouts/user_nav' %>
+		</div>
 	<%= render 'layouts/header' %>
 	<% flash.each do |key, value| %>
 	  <%= content_tag(:div, value, :class => "flash #{key}") %>
 	<% end %>
 	
-	<%= render 'layouts/user_nav' %>
+	
 	<h1><%= sub_title %></h1>
-<%= yield %>
+		
+		<%= yield %>
 
     </div>
 </body>
