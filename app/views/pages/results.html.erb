@@ -1,22 +1,26 @@
 
 <h2>Database Schema for League Matches</h2>
 <table>
-
-	<th>ID</th>
-	<th>Date</th>
-	<th>Result</th>
-	<th>White Player</th>
-	<th>Black Player</th>
-	<th># of Moves</th>
-	<th>Komi</th>
-	<th>Handicap</th>
-	<th>Reviewed</th>
-	<th>SGF</th>
-	
+	<tr>
+		<th>ID</th>
+		<th>Date</th>
+		<th>Result</th>
+		<th>White's KGS Name</th>
+		<th>Black's KGS Name</th>
+		<th>White Player</th>
+		<th>Black Player</th>
+		<th># of Moves</th>
+		<th>Komi</th>
+		<th>Handicap</th>
+		<th>Reviewed</th>
+		<th>SGF</th>
+	</tr>
 	<tr>
 		<td>1</td>
 		<td>February 20, 2012</td>
 		<td>W+R</td>
+		<td>blublu</td>
+		<td>huh</td>
 		<td>Mac</td>
 		<td>Dorkinsky</td>
 		<td>234</td>
@@ -29,6 +33,8 @@
 		<td>2</td>
 		<td>January 10, 2012</td>
 		<td>B+5.5</td>
+		<td>jimbo</td>
+		<td>sum1</td>
 		<td>Geezer</td>
 		<td>Hullabaloo</td>
 		<td>310</td>
@@ -41,19 +47,21 @@
 
 <h2>Database Schema for Users</h2>
 <table>
-
-	<th>ID</th>
-	<th>Date Created</th>
-	<th>Name</th>
-	<th>Email</th>
-	<th>Password (encrypted)</th>
-	<th>Points</th>
-	<th>Rank</th>
-	<th>Level</th>
-	
+	<tr>
+		<th>ID</th>
+		<th>Date Created</th>
+		<th>KGS Name</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Password (encrypted)</th>
+		<th>Points</th>
+		<th>Rank</th>
+		<th>Level</th>
+	</tr>
 	<tr>
 		<td>1</td>
 		<td>February 20, 2012</td>
+		<td>spanky</td>
 		<td>Boozer</td>
 		<td>boozer@gmail.com</td>
 		<td>nebejg@UBfiu3h8391f3(*#3f932bif2)</td>
@@ -64,6 +72,7 @@
 	<tr>
 		<td>2</td>
 		<td>January 10, 2012</td>
+		<td>homme</td>
 		<td>Homie</td>
 		<td>homie@gmail.com</td>
 		<td>efjioej28)(#0hf3b2of208fhn.,nlshfa980230f</td>
