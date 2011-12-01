@@ -14,11 +14,24 @@ module ApplicationHelper
   end
   
   def url_get  
-    # require 'net/http'
-    # result = Net::HTTP.get(URI.parse('http://www.gokgs.com/gameArchives.jsp?user=andrew'))
-    result = open('public/url_get.txt').read
-    result = result.partition("<tr>")
+    #require 'net/http'
+    #result = Net::HTTP.get(URI.parse('http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11'))
     
+    #require 'open-uri'
+    #doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11"))  
+    result = open('public/url_get.txt').read
+    #result.slice!(result.index('!DOCTYPE'), result.index('<tr>'))
+    result = result.slice!(result.index('<tr>')..-1)
+    result.slice!(result.index('</table>')..-1)
+    result.slice!(result.index('<tr>'), result.rindex('</th>') + 10)
+    #result = result.slice!(result.index('</table>'), result.rindex('</html>'))
+    #result = result.split("<td>").join
+    #result = result.split("</td>").join.split("<tr>").join.split("</tr>")
+    #result = result.slice(result.index('<tr>'), result.rindex('</tr>'))
+    result = result.split('</tr><tr>', -1)
+    # result.each do |var|
+    #       var.slice(var.index('<td>'), result.rindex('</td>'))
+    #     end
     return result
     
   end
