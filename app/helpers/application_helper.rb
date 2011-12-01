@@ -29,10 +29,19 @@ module ApplicationHelper
     #result = result.split("</td>").join.split("<tr>").join.split("</tr>")
     #result = result.slice(result.index('<tr>'), result.rindex('</tr>'))
     result = result.split('</tr><tr>', -1)
-    # result.each do |var|
-    #       var.slice(var.index('<td>'), result.rindex('</td>'))
-    #     end
-    return result
+    url_data = Array.new("")
+    result.each do |var|
+       var = var.slice(4..-6)
+       newvar = var.split('</td><td>', -1)
+       newvar.eachline do |line|
+         url_data << line
+       end
+       puts newvar
+    end
+    url_data.each do |output|
+      print output
+    end
+   #return result
     
   end
 end
