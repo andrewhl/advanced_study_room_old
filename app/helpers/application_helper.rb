@@ -14,8 +14,11 @@ module ApplicationHelper
   end
   
   def url_get  
-    require 'net/http'
-    result = Net::HTTP.get(URI.parse('http://www.gokgs.com/gameArchives.jsp?user=andrew'))
+    # require 'net/http'
+    # result = Net::HTTP.get(URI.parse('http://www.gokgs.com/gameArchives.jsp?user=andrew'))
+    result = open('public/url_get.txt').read
+    result = result.partition("<tr>")
+    
     return result
     
   end
