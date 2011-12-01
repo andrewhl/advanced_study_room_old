@@ -24,17 +24,18 @@ module ApplicationHelper
     result = result.slice!(result.index('<tr>')..-1)
     result.slice!(result.index('</table>')..-1)
     result.slice!(result.index('<tr>'), result.rindex('</th>') + 10)
-    #result = result.slice!(result.index('</table>'), result.rindex('</html>'))
-    #result = result.split("<td>").join
-    #result = result.split("</td>").join.split("<tr>").join.split("</tr>")
-    #result = result.slice(result.index('<tr>'), result.rindex('</tr>'))
     result = result.split('</tr><tr>', -1)
     url_data = []
     result.each do |var|
        var = var.slice(4..-6)
        newvar = var.split('</td><td>', -1)
-       newvar.to_s.each_line do |line|
-          url_data << line
+       newvar.each do |item|
+          if item = "19x19" then 
+            board_size = item.gsub("19x19", "19") 
+            url_data << board_size
+          else
+            url_data << item
+          end           
        end
        puts newvar
     end
