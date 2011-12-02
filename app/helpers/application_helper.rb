@@ -26,11 +26,13 @@ module ApplicationHelper
     result.slice!(result.index('<tr>'), result.rindex('</th>') + 10)
     result = result.split('</tr><tr>', -1)
     url_data = []
+    print "FUCK"
     result.each do |var|
        var = var.slice(4..-6)
        newvar = var.split('</td><td>', -1)
        newvar.each do |item|
-          if item.slice(0,4) == "19x19" then 
+          print item.slice(0,5)
+          if item.slice(0,6) == "19x19" then             
             board_size = item.gsub("19x19", "19") 
             url_data << board_size
           else
