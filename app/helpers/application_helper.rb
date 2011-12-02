@@ -64,14 +64,14 @@ module ApplicationHelper
     end
     white_player = doc.css('tr > td[2] > a').each do |stuff|
       white_player_name = stuff.content.scan(/^\w+/)
-      white_player_rank = stuff.content.scan(/\?|-|[1-9]?[1-9][kdp]\W/) # Regex for KGS ranks
+      white_player_rank = stuff.content.scan(/\?|-|[1-9]?[1-9][kdp]/) # Regex for KGS ranks
       test2 = rank_convert(white_player_rank)
       puts test2
       puts "#{white_player_name}, #{white_player_rank}"
     end
     black_player = doc.css('tr > td[3] > a').each do |stuff|
       black_player_name = stuff.content.scan(/^\w+/)
-      black_player_rank = stuff.content.scan(/\?|-|[1-9]?[1-9][kdp]\W/) # Regex for KGS ranks
+      black_player_rank = stuff.content.scan(/\?|-|[1-9]?[1-9][kdp]/) # Regex for KGS ranks
       test = rank_convert(black_player_rank)
       puts test
       puts "#{black_player_name}, #{black_player_rank}"
@@ -112,16 +112,20 @@ module ApplicationHelper
   end
   
   def rank_convert(rank)
-    
-    if (rank.grep(/d/))
-      newrank = rank.grep(/[1-9]/,&:to_i)
+    rank = rank[0]
+    if rank[-1,1] == "d"
+      newrank = rank.scan(/[1-9]/)[0]
+      newrank = Integer(newrank)
       return newrank
-    elsif (rank.grep(/k/))
-      newrank = rank.grep(/[1-9]?[0-9]/,&:to_i).negative
+    elsif rank[-1,1] == "k"
+      newrank = rank.scan(/[1-9]/)[0]
+      newrank = Integer(newrank) * -1
       return newrank
-    elsif (rank.grep(/-|\?/))
-      newrank.to_i = 0
+    elsif (rank == "?") or (rank == "-")
+      newrank = 0
       return newrank
+    else
+      puts "I DID NOT KNOW WHAT TO DO."
     end
       
   end
