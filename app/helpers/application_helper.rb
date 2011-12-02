@@ -30,21 +30,24 @@ module ApplicationHelper
     result.each do |var|
        var = var.slice(4..-6)
        newvar = var.split('</td><td>', -1)
-       newvar.each do |item|
-          print item.slice(0,5)
-          if item.slice(0,6) == "19x19" then             
-            board_size = item.gsub("19x19", "19") 
-            url_data << board_size
+       for item in newvar
+       	  thing = item[0,2]
+          if item[0,2] == "19" then             
+            url_data << 19
+            if item[-2,1] == "H" then
+            	url_data << Integer(item[-1,1])
+            else
+            	url_data << 0
+            end
           else
             url_data << item
           end           
        end
-       puts newvar
     end
-    url_data.each do |output|
-        print output
-    end
-   #return result
+#    url_data.each do |output|
+#        print output
+#    end
+#   return result
     
   end
 end
