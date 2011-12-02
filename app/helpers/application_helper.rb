@@ -30,7 +30,7 @@ module ApplicationHelper
        var = var.slice(4..-6)
        newvar = var.split('</td><td>', -1)
        newvar.each do |item|
-          if item = "19x19" then 
+          if item.slice(0,4) == "19x19" then 
             board_size = item.gsub("19x19", "19") 
             url_data << board_size
           else
