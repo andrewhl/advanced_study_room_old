@@ -26,12 +26,20 @@ module ApplicationHelper
     result.slice!(result.index('<tr>'), result.rindex('</th>') + 10)
     result = result.split('</tr><tr>', -1)
     url_data = []
+    
+    # When item is the handicap field....
+      
     result.each do |var|
        var = var.slice(4..-6)
        newvar = var.split('</td><td>', -1)
        newvar.each do |item|
           if item[0,2] == "19" then         
             url_data << 19
+            if item [-2,1] == "H" then
+              url_data << Integer(item[-1,1])
+            else
+              url_data << 0
+            end
           else
             url_data << item
           end           
@@ -60,13 +68,18 @@ module ApplicationHelper
       puts stuff.content
     end
     board_size_and_handicap = doc.css('tr > td[4]').each do |stuff|
-      puts stuff.content
+      off_board_sizes = ["9\u00d79", "13\u00d713", "15\u00d715", "17\u00d717", "21\u00d721"]
+      unless stuff.content.slice(0,3).include?("9\u00d79")
+        puts stuff.content.slice(0,5)
+      end
     end
     date = doc.css('tr > td[5]').each do |stuff|
       puts stuff.content
     end
     game_type = doc.css('tr > td[6]').each do |stuff|
-      puts stuff.content
+      unless stuff.content.include?("Rengo")
+        puts stuff.content
+      end
     end
     result = doc.css('tr > td[7]').each do |stuff|
       puts stuff.content
