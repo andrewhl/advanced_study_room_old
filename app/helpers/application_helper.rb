@@ -60,46 +60,46 @@ module ApplicationHelper
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11"))
     doc = doc.xpath('//table[1]')
     viewable = doc.css('tr > td[1] > a').each do |stuff|
-      puts stuff
+#      puts stuff
     end
     white_player = doc.css('tr > td[2] > a').each do |stuff|
       white_player_name = stuff.content.scan(/^\w+/)
       white_player_rank = stuff.content.scan(/\?|-|[1-9]?[1-9][kdp]/) # Regex for KGS ranks
       test2 = rank_convert(white_player_rank)
-      puts test2
-      puts "#{white_player_name}, #{white_player_rank}"
+#      puts test2
+#      puts "#{white_player_name}, #{white_player_rank}"
     end
     black_player = doc.css('tr > td[3] > a').each do |stuff|
       black_player_name = stuff.content.scan(/^\w+/)
       black_player_rank = stuff.content.scan(/\?|-|[1-9]?[1-9][kdp]/) # Regex for KGS ranks
       test = rank_convert(black_player_rank)
-      puts test
-      puts "#{black_player_name}, #{black_player_rank}"
+#      puts test
+#      puts "#{black_player_name}, #{black_player_rank}"
     end
     board_size_and_handicap = doc.css('tr > td[4]').each do |stuff|
-      if stuff.grep(/19/)
-        board_size = 19
-        puts board_size
-      else
-        board_size = "Invalid"
-        puts board_size
-      end
-      off_board_sizes = ["9\u00d79", "13\u00d713", "15\u00d715", "17\u00d717", "21\u00d721"] # Unicode multiplication symbol, for unauthorized board sizes
-      unless stuff.content.slice(0,3).include?("9\u00d79")
-        puts stuff.content.slice(0,5)
-      end
+      boardArray = stuff.content.scan(/[0-9]+/)
+      board_size = boardArray[0]
+	  
+	  if boardArray.length() == 3
+	    handi = boardArray[2]
+	  else
+	    handi = 0
+	  end
+	  print "Board Size: ", board_size, "\n"
+	  print "Handicap: ", handi, "\n"
+	  
     end
     date = doc.css('tr > td[5]').each do |stuff|
-      puts stuff.content
+#      puts stuff.content
       
     end
     game_type = doc.css('tr > td[6]').each do |stuff|
       unless stuff.content.include?("Rengo")
-        puts stuff.content
+#        puts stuff.content
       end
     end
     result = doc.css('tr > td[7]').each do |stuff|
-      puts stuff.content
+#      puts stuff.content
     end
     return viewable
     
