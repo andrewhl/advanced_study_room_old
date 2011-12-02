@@ -26,15 +26,12 @@ module ApplicationHelper
     result.slice!(result.index('<tr>'), result.rindex('</th>') + 10)
     result = result.split('</tr><tr>', -1)
     url_data = []
-    print "FUCK"
     result.each do |var|
        var = var.slice(4..-6)
        newvar = var.split('</td><td>', -1)
        newvar.each do |item|
-          print item.slice(0,5)
-          if item.slice(0,6) == "19x19" then             
-            board_size = item.gsub("19x19", "19") 
-            url_data << board_size
+          if item[0,2] == "19" then         
+            url_data << 19
           else
             url_data << item
           end           
@@ -44,7 +41,42 @@ module ApplicationHelper
     url_data.each do |output|
         print output
     end
-   #return result
+    return result
     
+  end
+  
+  def nokogiri_get 
+    
+    require 'open-uri'
+    doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11"))
+    doc = doc.xpath('//table[1]')
+    viewable = doc.css('tr > td[1]').each do |stuff|
+      puts stuff.content
+    end
+    white_player = doc.css('tr > td[2] > a').each do |stuff|
+      puts stuff.content
+    end
+    black_player = doc.css('tr > td[3] > a').each do |stuff|
+      puts stuff.content
+    end
+    board_size_and_handicap = doc.css('tr > td[4]').each do |stuff|
+      puts stuff.content
+    end
+    date = doc.css('tr > td[5]').each do |stuff|
+      puts stuff.content
+    end
+    game_type = doc.css('tr > td[6]').each do |stuff|
+      puts stuff.content
+    end
+    result = doc.css('tr > td[7]').each do |stuff|
+      puts stuff.content
+    end
+    
+    #return white_player_contents
+    
+    # doc.css('tr td').each do |node|
+    #       puts node.text
+    #     end
+    #     #return doc
   end
 end
