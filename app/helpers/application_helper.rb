@@ -83,4 +83,21 @@ module ApplicationHelper
       
   end
   
+  def nokogiri_test
+    
+    require 'open-uri'
+    require 'time'
+    doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11"))
+    doc = doc.xpath('//table[1]')
+    doc = doc.css('tr:not(:first)')
+    #doc = doc.xpath('tr/td[1]/a/@href | tr/td[position()>1]')
+    
+    
+    rows = doc.each do |stuff|
+      puts stuff.content
+    end
+    return doc
+    
+  end
+  
 end
