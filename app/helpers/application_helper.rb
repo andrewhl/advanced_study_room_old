@@ -94,11 +94,46 @@ module ApplicationHelper
     # prints them out, row by row.
     doc.each do |row|
       # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
-      puts row.css('td')[0].css('a')[0]
-      for text in row.css('td')
-      	# prints the content for each <td> in the row.
-      	puts text.content
-      end
+      puts url = row.at('a')[:href]
+      columns = row.css('td')
+      private_game = columns[0].content
+      
+      # Calculate white player name and rank
+      white_player_name = columns[1].content.scan(/^\w+/)
+      white_player_rank = columns[1].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
+      white_player_rank = rank_convert(white_player_rank)
+      
+      # Calculate black player name and rank
+      black_player_name = columns[2].content.scan(/^\w+/)
+      black_player_rank = columns[2].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
+      black_player_rank = rank_convert(black_player_rank)
+      
+      # Parse board size
+      board_size_and_handicap = columns[3].content
+      boardArray = columns[3].content.scan(/[0-9]+/)
+      board_size = boardArray[0]
+	  
+  	  if boardArray.length() == 3
+  	    handi = boardArray[2]
+  	  else
+  	    handi = 0
+  	  end
+  	  print "Board Size: ", board_size, "\n"
+  	  print "Handicap: ", handi, "\n"
+      
+      # Calculate UNIX time
+      date = columns[4].content
+      unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
+      
+      game_type = columns[5].content
+      result = columns[6].content
+      
+      puts "White name: #{white_player_name}", "White rank: #{white_player_rank}", "Black name: #{black_player_name}", "Black rank: #{black_player_rank}", "UNIX time: #{unixtime}", "Game type: #{game_type}", "Result: #{result}"
+      # for text in row.css('td')
+      #         # prints the content for each <td> in the row.
+      #         if text.scan()
+      #         puts text.content
+      #       end
     end
     return doc
     
