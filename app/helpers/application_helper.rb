@@ -90,11 +90,15 @@ module ApplicationHelper
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11"))
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
-    #doc = doc.xpath('tr/td[1]/a/@href | tr/td[position()>1]')
-    
-    
-    rows = doc.each do |stuff|
-      puts stuff.content
+        
+    # prints them out, row by row.
+    for row doc.each do |stuff|
+      # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
+      puts row.css('td')[0].css('a')[0]
+      for text in row.css('td')
+      	# prints the content for each <td> in the row.
+      	puts text.content
+      end
     end
     return doc
     
