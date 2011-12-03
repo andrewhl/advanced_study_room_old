@@ -92,7 +92,7 @@ module ApplicationHelper
     doc = doc.css('tr:not(:first)')
         
     # prints them out, row by row.
-    for row doc.each do |stuff|
+    doc.each do |row|
       # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
       puts row.css('td')[0].css('a')[0]
       for text in row.css('td')
