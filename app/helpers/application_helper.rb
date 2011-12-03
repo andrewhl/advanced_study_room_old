@@ -90,23 +90,32 @@ module ApplicationHelper
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11"))
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
-        
+    
+    games = Array.new
+    
     # prints them out, row by row.
     doc.each do |row|
       # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
       puts url = row.at('a')[:href]
       columns = row.css('td')
       private_game = columns[0].content
+      games[0] = url
       
       # Calculate white player name and rank
       white_player_name = columns[1].content.scan(/^\w+/)
       white_player_rank = columns[1].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
       white_player_rank = rank_convert(white_player_rank)
       
+      games[1] = white_player_name
+      games[2] = white_player_rank
+      
       # Calculate black player name and rank
       black_player_name = columns[2].content.scan(/^\w+/)
       black_player_rank = columns[2].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
       black_player_rank = rank_convert(black_player_rank)
+      
+      games[3] = black_player_name
+      games[4] = black_player_rank
       
       # Parse board size
       board_size_and_handicap = columns[3].content
@@ -118,23 +127,36 @@ module ApplicationHelper
   	  else
   	    handi = 0
   	  end
-  	  print "Board Size: ", board_size, "\n"
-  	  print "Handicap: ", handi, "\n"
+  	  #print "Board Size: ", board_size, "\n"
+  	  #print "Handicap: ", handi, "\n"
+  	  
+  	  games[5] = board_size
+  	  games[6] = handi
       
       # Calculate UNIX time
       date = columns[4].content
       unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
       
+      games[7] = unixtime
+      
       game_type = columns[5].content
+      
+      games[8] = game_type
+      
       result = columns[6].content
       
-      puts "White name: #{white_player_name}", "White rank: #{white_player_rank}", "Black name: #{black_player_name}", "Black rank: #{black_player_rank}", "UNIX time: #{unixtime}", "Game type: #{game_type}", "Result: #{result}"
+      games[9] = result
+      
+      #puts "White name: #{white_player_name}", "White rank: #{white_player_rank}", "Black name: #{black_player_name}", "Black rank: #{black_player_rank}", "UNIX time: #{unixtime}", "Game type: #{game_type}", "Result: #{result}"
+      #games << url, white_player_name, white_player_rank, black_player_name, black_player_rank, unixtime, game_type, result
+      
       # for text in row.css('td')
       #         # prints the content for each <td> in the row.
       #         if text.scan()
       #         puts text.content
       #       end
     end
+    puts games
     return doc
     
   end
