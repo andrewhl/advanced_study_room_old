@@ -84,6 +84,15 @@ module ApplicationHelper
     end
   end
   
+  def sgf_parse
+    
+     sgf = KantanSgf::Sgf.new('http://files.gokgs.com/games/2011/11/29/andrew-ninecrane.sgf')
+     sgf.parse
+     
+     puts sgf.player_black
+    
+  end
+  
   def nokogiri_test
     
     require 'open-uri'
@@ -114,13 +123,14 @@ module ApplicationHelper
       # Parse board size
       board_size_and_handicap = columns[3].content
       boardArray = columns[3].content.scan(/[0-9]+/)
-      board_size = boardArray[0]
+      board_size = Integer(boardArray[0])
 	  
   	  if boardArray.length() == 3
-  	    handi = boardArray[2]
+  	    handi = Integer(boardArray[2])
   	  else
-  	    handi = 0
+  	    handi = Integer(0)
   	  end
+  	  
   	  #print "Board Size: ", board_size, "\n"
   	  #print "Handicap: ", handi, "\n"
 
@@ -159,15 +169,22 @@ module ApplicationHelper
     for row in games
       if row["url"] == nil
         next
-      elsif
-        row["board_size"] != 19
+      elsif row["board_size"] != 19
+        next
+      elsif row["game_type"] == "Rengo"
+        next
+      elsif row["game_type"] == "Simul"
+        next
+      elsif row["game_type"] == "Teaching"
+        next
+      elsif row["handi"] != 0
         next
       else
         rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :result => row["result"])
         rowadd.save
       end
     end    
-  
+   
   end
   
 end
