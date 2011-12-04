@@ -97,7 +97,7 @@ module ApplicationHelper
     # prints them out, row by row.
     doc.each do |row|
       # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
-      puts url = row.at('a')[:href]
+      url = row.at('a')[:href]
       columns = row.css('td')
       private_game = columns[0].content
       
@@ -159,11 +159,13 @@ module ApplicationHelper
       #         puts text.content
       #       end
     end
-    puts games
-    return games
+    #puts games
     
-    match = Match.new(games)
-    
+    # for row in games
+    #   rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :result => row["result"])
+    #   rowadd.save
+    # end    
+  
   end
   
 end
