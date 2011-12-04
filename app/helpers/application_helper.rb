@@ -102,12 +102,12 @@ module ApplicationHelper
       private_game = columns[0].content
       
       # Calculate white player name and rank
-      white_player_name = columns[1].content.scan(/^\w+/)
+      white_player_name = columns[1].content.scan(/^\w+/)[0]
       white_player_rank = columns[1].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
       white_player_rank = rank_convert(white_player_rank)
       
       # Calculate black player name and rank
-      black_player_name = columns[2].content.scan(/^\w+/)
+      black_player_name = columns[2].content.scan(/^\w+/)[0]
       black_player_rank = columns[2].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
       black_player_rank = rank_convert(black_player_rank)
       
@@ -129,6 +129,8 @@ module ApplicationHelper
       unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
       
       game_type = columns[5].content
+      
+      # Parse game results
       result = columns[6].content
       resArray = result.split('+')
       score = 0
@@ -150,21 +152,21 @@ module ApplicationHelper
       end 
       
       games << {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "result_boolean" => result_boolean, "score" => score, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "result" =>result}
-      #puts "White name: #{white_player_name}", "White rank: #{white_player_rank}", "Black name: #{black_player_name}", "Black rank: #{black_player_rank}", "UNIX time: #{unixtime}", "Game type: #{game_type}", "Result: #{result}"
-      #games << url, white_player_name, white_player_rank, black_player_name, black_player_rank, unixtime, game_type, result
-      
-      # for text in row.css('td')
-      #         # prints the content for each <td> in the row.
-      #         if text.scan()
-      #         puts text.content
-      #       end
+
     end
     #puts games
     
-    # for row in games
-    #   rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :result => row["result"])
-    #   rowadd.save
-    # end    
+    for row in games
+      if row["url"] == nil
+        next
+      elsif
+        row["board_size"] != 19
+        next
+      else
+        rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :result => row["result"])
+        rowadd.save
+      end
+    end    
   
   end
   
