@@ -69,18 +69,19 @@ module ApplicationHelper
     if rank[-1,1] == "d"
       newrank = rank.scan(/[1-9]/)[0]
       newrank = Integer(newrank)
+      rank_boolean = true
       return newrank
     elsif rank[-1,1] == "k"
       newrank = rank.scan(/[1-9]/)[0]
-      newrank = Integer(newrank) * -1
+      newrank = Integer(newrank) * -1 + 1
+      rank_boolean = true
       return newrank
     elsif (rank == "?") or (rank == "-")
-      newrank = 0
-      return newrank
+      newrank = -31
+      rank_boolean = false
     else
       puts "I DID NOT KNOW WHAT TO DO."
     end
-      
   end
   
   def nokogiri_test
@@ -127,13 +128,28 @@ module ApplicationHelper
       date = columns[4].content
       unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
       
-      # game_type = columns[5].content
-      #       result = columns[6].content
-      #       resArray = result.split('+')
-      #       puts resArray
-      #       if resArray[0] == ("W")
-      #         boolean_result = 1
-      #       end
+      game_type = columns[5].content
+      result = columns[6].content
+      resArray = result.split('+')
+      score = 0
+      if resArray[0] == ("W")
+        white_win = true
+        black_win = false
+      else
+        white_win = false
+        black_win = true
+      end
+      if resArray[1] == "Res." 
+        score = -1.0
+      elsif resArray[1] == "Forf." 
+        score = -2.0
+      elsif resArray[1] == "Time" 
+        score = -3.0
+      elsif resArray[1] == nil
+        score = 0
+      else 
+          score = Float(resArray[1])
+      end 
       
       games << {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "result" =>result}
       #puts "White name: #{white_player_name}", "White rank: #{white_player_rank}", "Black name: #{black_player_name}", "Black rank: #{black_player_rank}", "UNIX time: #{unixtime}", "Game type: #{game_type}", "Result: #{result}"
@@ -146,7 +162,7 @@ module ApplicationHelper
       #       end
     end
     puts games
-    return doc
+    return resArray
     
   end
   
