@@ -14,16 +14,18 @@
 ActiveRecord::Schema.define(:version => 20111130163630) do
 
   create_table "matches", :force => true do |t|
-    t.text     "result"
-    t.text     "w_KGS_name"
-    t.text     "b_KGS_name"
-    t.text     "white"
-    t.text     "black"
-    t.integer  "move_number"
-    t.text     "komi"
-    t.text     "handicap"
-    t.boolean  "reviewed"
-    t.boolean  "sgf"
+    t.string   "url"
+    t.string   "white_player_name"
+    t.integer  "white_player_rank"
+    t.string   "black_player_name"
+    t.integer  "black_player_rank"
+    t.boolean  "result_boolean"
+    t.float    "score"
+    t.integer  "board_size"
+    t.integer  "handi"
+    t.integer  "unixtime"
+    t.string   "game_type"
+    t.string   "result"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

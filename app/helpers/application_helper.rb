@@ -133,11 +133,9 @@ module ApplicationHelper
       resArray = result.split('+')
       score = 0
       if resArray[0] == ("W")
-        white_win = true
-        black_win = false
+        result_boolean = true
       else
-        white_win = false
-        black_win = true
+        result_boolean = false
       end
       if resArray[1] == "Res." 
         score = -1.0
@@ -148,10 +146,10 @@ module ApplicationHelper
       elsif resArray[1] == nil
         score = 0
       else 
-          score = Float(resArray[1])
+        score = Float(resArray[1])
       end 
       
-      games << {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "result" =>result}
+      games << {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "result_boolean" => result_boolean, "score" => score, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "result" =>result}
       #puts "White name: #{white_player_name}", "White rank: #{white_player_rank}", "Black name: #{black_player_name}", "Black rank: #{black_player_rank}", "UNIX time: #{unixtime}", "Game type: #{game_type}", "Result: #{result}"
       #games << url, white_player_name, white_player_rank, black_player_name, black_player_rank, unixtime, game_type, result
       
@@ -162,7 +160,9 @@ module ApplicationHelper
       #       end
     end
     puts games
-    return resArray
+    return games
+    
+    match = Match.new(games)
     
   end
   
