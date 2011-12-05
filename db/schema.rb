@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(:version => 20111130163630) do
     t.integer  "handi"
     t.integer  "unixtime"
     t.string   "game_type"
+    t.float    "komi"
+    t.boolean  "valid"
     t.string   "result"
     t.datetime "created_at"
     t.datetime "updated_at"

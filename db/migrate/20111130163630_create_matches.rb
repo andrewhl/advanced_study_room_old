@@ -12,6 +12,8 @@ class CreateMatches < ActiveRecord::Migration
       t.integer :handi
       t.integer :unixtime
       t.string :game_type
+      t.float :komi
+      t.boolean :valid
       t.string :result
 
       t.timestamps

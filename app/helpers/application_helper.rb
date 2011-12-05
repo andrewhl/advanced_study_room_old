@@ -86,10 +86,34 @@ module ApplicationHelper
   
   def sgf_parse
     
-     sgf = KantanSgf::Sgf.new('http://files.gokgs.com/games/2011/11/29/andrew-ninecrane.sgf')
-     sgf.parse
-     
-     puts sgf.player_black
+     # sgf = KantanSgf::Sgf.new('public/casio-clement44.sgf')
+     # sgf.parse
+     # 
+     #  sgf.comments.each do |key, value|
+     #     if value.scan(/ASR League/i)
+     #       valid = true
+     #       return valid
+     #     else
+     #       valid = false
+     #       return valid
+     #     end
+     #  end
+      
+      require 'sgf'
+      sgf = SGF::Parser.new(row["url"])
+      sgf = KantanSgf::Sgf.new(row["url"])
+      sgf.parse
+      
+      komi = sgf.komi
+      
+      sgf.comments.each do |key, value|
+        if value.scan(/ASR League/i)
+          valid = true
+        else
+          valid = false
+          next
+        end
+      end
     
   end
   
@@ -107,8 +131,9 @@ module ApplicationHelper
     doc.each do |row|
       # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
       url = row.at('a')[:href]
+
       columns = row.css('td')
-      private_game = columns[0].content
+      public_game = columns[0].content
       
       # Calculate white player name and rank
       white_player_name = columns[1].content.scan(/^\w+/)[0]
@@ -160,14 +185,13 @@ module ApplicationHelper
       else 
         score = Float(resArray[1])
       end 
-      
-      games << {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "result_boolean" => result_boolean, "score" => score, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "result" =>result}
+    
+      games << {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "result_boolean" => result_boolean, "score" => score, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "public_game" => public_game, "result" =>result}
 
     end
-    #puts games
     
     for row in games
-      if row["url"] == nil
+      if row["public_game"] == "No"
         next
       elsif row["board_size"] != 19
         next
@@ -180,11 +204,33 @@ module ApplicationHelper
       elsif row["handi"] != 0
         next
       else
-        rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :result => row["result"])
-        rowadd.save
+        
+        # SGF Parser
+        
+        require 'net/http'
+        require 'open-uri'
+        
+        sgf_raw = open(row["url"]).read    
+        sgf = KantanSgf::Sgf.new(sgf_raw)
+        sgf.parse
+         
+        komi = sgf.komi
+         
+        sgf.comments.each do |key, value|
+          if value.scan(/ASR League/i)
+            valid = true
+          else
+            valid = false
+            next
+          end
+        end
+         
+        rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :komi => komi, :valid => valid, :result => row["result"])
+        
+        #rowadd.save
       end
     end    
    
-  end
+   end
   
 end
