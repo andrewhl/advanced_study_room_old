@@ -209,25 +209,39 @@ module ApplicationHelper
         
         require 'net/http'
         require 'open-uri'
+        require 'sgf'
+        sgf_raw = open(row["url"]).read
+        parser = SGF::Parser.new sgf_raw
+        tree = parser.parse
         
-        sgf_raw = open(row["url"]).read    
-        sgf = KantanSgf::Sgf.new(sgf_raw)
-        sgf.parse
-         
-        komi = sgf.komi
-         
-        sgf.comments.each do |key, value|
-          if value.scan(/ASR League/i)
-            valid = true
-          else
-            valid = false
-            next
-          end
-        end
-         
-        rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :komi => komi, :valid => valid, :result => row["result"])
+        game_info = tree.root.children[0].properties
+        komi = game_info["KM"][1..-2].to_f 
+        comments = game_info["C"]
+        puts comments
+        #puts sgf_raw
+       
         
-        #rowadd.save
+        #comments = sgf.current_node.comments
+                    
+        
+        # require 'sgf'
+        # sgf = SGF::Parser.new(row["url"])
+        # sgf = KantanSgf::Sgf.new(row["url"])
+        # sgf.parse
+        # 
+        # komi = sgf.komi
+        # 
+        # sgf.comments.each do |key, value|
+        #   if value.scan(/ASR League/i)
+        #     valid = true
+        #   else
+        #     valid = false
+        #     next
+        #   end
+        # end
+         
+        # rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :komi => komi, :valid => valid, :result => row["result"])
+        # rowadd.save
       end
     end    
    

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111130163630) do
+ActiveRecord::Schema.define(:version => 20111205071840) do
 
   create_table "matches", :force => true do |t|
     t.string   "url"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20111130163630) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_scraped"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
