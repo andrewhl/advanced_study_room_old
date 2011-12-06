@@ -145,17 +145,13 @@ module ApplicationHelper
         # Restrict overtime settings
         over_time = over_time.split(' ')
         byo_yomi_periods = over_time[0].split('x')[0].to_i # Parse SGF overtime periods
-        byo_yomi_stones = over_time[0].split('x')[1].to_i # Parse SGF overtime stones
-        
-        if byo_yomi_periods < 5
+        byo_yomi_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
+
+        if (byo_yomi_periods < 5) and (byo_yomi_stones < 30)
           next
         end
         
-        if (byo_yomi_periods == 5) and (byo_yomi_stones < 30)
-          next
-        end
-        
-        # Check main time is between 1500 and 2700 seconds
+        # Check main time is not less than 1500
         main_time = game_info["TM"].to_i
         
         if main_time < 1500
@@ -192,7 +188,22 @@ module ApplicationHelper
         end
         
         # Submit game to DB
-        rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"], :white_player_rank => row["white_player_rank"], :black_player_name => row["black_player_name"], :black_player_rank => row["black_player_rank"], :result_boolean => row["result_boolean"], :score => row["score"], :board_size => row["board_size"], :handi => row["handi"], :unixtime => row["unixtime"], :game_type => row["game_type"], :ruleset => ruleset, :komi => komi, :valid => valid, :result => row["result"])
+        rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"],
+                                               :white_player_rank => row["white_player_rank"],
+                                               :black_player_name => row["black_player_name"], 
+                                               :black_player_rank => row["black_player_rank"], 
+                                               :result_boolean => row["result_boolean"], 
+                                               :score => row["score"], 
+                                               :board_size => row["board_size"], 
+                                               :handi => row["handi"], 
+                                               :unixtime => row["unixtime"], 
+                                               :game_type => row["game_type"], 
+                                               :ruleset => ruleset, 
+                                               :komi => komi,
+                                               :valid => valid, 
+                                               :result => row["result"],
+                                               :byo_yomi_periods => byo_yomi_periods, 
+                                               :byo_yomi_seconds => byo_yomi_seconds)
         rowadd.save
       end
     end    

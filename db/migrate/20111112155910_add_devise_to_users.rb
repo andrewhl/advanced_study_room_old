@@ -5,8 +5,6 @@ class AddDeviseToUsers < ActiveRecord::Migration
       t.recoverable
       #t.rememberable
       t.trackable
-      
-      t.datetime :last_scrape
     
       # t.encryptable
       # t.confirmable
