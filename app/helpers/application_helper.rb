@@ -14,6 +14,9 @@ module ApplicationHelper
   end
       
   def rank_convert(rank)
+    if not rank[0]
+      return -31
+    end
     rank = rank[0]
     if rank[-1,1] == "d"
       newrank = rank.scan(/[1-9]/)[0]
@@ -38,7 +41,7 @@ module ApplicationHelper
     kgsnames = User.find(:all, :select => "kgs_names")
     
     for x in kgsnames
-      if x.kgs_names == nil
+      if not x.kgs_names
         next
       end
       match_scraper(x.kgs_names)
