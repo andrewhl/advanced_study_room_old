@@ -32,31 +32,16 @@ module ApplicationHelper
       puts "I DID NOT KNOW WHAT TO DO."
     end
   end
-  
-  def get_matches
     
-    kgsnames = User.find(:all, :select => "kgs_names")
-    
-    for x in kgsnames
-      puts x.kgs_names
-    end
-    
-    usernames = User.find(:all, :select => "username")
-    
-    for x in usernames
-      puts x.username
-    end   
-  end
-  
   def scrape
     
     kgsnames = User.find(:all, :select => "kgs_names")
     
     for x in kgsnames
-      if x.kgs_name == nil
+      if x.kgs_names == nil
         next
       end
-      match_scraper(x.kgs_name)
+      match_scraper(x.kgs_names)
     end
   end
 
@@ -118,7 +103,7 @@ module ApplicationHelper
     return {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "result_boolean" => result_boolean, "score" => score, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "public_game" => public_game, "result" =>result}
   end
 
-  def parseSGF(url)
+  def sgfParser(url)
     # SGF Parser
     
     require 'net/http'
@@ -146,7 +131,7 @@ module ApplicationHelper
     byo_yomi_periods = over_time[0].split('x')[0].to_i # Parse SGF overtime periods
     byo_yomi_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
 
-    if (byo_yomi_periods < 5) and (byo_yomi_stones < 30)
+    if (byo_yomi_periods < 5) and (byo_yomi_seconds < 30)
       return false
     end
     
@@ -219,7 +204,7 @@ module ApplicationHelper
       else
         sgf = sgfParser(row["url"])
         
-        if sgf == False:
+        if sgf == false
           next
         end
 
@@ -236,8 +221,8 @@ module ApplicationHelper
                                                :game_type => row["game_type"], 
                                                :ruleset => sgf[3], 
                                                :komi => sgf[4],
-                                               :valid => valid, 
                                                :result => row["result"],
+                                               :main_time => sgf[2],
                                                :byo_yomi_periods => sgf[0], 
                                                :byo_yomi_seconds => sgf[1])
         rowadd.save

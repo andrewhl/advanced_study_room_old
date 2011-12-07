@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111206201044) do
+ActiveRecord::Schema.define(:version => 20111207071303) do
 
   create_table "matches", :force => true do |t|
     t.string   "url"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20111206201044) do
     t.datetime "updated_at"
     t.integer  "byo_yomi_periods"
     t.integer  "byo_yomi_seconds"
+    t.integer  "main_time"
   end
 
   create_table "users", :force => true do |t|
