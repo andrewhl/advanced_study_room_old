@@ -117,15 +117,18 @@ module ApplicationHelper
     tree = parser.parse sgf_raw
     
     game_info = tree.root.children[0].properties
+    puts game_info.inspect
     
     # Check that over time is at least 5x30 byo-yomi
     over_time = game_info["OT"]
     if over_time == nil
+      puts "Invalid because over_time was nil"
       return false
     end
     
     # Omit games with the Canadian ruleset
     if over_time["Canadian"]
+      puts "Invalid because of Canadian ruleset"
       return false
     end
     
@@ -135,6 +138,7 @@ module ApplicationHelper
     byo_yomi_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
 
     if (byo_yomi_periods < 5) and (byo_yomi_seconds < 30)
+      puts "Invalid because of incorrect byo-yomi: #{byo_yomi_periods}, #{byo_yomi_seconds}"
       return false
     end
     
@@ -142,6 +146,7 @@ module ApplicationHelper
     main_time = game_info["TM"].to_i
     
     if main_time < 1500
+      puts "Invalid because of incorrect main time: #{main_time}"
       return false
     end        
     
@@ -149,13 +154,15 @@ module ApplicationHelper
     ruleset = game_info["RU"]
     
     if ruleset != "Japanese"
+      puts "Invalid because of ruleset: #{ruleset}"
       return false
     end
     
-    # Check komi is 6.5
+    # Check komi is 6.5 or 0.5
     komi = game_info["KM"][1..-2].to_f
     
-    if komi != 6.5
+    unless (komi == 6.5) or (komi == 0.5)
+      puts "Invalid because of komi: #{komi}"
       return false
     end
 
@@ -164,6 +171,9 @@ module ApplicationHelper
     valid = false
     for i in 0..30
       comment = game.properties["C"]
+      if not comment
+        break
+      end
       if comment.scan(/ASR League/i)
         valid = true
       end
@@ -171,6 +181,7 @@ module ApplicationHelper
     end
     
     if valid != true
+      puts "Invalid because missing tag"
       return false
     end
 
@@ -195,19 +206,25 @@ module ApplicationHelper
     # Various filters
     for row in games
       if row["public_game"] == "No"
+        puts "Invalid because was private"
         next
       elsif row["board_size"] != 19
+        puts "Invalid because of incorrect board size"
         next
       elsif row["game_type"] == "Rengo"
+        puts "Invalid because was rengo"
         next
       elsif row["game_type"] == "Teaching"
+        puts "Invalid because was teaching"
         next
       elsif row["handi"] != 0
+        puts "Invalid because was handicap"
         next
       else
         sgf = sgfParser(row["url"])
         
         if sgf == false
+          puts sgf
           next
         end
 
