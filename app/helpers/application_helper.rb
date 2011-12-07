@@ -50,10 +50,23 @@ module ApplicationHelper
 
   def processRow(row)
     # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
+    
     url = row.at('a')[:href]
 
+    if row.xpath('td[@colspan="2"]')
+      column[1] = row.xpath('td[@colspan="2"]').map do |x|
+      puts x.css('a')
+    end
+    
     columns = row.css('td')
+    
+    # <td colspan="2">
+    # <a href="gameArchives.jsp?user=niark">niark [-]</a>
+    #  (<a href="gameArchives.jsp?user=ciaso">ciaso [-]</a> vs. <a href="gameArchives.jsp?user=niark">niark [-]</a>)
+    #  </td>
+    
     public_game = columns[0].content
+    puts columns[1]
     
     # Calculate white player name and rank
     white_player_name = columns[1].content.scan(/^\w+/)[0]
