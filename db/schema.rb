@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111207191222) do
+ActiveRecord::Schema.define(:version => 20111207212748) do
 
   create_table "matches", :force => true do |t|
     t.string   "url"
@@ -35,6 +35,17 @@ ActiveRecord::Schema.define(:version => 20111207191222) do
     t.integer  "main_time"
     t.string   "invalid_reason"
     t.string   "ruleset"
+  end
+
+  create_table "points", :force => true do |t|
+    t.float    "amount"
+    t.string   "source"
+    t.datetime "date_granted"
+    t.datetime "date_lost"
+    t.string   "event"
+    t.string   "action"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|

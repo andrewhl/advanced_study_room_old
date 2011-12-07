@@ -38,7 +38,7 @@ module ApplicationHelper
     
   def scrape
     
-    kgsnames = User.find(:all, :select => "kgs_names")
+    kgsnames = User.select("kgs_names")
     
     for x in kgsnames
       if not x.kgs_names
@@ -78,6 +78,7 @@ module ApplicationHelper
     
     # Calculate UNIX time
     date = columns[4].content
+    puts date
     unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
     
     game_type = columns[5].content
@@ -146,12 +147,6 @@ module ApplicationHelper
       valid_sgf = false
     end
     
-    # Omit games with the Canadian ruleset
-    if over_time["Canadian"]
-      invalid_reason << "Canadian ruleset"
-      valid_sgf = false
-    end
-    
     # Restrict overtime settings
     over_time = over_time.split(' ')
     byo_yomi_periods = over_time[0].split('x')[0].to_i # Parse SGF overtime periods
@@ -176,6 +171,11 @@ module ApplicationHelper
     if ruleset != "Japanese"
       invalid_reason << "incorrect ruleset: #{ruleset}"
       valid_sgf = false
+    end
+    
+    # Omit games with the Canadian ruleset
+    if over_time["Canadian"]
+      ruleset = "Canadian"
     end
     
     # Check komi is 6.5 or 0.5
@@ -207,24 +207,38 @@ module ApplicationHelper
     end
     
     # Various filters
+    invalid_reason = []
     for row in games
+      parsedurl = row["url"]
       if row["public_game"] == "No"
-        puts "game was private"
+        # puts "game was private"
+        next
+      elsif User.where("url = {parsedurl}")
+        # puts "Duplicate url"
         next
       elsif row["board_size"] != 19
-        puts "Invalid because of incorrect board size"
+        invalid_reason << "incorrect board size"
         valid_game = false
       elsif row["game_type"] == "Rengo"
-        puts "Invalid because was rengo"
+        invalid_reason << "was a rengo game"
         valid_game = false
       elsif row["game_type"] == "Teaching"
-        puts "Invalid because was teaching"
+        invalid_reason << "was a teaching game"
         valid_game = false
       elsif row["handi"] != 0
-        puts "Invalid because was handicap"
+        invalid_reason << "incorrect handicap"
         valid_game = false
       else
         sgf = sgfParser(row["url"])
+        
+        for x in sgf[6]
+          invalid_reason << x
+        end
+        
+        if sgf[3] == "Canadian"
+          # puts "Canadian ruleset not valid"
+          next
+        end
         
         if sgf[5] == false
           valid_game = false
@@ -247,7 +261,7 @@ module ApplicationHelper
                                                :main_time => sgf[2],
                                                :byo_yomi_periods => sgf[0], 
                                                :byo_yomi_seconds => sgf[1],
-                                               :invalid_reason => sgf[6].to_s,
+                                               :invalid_reason => invalid_reason.to_s,
                                                :valid_game => valid_game)
         rowadd.save
       end # End if .. else statement
