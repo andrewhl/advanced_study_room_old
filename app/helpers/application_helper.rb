@@ -168,19 +168,19 @@ module ApplicationHelper
 
     # Confirm 'ASR League' is mentioned within first 30 moves
     game = tree.root
-    valid = false
+    valid_game = false
     for i in 0..30
       comment = game.properties["C"]
       if not comment
         break
       end
       if comment.scan(/ASR League/i)
-        valid = true
+        valid_game = true
       end
       game = game.children[0]
     end
     
-    if valid != true
+    if valid_game != true
       puts "Invalid because missing tag"
       return false
     end
@@ -210,22 +210,22 @@ module ApplicationHelper
         next
       elsif row["board_size"] != 19
         puts "Invalid because of incorrect board size"
-        next
+        valid_game = false
       elsif row["game_type"] == "Rengo"
         puts "Invalid because was rengo"
-        next
+        valid_game = false
       elsif row["game_type"] == "Teaching"
         puts "Invalid because was teaching"
-        next
+        valid_game = false
       elsif row["handi"] != 0
         puts "Invalid because was handicap"
-        next
+        valid_game = false
       else
         sgf = sgfParser(row["url"])
         
         if sgf == false
-          puts sgf
-          next
+          puts "SGF was invalid"
+          valid_game = false
         end
 
         # Submit game to DB
@@ -244,7 +244,8 @@ module ApplicationHelper
                                                :result => row["result"],
                                                :main_time => sgf[2],
                                                :byo_yomi_periods => sgf[0], 
-                                               :byo_yomi_seconds => sgf[1])
+                                               :byo_yomi_seconds => sgf[1],
+                                               :valid_game => valid_game)
         rowadd.save
       end # End if .. else statement
     end # End for loop
