@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20111207191222) do
     t.integer  "byo_yomi_seconds"
     t.integer  "main_time"
     t.string   "invalid_reason"
+    t.string   "ruleset"
   end
 
   create_table "users", :force => true do |t|
