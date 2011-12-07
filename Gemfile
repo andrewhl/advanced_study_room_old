@@ -2,11 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
 gem 'nokogiri'
-gem 'treetop'
-gem 'kantan-sgf'
 gem "SgfParser", :path => "lib/assets/gems/SgfParser"
 gem 'ffaker'
-
+gem 'mechanize'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'

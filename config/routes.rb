@@ -1,6 +1,5 @@
 Asr::Application.routes.draw do
   
-  
   devise_for :users
   resources :pages
   resources :users
@@ -12,8 +11,7 @@ Asr::Application.routes.draw do
   match '/results', :to => 'pages#results'
   match '/prizes', :to => 'pages#prizes'
   match '/news', :to => 'pages#news'
-
-  
+  match '/users', :to => 'users#index'
   
   root :to => "pages#home"
 

@@ -32,12 +32,43 @@ module ApplicationHelper
       puts "I DID NOT KNOW WHAT TO DO."
     end
   end
+  
+  def get_matches
     
-  def match_scraper
+    kgsnames = User.find(:all, :select => "kgs_names")
+    
+    for x in kgsnames
+      puts x.kgs_names
+    end
+    
+    usernames = User.find(:all, :select => "username")
+    
+    for x in usernames
+      puts x.username
+    end
+    
+    
+  end
+  
+  def scrape
+    
+    kgsnames = User.find(:all, :select => "kgs_names")
+    
+    for x in kgsnames
+      if x.kgs_name == nil
+        next
+      end
+      match_scraper(x.kgs_name)
+    end
+    
+  end
+    
+  def match_scraper(kgs_name)
     
     require 'open-uri'
     require 'time'
-    doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=andrew&year=2011&month=11"))
+      
+    doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{kgs_name}"))
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
     
@@ -205,8 +236,8 @@ module ApplicationHelper
                                                :byo_yomi_periods => byo_yomi_periods, 
                                                :byo_yomi_seconds => byo_yomi_seconds)
         rowadd.save
-      end
-    end    
+      end # End if .. else statement
+    end # End for loop
    
    end
   
