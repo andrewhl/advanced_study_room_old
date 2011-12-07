@@ -118,18 +118,38 @@ module ApplicationHelper
     
     game_info = tree.root.children[0].properties
     puts game_info.inspect
+    valid_sgf = true
+    invalid_reason = []
+    
+    # Confirm 'ASR League' is mentioned within first 30 moves
+    game = tree.root
+    for i in 0..30
+      comment = game.properties["C"]
+      if not comment
+        break
+        invalid_reason << "did not contain any comments"
+        valid_sgf = false
+      end
+      if comment.scan(/ASR League/i)
+        valid_sgf = true
+      else
+        invalid_reason << "did not contain tag line"
+        valid_sgf = false
+      end
+      game = game.children[0]
+    end
     
     # Check that over time is at least 5x30 byo-yomi
     over_time = game_info["OT"]
     if over_time == nil
-      puts "Invalid because over_time was nil"
-      return false
+      invalid_reason << "over_time was nil"
+      valid_sgf = false
     end
     
     # Omit games with the Canadian ruleset
     if over_time["Canadian"]
-      puts "Invalid because of Canadian ruleset"
-      return false
+      invalid_reason << "Canadian ruleset"
+      valid_sgf = false
     end
     
     # Restrict overtime settings
@@ -138,54 +158,37 @@ module ApplicationHelper
     byo_yomi_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
 
     if (byo_yomi_periods < 5) and (byo_yomi_seconds < 30)
-      puts "Invalid because of incorrect byo-yomi: #{byo_yomi_periods}, #{byo_yomi_seconds}"
-      return false
+      invalid_reason << "incorrect byo-yomi: #{byo_yomi_periods}, #{byo_yomi_seconds}"
+      valid_sgf = false
     end
     
     # Check main time is not less than 1500
     main_time = game_info["TM"].to_i
     
     if main_time < 1500
-      puts "Invalid because of incorrect main time: #{main_time}"
-      return false
+      invalid_reason << "incorrect main time: #{main_time}"
+      valid_sgf = false
     end        
     
     # Check ruleset is Japanese
     ruleset = game_info["RU"]
     
     if ruleset != "Japanese"
-      puts "Invalid because of ruleset: #{ruleset}"
-      return false
+      invalid_reason << "incorrect ruleset: #{ruleset}"
+      valid_sgf = false
     end
     
     # Check komi is 6.5 or 0.5
     komi = game_info["KM"][1..-2].to_f
     
-    unless (komi == 6.5) or (komi == 0.5)
-      puts "Invalid because of komi: #{komi}"
-      return false
+    unless komi == 6.5
+      invalid_reason << "incorrect komi: #{komi}"
+      valid_sgf = false
     end
 
-    # Confirm 'ASR League' is mentioned within first 30 moves
-    game = tree.root
-    valid_game = false
-    for i in 0..30
-      comment = game.properties["C"]
-      if not comment
-        break
-      end
-      if comment.scan(/ASR League/i)
-        valid_game = true
-      end
-      game = game.children[0]
-    end
     
-    if valid_game != true
-      puts "Invalid because missing tag"
-      return false
-    end
-
-    return [byo_yomi_periods, byo_yomi_seconds, main_time, ruleset, komi]
+    
+    return [byo_yomi_periods, byo_yomi_seconds, main_time, ruleset, komi, valid_sgf, invalid_reason]
   end
 
   def match_scraper(kgs_name)
@@ -206,7 +209,7 @@ module ApplicationHelper
     # Various filters
     for row in games
       if row["public_game"] == "No"
-        puts "Invalid because was private"
+        puts "game was private"
         next
       elsif row["board_size"] != 19
         puts "Invalid because of incorrect board size"
@@ -223,8 +226,7 @@ module ApplicationHelper
       else
         sgf = sgfParser(row["url"])
         
-        if sgf == false
-          puts "SGF was invalid"
+        if sgf[5] == false
           valid_game = false
         end
 
@@ -245,6 +247,7 @@ module ApplicationHelper
                                                :main_time => sgf[2],
                                                :byo_yomi_periods => sgf[0], 
                                                :byo_yomi_seconds => sgf[1],
+                                               :invalid_reason => sgf[6].to_s,
                                                :valid_game => valid_game)
         rowadd.save
       end # End if .. else statement
