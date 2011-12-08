@@ -4,7 +4,8 @@ gem 'rails', '3.1.1'
 gem 'nokogiri'
 gem "SgfParser", :path => "lib/assets/gems/SgfParser"
 gem 'ffaker'
-gem 'mechanize'
+gem 'activeadmin'
+gem "meta_search",    '>= 1.1.0.pre'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'

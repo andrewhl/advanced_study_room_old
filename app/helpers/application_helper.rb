@@ -277,7 +277,7 @@ module ApplicationHelper
     #     return
     #   end
     # end
-    if doc.css("h2").inner_html.include? ' 0 games'
+    if doc.css("h2").inner_html.include? '(0 games)'
       return
     end
         
@@ -296,24 +296,30 @@ module ApplicationHelper
     for row in games
       parsedurl = row["url"]
       if row["public_game"] == "No"
+        puts "Filtering private game..."
         # puts "game was private"
         next
       elsif User.where("url = {parsedurl}")
+        puts "Filtering duplicate url..."
         # puts "Duplicate url"
         next
       elsif row["board_size"] != 19
+        puts "Filtering incorrect board size: #{row['board_size']}"
         invalid_reason << "incorrect board size"
         puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["game_type"] == "Rengo"
+        puts "Filtering rengo game"
         invalid_reason << "was a rengo game"
         puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["game_type"] == "Teaching"
+        puts "Filtering teaching game"
         invalid_reason << "was a teaching game"
         puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["handi"] != 0
+        puts "Filtering incorrect handicap: #{row['handi']}"
         invalid_reason << "incorrect handicap"
         puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
