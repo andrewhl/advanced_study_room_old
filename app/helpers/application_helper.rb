@@ -43,9 +43,9 @@ module ApplicationHelper
       if not x.kgs_names
         next
       end
+      puts "Scraping #{x.kgs_names}..."
       match_scraper(x.kgs_names)
       sleep(15)
-      puts "Scraping #{x.kgs_names}..."
     end
   end
 
@@ -64,7 +64,7 @@ module ApplicationHelper
     
     if columns[4].content != "Review"
       
-      puts "Processing normal game..."
+      puts "Processing rank info: #{columns[4].content}"
       
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
 
@@ -87,11 +87,10 @@ module ApplicationHelper
 
       # Review games
       
-      puts "Processing review game..."      
-      
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       white_black_array = columns[i].content.scan(myRegex).uniq
+      puts "Processing review game: #{columns[i]}"
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
@@ -105,7 +104,7 @@ module ApplicationHelper
     end
     
     # Parse board size
-    puts "Parsing board size and handicap..."
+    puts "Parsing board size and handicap: #{columns[i].content}"  
     board_size_and_handicap = columns[i].content
     boardArray = columns[i].content.scan(/[0-9]+/)
     board_size = Integer(boardArray[0])
@@ -118,7 +117,7 @@ module ApplicationHelper
     end
     
     # Calculate UNIX time
-    puts "Parsing UNIX time..."
+    puts "Parsing UNIX time: #{columns[i].content}"
     date = columns[i].content
     i += 1
     unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
@@ -127,7 +126,7 @@ module ApplicationHelper
     i += 1
     
     # Parse game results
-    puts "Parsing game result..."
+    puts "Parsing game result: #{columns[i].content}"
     result = columns[i].content
     i += 1
 
@@ -183,6 +182,7 @@ module ApplicationHelper
         valid_sgf = true
       else
         invalid_reason << "did not contain tag line"
+        puts "Game invalid for #{invalid_reason.last}"
         valid_sgf = false
       end
       game = game.children[0]
@@ -247,14 +247,24 @@ module ApplicationHelper
     return [byo_yomi_periods, byo_yomi_seconds, main_time, ruleset, komi, valid_sgf, invalid_reason]
   end
 
-  def match_scraper(kgs_name)
+  #def match_scraper(kgs_name)
+  def match_scraper
     
     require 'open-uri'
     require 'time'
-      
-    doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{kgs_name}"))
+
+    #doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{kgs_name}"))
+    doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=tlapeg07"))
+
+    if doc.css("h2:contains('0 games')")
+      return false
+    end
+
+    
+    
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
+    
     
     games = []
     
