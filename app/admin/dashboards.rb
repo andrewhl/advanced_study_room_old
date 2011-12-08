@@ -35,12 +35,20 @@ ActiveAdmin::Dashboards.build do
   #
   # Will render the "Recent Users" then the "Recent Posts" sections on the dashboard.
   
-  section "Users" do
-    ul do
-      User.all do |user|
-        li user.kgs_name
-      end
+  section "Recent Users" do
+    table_for User.order("created_at desc").limit(10) do
+      column :username
+      column :kgs_names
     end
   end
-
+  
+  section "Recent Matches" do
+    table_for Match.order("created_at desc").limit(10) do
+      column :black_player_name
+      column :black_player_rank
+      column :white_player_name
+      column :white_player_rank
+      column :result
+    end
+  end
 end
