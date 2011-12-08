@@ -14,10 +14,9 @@ module ApplicationHelper
   end
       
   def rank_convert(rank)
-    if not rank[0]
+    if not rank
       return -31
     end
-    rank = rank[0]
     if rank[-1,1] == "d"
       newrank = rank.scan(/[1-9]/)[0]
       newrank = Integer(newrank)
@@ -54,20 +53,24 @@ module ApplicationHelper
     url = row.at('a')[:href]
     columns = row.css('td')
     
-    public_game = columns[0].content
-    puts columns[1]
+    i = 0
+
+    public_game = columns[i].content
+    i += 1
 
     if columns[4].content != "Review"
       
-      myRegex =  /(\w+) \[(\?|-|\w+)\]/
+      myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
 
-      rank_array = columns[1].content.scan(myRegex)[0]
+      rank_array = columns[i].content.scan(myRegex)[0]
+      i += 1
 
       # Calculate white player name and rank
       white_player_name = rank_array[0]
       white_player_rank = rank_convert(rank_array[1])
       
-      rank_array = columns[2].content.scan(myRegex)[0]
+      rank_arrayb = columns[i].content.scan(myRegex)[0]
+      i += 1
 
       # Calculate black player name and rank
       black_player_name = rank_array[0]
@@ -75,30 +78,25 @@ module ApplicationHelper
 
     else
 
-      # Review games
-      # puts columns[1].content
-      
-      white_black_array = columns[1].content.scan(/(\w+) \[(\?|-|\w+)\]/).uniq
+      # Review games      
+      white_black_array = columns[i].content.scan(/(\w+) \[(\?|-|\w+)\]/).uniq
+      i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
       black_player_name = white_black_array[0][0]
-      black_player_rank = white_black_array[0][1]
-      black_player_rank = rank_convert(black_player_rank)
+      black_player_rank = rank_convert(white_black_array[0][1])
 
       # Calculate white player name and rank - Note that white will ALWAYS be our reviewee
       white_player_name = white_black_array[1][0]
-      white_player_rank = white_black_array[1][1]
-      white_player_rank = rank_convert(white_player_rank)
+      white_player_rank = rank_convert(white_black_array[1][1])
       
-      # This adjust the other columns so we have the right amount again.
-      columns.insert(2, "Game review")
-
     end
     
     # Parse board size
-    board_size_and_handicap = columns[3].content
-    boardArray = columns[3].content.scan(/[0-9]+/)
+    board_size_and_handicap = columns[i].content
+    boardArray = columns[i].content.scan(/[0-9]+/)
     board_size = Integer(boardArray[0])
+    i += 1
   
     if boardArray.length() == 3
       handi = Integer(boardArray[2])
@@ -107,14 +105,17 @@ module ApplicationHelper
     end
     
     # Calculate UNIX time
-    date = columns[4].content
-    puts date
+    date = columns[i].content
+    i += 1
     unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
     
-    game_type = columns[5].content
+    game_type = columns[i].content
+    i += 1
     
     # Parse game results
-    result = columns[6].content
+    result = columns[i].content
+    i += 1
+
     resArray = result.split('+')
     score = 0
     if resArray[0] == ("W")
