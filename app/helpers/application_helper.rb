@@ -44,6 +44,8 @@ module ApplicationHelper
         next
       end
       match_scraper(x.kgs_names)
+      sleep(15)
+      puts "Scraping #{x.kgs_names}..."
     end
   end
 
@@ -79,7 +81,7 @@ module ApplicationHelper
     else
 
       # Review games      
-      white_black_array = columns[i].content.scan(/(\w+) \[(\?|-|\w+)\]/).uniq
+      white_black_array = columns[i].content.scan(myRegex).uniq
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
@@ -160,6 +162,7 @@ module ApplicationHelper
       if not comment
         break
         invalid_reason << "did not contain any comments"
+        puts "Game invalid for #{invalid_reason.last}"
         valid_sgf = false
       end
       if comment.scan(/ASR League/i)
@@ -175,6 +178,7 @@ module ApplicationHelper
     over_time = game_info["OT"]
     if over_time == nil
       invalid_reason << "over_time was nil"
+      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end
     
@@ -185,6 +189,7 @@ module ApplicationHelper
 
     if (byo_yomi_periods < 5) and (byo_yomi_seconds < 30)
       invalid_reason << "incorrect byo-yomi: #{byo_yomi_periods}, #{byo_yomi_seconds}"
+      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end
     
@@ -193,6 +198,7 @@ module ApplicationHelper
     
     if main_time < 1500
       invalid_reason << "incorrect main time: #{main_time}"
+      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end        
     
@@ -201,6 +207,7 @@ module ApplicationHelper
     
     if ruleset != "Japanese"
       invalid_reason << "incorrect ruleset: #{ruleset}"
+      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end
     
@@ -214,6 +221,7 @@ module ApplicationHelper
     
     unless komi == 6.5
       invalid_reason << "incorrect komi: #{komi}"
+      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end
 
@@ -249,15 +257,19 @@ module ApplicationHelper
         next
       elsif row["board_size"] != 19
         invalid_reason << "incorrect board size"
+        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["game_type"] == "Rengo"
         invalid_reason << "was a rengo game"
+        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["game_type"] == "Teaching"
         invalid_reason << "was a teaching game"
+        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["handi"] != 0
         invalid_reason << "incorrect handicap"
+        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       else
         sgf = sgfParser(row["url"])
@@ -267,7 +279,7 @@ module ApplicationHelper
         end
         
         if sgf[3] == "Canadian"
-          # puts "Canadian ruleset not valid"
+          puts "Canadian ruleset not valid"
           next
         end
         
