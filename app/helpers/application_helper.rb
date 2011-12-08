@@ -52,12 +52,6 @@ module ApplicationHelper
     # This next line gets the 1st <a> tag in the first <td> tag (which is our sgf link), or nil if it's a private game.
     
     url = row.at('a')[:href]
-
-    if row.xpath('td[@colspan="2"]')
-      column[1] = row.xpath('td[@colspan="2"]').map do |x|
-      puts x.css('a')
-    end
-    
     columns = row.css('td')
     
     # <td colspan="2">
@@ -67,16 +61,38 @@ module ApplicationHelper
     
     public_game = columns[0].content
     puts columns[1]
-    
-    # Calculate white player name and rank
-    white_player_name = columns[1].content.scan(/^\w+/)[0]
-    white_player_rank = columns[1].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
-    white_player_rank = rank_convert(white_player_rank)
-    
-    # Calculate black player name and rank
-    black_player_name = columns[2].content.scan(/^\w+/)[0]
-    black_player_rank = columns[2].content.scan(/\?|-|[1-9]?[1-9][kdp]/)
-    black_player_rank = rank_convert(black_player_rank)
+
+    if columns[4].content != "Review"
+          
+      # Calculate white player name and rank
+      white_player_name = columns[1].content.scan(/^\w+/)[0]
+      white_player_rank = columns[1].content.scan(/\?|-|[1-9]?[0-9][kdp]/)
+      white_player_rank = rank_convert(white_player_rank)
+      
+      # Calculate black player name and rank
+      black_player_name = columns[2].content.scan(/^\w+/)[0]
+      black_player_rank = columns[2].content.scan(/\?|-|[1-9]?[0-9][kdp]/)
+      black_player_rank = rank_convert(black_player_rank)
+
+    else
+
+      puts "Our Deviant"
+      puts columns[1].content
+
+      # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
+      black_player_name = columns[1].content.scan(Regex to extract leftmost name)[0]
+      black_player_rank = columns[1].contentscan(rank for above)
+      black_player_rank = rank_convert(black_player_rank)
+
+      # Calculate white player name and rank - Note that white will ALWAYS be our reviewee
+      white_player_name = columns[1].content.scan(Regex to extract middle name)[0]
+      white_player_rank = columns[1].content.scan(rank for above)
+      white_player_rank = rank_convert(white_player_rank)
+      
+      # This adjust the other columsn so we have the right amount again.
+      columns.insert(2, "Booooooger Brains")
+
+    end
     
     # Parse board size
     board_size_and_handicap = columns[3].content
