@@ -59,12 +59,17 @@ module ApplicationHelper
 
     public_game = columns[i].content
     i += 1
-
+    
+    puts "Scraping rank info..."
+    
     if columns[4].content != "Review"
+      
+      puts "Processing normal game..."
       
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
 
       rank_array = columns[i].content.scan(myRegex)[0]
+      
       i += 1
 
       # Calculate white player name and rank
@@ -80,7 +85,12 @@ module ApplicationHelper
 
     else
 
-      # Review games      
+      # Review games
+      
+      puts "Processing review game..."      
+      
+      myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
+      
       white_black_array = columns[i].content.scan(myRegex).uniq
       i += 1
 
@@ -95,6 +105,7 @@ module ApplicationHelper
     end
     
     # Parse board size
+    puts "Parsing board size and handicap..."
     board_size_and_handicap = columns[i].content
     boardArray = columns[i].content.scan(/[0-9]+/)
     board_size = Integer(boardArray[0])
@@ -107,6 +118,7 @@ module ApplicationHelper
     end
     
     # Calculate UNIX time
+    puts "Parsing UNIX time..."
     date = columns[i].content
     i += 1
     unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
@@ -115,6 +127,7 @@ module ApplicationHelper
     i += 1
     
     # Parse game results
+    puts "Parsing game result..."
     result = columns[i].content
     i += 1
 
@@ -156,6 +169,7 @@ module ApplicationHelper
     invalid_reason = []
     
     # Confirm 'ASR League' is mentioned within first 30 moves
+    puts "Checking for tag line..."
     game = tree.root
     for i in 0..30
       comment = game.properties["C"]
@@ -175,6 +189,7 @@ module ApplicationHelper
     end
     
     # Check that over time is at least 5x30 byo-yomi
+    puts "Checking time settings..."
     over_time = game_info["OT"]
     if over_time == nil
       invalid_reason << "over_time was nil"
@@ -203,6 +218,7 @@ module ApplicationHelper
     end        
     
     # Check ruleset is Japanese
+    puts "Checking ruleset..."
     ruleset = game_info["RU"]
     
     if ruleset != "Japanese"
@@ -217,6 +233,7 @@ module ApplicationHelper
     end
     
     # Check komi is 6.5 or 0.5
+    puts "Checking komi..."
     komi = game_info["KM"][1..-2].to_f
     
     unless komi == 6.5
@@ -246,6 +263,7 @@ module ApplicationHelper
     end
     
     # Various filters
+    puts "Checking game filters..."
     invalid_reason = []
     for row in games
       parsedurl = row["url"]
@@ -288,6 +306,7 @@ module ApplicationHelper
         end
 
         # Submit game to DB
+        puts "Writing to database..."
         rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"],
                                                :white_player_rank => row["white_player_rank"],
                                                :black_player_name => row["black_player_name"], 
