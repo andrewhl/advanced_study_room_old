@@ -54,43 +54,44 @@ module ApplicationHelper
     url = row.at('a')[:href]
     columns = row.css('td')
     
-    # <td colspan="2">
-    # <a href="gameArchives.jsp?user=niark">niark [-]</a>
-    #  (<a href="gameArchives.jsp?user=ciaso">ciaso [-]</a> vs. <a href="gameArchives.jsp?user=niark">niark [-]</a>)
-    #  </td>
-    
     public_game = columns[0].content
     puts columns[1]
 
     if columns[4].content != "Review"
-          
-      # Calculate white player name and rank
-      white_player_name = columns[1].content.scan(/^\w+/)[0]
-      white_player_rank = columns[1].content.scan(/\?|-|[1-9]?[0-9][kdp]/)
-      white_player_rank = rank_convert(white_player_rank)
       
+      myRegex =  /(\w+) \[(\?|-|\w+)\]/
+
+      rank_array = columns[1].content.scan(myRegex)[0]
+
+      # Calculate white player name and rank
+      white_player_name = rank_array[0]
+      white_player_rank = rank_convert(rank_array[1])
+      
+      rank_array = columns[2].content.scan(myRegex)[0]
+
       # Calculate black player name and rank
-      black_player_name = columns[2].content.scan(/^\w+/)[0]
-      black_player_rank = columns[2].content.scan(/\?|-|[1-9]?[0-9][kdp]/)
-      black_player_rank = rank_convert(black_player_rank)
+      black_player_name = rank_array[0]
+      black_player_rank = rank_convert(rank_array[1])
 
     else
 
-      puts "Our Deviant"
-      puts columns[1].content
+      # Review games
+      # puts columns[1].content
+      
+      white_black_array = columns[1].content.scan(/(\w+) \[(\?|-|\w+)\]/).uniq
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
-      black_player_name = columns[1].content.scan(Regex to extract leftmost name)[0]
-      black_player_rank = columns[1].contentscan(rank for above)
+      black_player_name = white_black_array[0][0]
+      black_player_rank = white_black_array[0][1]
       black_player_rank = rank_convert(black_player_rank)
 
       # Calculate white player name and rank - Note that white will ALWAYS be our reviewee
-      white_player_name = columns[1].content.scan(Regex to extract middle name)[0]
-      white_player_rank = columns[1].content.scan(rank for above)
+      white_player_name = white_black_array[1][0]
+      white_player_rank = white_black_array[1][1]
       white_player_rank = rank_convert(white_player_rank)
       
-      # This adjust the other columsn so we have the right amount again.
-      columns.insert(2, "Booooooger Brains")
+      # This adjust the other columns so we have the right amount again.
+      columns.insert(2, "Game review")
 
     end
     
