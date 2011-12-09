@@ -280,6 +280,7 @@ module ApplicationHelper
 
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{kgs_name}"))
 
+    # Check that page contains at least one game record
     if doc.css("h2").inner_html.include? '(0 games)'
       return
     end
@@ -291,7 +292,7 @@ module ApplicationHelper
     
     doc.each do |row|
       rowResult = processRow(row)
-      if rowResult != false:
+      if rowResult != false
         games << rowResult
       end
     end
@@ -302,15 +303,14 @@ module ApplicationHelper
     user = User.find_by_kgs_names(kgs_name)
     puts user.inspect
     puts games.inspect
-
+    
     if games[0]["white_player_name"] == kgs_name
-      user.rank = white_player_rank
+      user.rank = games[0]["white_player_rank"]
       user.save
-    else
-      user.rank = black_player_rank
+    elsif games[0]["black_player_name"] == kgs_name
+      user.rank = games[0]["black_player_rank"]
       user.save
     end
-    
     
     # Various filters
     puts "Checking game filters..."
