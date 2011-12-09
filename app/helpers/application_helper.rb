@@ -30,8 +30,10 @@ module ApplicationHelper
     elsif (rank == "?") or (rank == "-")
       newrank = -31
       rank_boolean = false
+      return newrank
     else
       puts "I DID NOT KNOW WHAT TO DO."
+      return -31
     end
   end
     
@@ -69,21 +71,16 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       white_black_array = columns[i].content.scan(myRegex).uniq
-      puts "Debug (if) white_black_array at #{__LINE__}: #{white_black_array}"
-      puts "Pocessing review game: #{columns[i]}"
+      puts "Processing review game: #{white_black_array[0][0]} vs #{white_black_array[1][0]}"
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
       black_player_name = white_black_array[0][0]
-      puts "Debug (if) black_player_name at #{__LINE__}: #{black_player_name}"
       black_player_rank = rank_convert(white_black_array[0][1])
-      puts "Debug (if) black_player_rank at #{__LINE__}: #{black_player_rank}"
 
       # Calculate white player name and rank - Note that white will ALWAYS be our reviewee
       white_player_name = white_black_array[1][0]
-      puts "Debug (if) white_player_name at #{__LINE__}: #{white_player_name}"
       white_player_rank = rank_convert(white_black_array[1][1])
-      puts "Debug (if) white_player_rank at #{__LINE__}: #{white_player_rank}"
 
     elsif columns[4].content == "Demonstration"
 
@@ -92,15 +89,12 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       rank_array = columns[i].content.scan(myRegex)[0]
-      puts "Debug (elsif) rank_array at #{__LINE__}: #{rank_array}"
-      puts "Processing review game: #{columns[i]}"
+      puts "Processing demonstration game: #{rank_array[0]}"
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our demoer
       black_player_name = rank_array[0]
-      puts "Debug (elsif) black_player_name at #{__LINE__}: #{rank_array}"
       black_player_rank = rank_convert(rank_array[1])
-      puts "Debug (elsif) black_player_rank at #{__LINE__}: #{black_player_rank}"
 
       # THERE IS NO WHITE
       white_player_name = "None"
@@ -112,42 +106,28 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
 
       rank_array = columns[i].content.scan(myRegex)[0]
-      puts "Debug (else) rank_array at #{__LINE__}: #{rank_array}"
-      
       i += 1
+      rank_arrayb = columns[i].content.scan(myRegex)[0]
+      i += 1
+
+      return false if not rank_array
+      return false if not rank_arrayb
 
       # Calculate white player name and rank
       white_player_name = rank_array[0]
-      puts "Debug (else) white_player_name at #{__LINE__}: #{white_player_name}"
       white_player_rank = rank_convert(rank_array[1])
-      puts "Debug (else) white_player_rank at #{__LINE__}: #{white_player_rank}"
-      
-      rank_arrayb = columns[i].content.scan(myRegex)[0]
-      puts "Debug (else) rank_arrayb at #{__LINE__}: #{rank_arrayb}"
-      i += 1
 
       # Calculate black player name and rank
-      black_player_name = rank_array[0]
-      puts "Debug (else) black_player_name at #{__LINE__}: #{black_player_name}"
-      black_player_rank = rank_convert(rank_array[1])
-      puts "Debug (else) black_player_rank at #{__LINE__}: #{black_player_rank}"
+      black_player_name = rank_arrayb[0]
+      black_player_rank = rank_convert(rank_arrayb[1])
       
     end
-    
-    if white_user = User.find_by_kgs_names(white_player_name)
-      puts "Debug rank assignment at #{__LINE__} white_user: #{white_user}"
-      white_user.rank = white_player_rank
-      puts "Debug rank assignment at #{__LINE__} white_user.rank: #{white_user.rank}"
-      white_user.save
-    end
-    
-    if black_user = User.find_by_kgs_names(black_player_name)
-      puts "Debug rank assignment at #{__LINE__} black_user: #{black_user}"
-      black_user.rank = black_player_rank
-      puts "Debug rank assignment at #{__LINE__} black_user.rank: #{black_user.rank}"
-      black_user.save
-    end
-    
+
+    return false if not User.find_by_kgs_names(black_player_name)
+    return false if not User.find_by_kgs_names(white_player_name)
+
+
+
     # Parse board size
     puts "Parsing board size and handicap: #{columns[i].content}"  
     board_size_and_handicap = columns[i].content
@@ -310,8 +290,27 @@ module ApplicationHelper
     games = []
     
     doc.each do |row|
-      games << processRow(row)
+      rowResult = processRow(row)
+      if rowResult != false:
+        games << rowResult
+      end
     end
+
+    return if games.length() == 0
+
+    # Update ranking for this user
+    user = User.find_by_kgs_names(kgs_name)
+    puts user.inspect
+    puts games.inspect
+
+    if games[0]["white_player_name"] == kgs_name
+      user.rank = white_player_rank
+      user.save
+    else
+      user.rank = black_player_rank
+      user.save
+    end
+    
     
     # Various filters
     puts "Checking game filters..."
