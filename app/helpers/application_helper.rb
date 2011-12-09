@@ -69,16 +69,21 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       white_black_array = columns[i].content.scan(myRegex).uniq
-      puts "Processing review game: #{columns[i]}"
+      puts "Debug (if) white_black_array at #{__LINE__}: #{white_black_array}"
+      puts "Pocessing review game: #{columns[i]}"
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
       black_player_name = white_black_array[0][0]
+      puts "Debug (if) black_player_name at #{__LINE__}: #{black_player_name}"
       black_player_rank = rank_convert(white_black_array[0][1])
+      puts "Debug (if) black_player_rank at #{__LINE__}: #{black_player_rank}"
 
       # Calculate white player name and rank - Note that white will ALWAYS be our reviewee
       white_player_name = white_black_array[1][0]
+      puts "Debug (if) white_player_name at #{__LINE__}: #{white_player_name}"
       white_player_rank = rank_convert(white_black_array[1][1])
+      puts "Debug (if) white_player_rank at #{__LINE__}: #{white_player_rank}"
 
     elsif columns[4].content == "Demonstration"
 
@@ -87,12 +92,15 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       rank_array = columns[i].content.scan(myRegex)[0]
+      puts "Debug (elsif) rank_array at #{__LINE__}: #{rank_array}"
       puts "Processing review game: #{columns[i]}"
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our demoer
       black_player_name = rank_array[0]
+      puts "Debug (elsif) black_player_name at #{__LINE__}: #{rank_array}"
       black_player_rank = rank_convert(rank_array[1])
+      puts "Debug (elsif) black_player_rank at #{__LINE__}: #{black_player_rank}"
 
       # THERE IS NO WHITE
       white_player_name = "None"
@@ -104,29 +112,39 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
 
       rank_array = columns[i].content.scan(myRegex)[0]
+      puts "Debug (else) rank_array at #{__LINE__}: #{rank_array}"
       
       i += 1
 
       # Calculate white player name and rank
       white_player_name = rank_array[0]
+      puts "Debug (else) white_player_name at #{__LINE__}: #{white_player_name}"
       white_player_rank = rank_convert(rank_array[1])
+      puts "Debug (else) white_player_rank at #{__LINE__}: #{white_player_rank}"
       
       rank_arrayb = columns[i].content.scan(myRegex)[0]
+      puts "Debug (else) rank_arrayb at #{__LINE__}: #{rank_arrayb}"
       i += 1
 
       # Calculate black player name and rank
       black_player_name = rank_array[0]
+      puts "Debug (else) black_player_name at #{__LINE__}: #{black_player_name}"
       black_player_rank = rank_convert(rank_array[1])
+      puts "Debug (else) black_player_rank at #{__LINE__}: #{black_player_rank}"
       
     end
     
     if white_user = User.find_by_kgs_names(white_player_name)
+      puts "Debug rank assignment at #{__LINE__} white_user: #{white_user}"
       white_user.rank = white_player_rank
+      puts "Debug rank assignment at #{__LINE__} white_user.rank: #{white_user.rank}"
       white_user.save
     end
     
     if black_user = User.find_by_kgs_names(black_player_name)
+      puts "Debug rank assignment at #{__LINE__} black_user: #{black_user}"
       black_user.rank = black_player_rank
+      puts "Debug rank assignment at #{__LINE__} black_user.rank: #{black_user.rank}"
       black_user.save
     end
     
