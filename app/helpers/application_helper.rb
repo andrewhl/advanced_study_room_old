@@ -111,7 +111,7 @@ module ApplicationHelper
       white_player_name = rank_array[0]
       white_player_rank = rank_convert(rank_array[1])
       
-      rank_array = columns[i].content.scan(myRegex)[0]
+      rank_arrayb = columns[i].content.scan(myRegex)[0]
       i += 1
 
       # Calculate black player name and rank
@@ -120,12 +120,15 @@ module ApplicationHelper
       
     end
     
-    white_user = User.where(:kgs_names => white_player_name)
-    white_user.rank = white_player_rank
-    white_user.save
-    black_user = User.where(:kgs_names => black_player_name)
-    black_user.rank = black_player_rank
-    black_user.save
+    if white_user = User.find_by_kgs_names(white_player_name)
+      white_user.rank = white_player_rank
+      white_user.save
+    end
+    
+    if black_user = User.find_by_kgs_names(black_player_name)
+      black_user.rank = black_player_rank
+      black_user.save
+    end
     
     # Parse board size
     puts "Parsing board size and handicap: #{columns[i].content}"  
