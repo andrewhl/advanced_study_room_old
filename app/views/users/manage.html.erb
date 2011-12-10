@@ -1,8 +1,8 @@
-<%= form_tag manage_users_path, :method => :put do %>
+<%= form_tag("/manage", :method => "put") do %>
 <table class="kgs_names" summary="KGS Names">
 	<% for user in @manage_users %>
 	<tr>
-		<td class="kgs_name"><%= user.kgs_names %></td>
+		<td class="kgs_name"><%= @user.kgs_names %></td>
 		<td class="division"><%= select_tag(:division, options_for_select([["Alpha", 1], ["Beta I", 2], ["Beta II", 3], ["Gamma I", 4], ["Gamma II", 5], ["Gamma III", 6], ["Gamma IV", 7], ["Delta", 8]])) %></td>
 	</tr>
 	<% end %>

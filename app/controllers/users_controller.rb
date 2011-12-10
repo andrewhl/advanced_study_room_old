@@ -6,8 +6,14 @@ class UsersController < ApplicationController
 
   def manage
     @user = User.find_all_by_kgs_names
-    #@division = User.find_all_by_division
-    redirect_to manage_path
+    @division = User.first
+    #redirect_to manage_path
+  end
+  
+  def manage_users
+    @user = User.find_all_by_kgs_names
+    @division = User.first
+    #redirect_to manage_path
   end
   
   def add_to_division

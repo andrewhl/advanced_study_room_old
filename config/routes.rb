@@ -8,7 +8,6 @@ Asr::Application.routes.draw do
   resources :pages
   resources :users
   resources :admin
-  resources :users
   
   #map.resources :users, :collection => { :division => :put }
   
