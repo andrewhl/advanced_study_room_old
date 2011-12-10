@@ -23,5 +23,10 @@ class UsersController < ApplicationController
   def add_to_waiting_list
     
   end
+  
+  def test
+    @user = User.find_all_by_kgs_names
+    @test = User.where(params[:kgs_names]).inspect  
+  end
 
 end

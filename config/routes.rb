@@ -21,6 +21,7 @@ Asr::Application.routes.draw do
   match '/prizes', :to => 'pages#prizes'
   match '/news', :to => 'pages#news'
   match '/users', :to => 'users#index'
+  match '/test', :to => 'users#test'
   
   root :to => "pages#home"
 
