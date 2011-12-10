@@ -7,6 +7,12 @@ Asr::Application.routes.draw do
   devise_for :users
   resources :pages
   resources :users
+  resources :admin
+  resources :users
+  
+  #map.resources :users, :collection => { :division => :put }
+  
+  match '/manage', :to => 'users#manage'
   
   match '/contact', :to => 'pages#contact'
   match '/home', :to => 'pages#home'

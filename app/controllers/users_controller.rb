@@ -1,11 +1,20 @@
 class UsersController < ApplicationController
-  def index
+  def index  
+    @users = User.all     
+    @username = User.find_all_by(username)
+  end
+
+  def manage
+    @user = User.find_all_by_kgs_names
+    #@division = User.find_all_by_division
+    redirect_to manage_path
+  end
+  
+  def add_to_division
     
-    @users = User.all
-      
-    @username = User.find(:all, :select => "username")
-    
-    
+  end
+  
+  def add_to_waiting_list
     
   end
 
