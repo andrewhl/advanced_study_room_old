@@ -1,10 +1,50 @@
 <%= form_tag('/update', :method => "post") %>
+<div class="span-24">
+	<div class="span-6">
+	<h3>Unassigned</h3>
+<%= select_tag "kgs_names", options_from_collection_for_select(@unassigned, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-6 last">
+		<%= select_tag "division", options_for_select(["Waiting List", "Alpha", "Beta I", "Beta II", "Gamma I", "Gamma II", "Gamma III", "Gamma IV", "Delta"]), :class => "division" %>
+	</div>
+</div>
+<div class="span-24">
+	<div class="span-3">
+		<h3>Alpha</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@alpha, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-3">
+		<h3>Beta I</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@betaI, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-3">
+		<h3>Beta II</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@betaII, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-3">
+		<h3>Gamma I</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@gammaI, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-3">
+		<h3>Gamma II</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@gammaII, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-3">
+		<h3>Gamma III</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@gammaIII, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-3">
+		<h3>Gamma IV</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@gammaIV, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+	<div class="span-3 last">
+		<h3>Delta</h3>
+	<%= select_tag "kgs_names", options_from_collection_for_select(@delta, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+	</div>
+</div>
 
-<%= select_tag "kgs_names", options_from_collection_for_select(@user, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
-<%= select_tag "division", options_for_select(["Alpha", "Beta I", "Beta II", "Gamma I", "Gamma II", "Gamma III", "Gamma IV", "Delta"]), :class => "division" %>
-
-<br />
-<%= submit_tag "Submit" %><br/>
+<div class="span-24">
+<%= submit_tag "Submit", :class => "submit" %>
 
 <table style="width:400px">
 <% @user.each do |item| %>
@@ -21,4 +61,5 @@
 <% end %>
 
 </table>
+</div>
 	

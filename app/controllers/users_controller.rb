@@ -10,18 +10,8 @@ class UsersController < ApplicationController
     
   end
   
-  def test
-    @user = User.select(:kgs_names)
-    new_division = params[:division]
-    kgs_names = params[:kgs_names]
-    
-    for x in kgs_names
-      user = User.where(:kgs_names => x)
-      user.each do |y|
-        y.division = new_division
-        y.save
-      end
-    end 
+  def show
+    @user = User.find(params[:id])
   end
   
   def update_kgs_names

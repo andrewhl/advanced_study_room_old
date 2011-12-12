@@ -18,6 +18,16 @@ class ManageController < ApplicationController
   end
   
   def update
+    # To do: create an array and fill it with all the divisions, and then drop that into a query that iterates through each division in the array
+    @unassigned = User.where("division is NULL OR division = 'Waiting List'")
+    @alpha = User.where(:division => "Alpha")
+    @betaI = User.where(:division => "Beta I")
+    @betaII = User.where(:division => "Beta II")
+    @gammaI = User.where(:division => "Gamma I")
+    @gammaII = User.where(:division => "Gamma II")
+    @gammaIII = User.where(:division => "Gamma III")
+    @gammaIV = User.where(:division => "Gamma IV")
+    @delta = User.where(:division => "Delta")
     @user = User.all
     if params[:kgs_names] != nil
       new_division = params[:division]
@@ -31,20 +41,6 @@ class ManageController < ApplicationController
         end
       end
     end
-  end
-  
-  def test
-    @user = User.select(:kgs_names)
-    new_division = params[:division]
-    kgs_names = params[:kgs_names]
-    
-    for x in kgs_names
-      user = User.where(:kgs_names => x)
-      user.each do |y|
-        y.division = new_division
-        y.save
-      end
-    end 
   end
   
   def destroy

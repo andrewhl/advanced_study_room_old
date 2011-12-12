@@ -10,8 +10,6 @@ Asr::Application.routes.draw do
   resources :admin
   resources :manage
   
-  #map.resources :users, :collection => { :division => :put }
-  
   match '/manage', :to => 'manage#index'
   match '/update', :to => 'manage#update'
   match '/test', :to => 'manage#test'

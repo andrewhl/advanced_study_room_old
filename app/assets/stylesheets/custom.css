@@ -3,6 +3,7 @@ body {
 	margin-right: auto;
 	width: 960px;
 	background-color: #E6E6E6;
+	padding-bottom: 20px;
 }
 
 header {
@@ -25,5 +26,9 @@ nav ul {
 	display: inline-block;
 }
 nav ul li { float: left; margin-right: 15px; }
+div.select { float: left; }
+select.kgs_names { height: 400px; width: 80px; font-size: 12px; }
+select.division { clear: both; display: block; }
+input.submit { clear: both; }
 
-select.kgs_names { height: 400px; width: 200px; font-size: 12px; }
+.notice { clear: both; }
