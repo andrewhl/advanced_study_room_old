@@ -132,7 +132,10 @@ module ApplicationHelper
 
     return false if not User.find_by_kgs_names(black_player_name)
     return false if not User.find_by_kgs_names(white_player_name)
-
+    
+    # Check both users are in the same division
+    return false if not User.find_by_kgs_names(white_player_name).division == User.find_by_kgs_names(black_player_name).division
+    
 
 
     # Parse board size
