@@ -25,3 +25,5 @@ nav ul {
 	display: inline-block;
 }
 nav ul li { float: left; margin-right: 15px; }
+
+select.kgs_names { height: 400px; width: 200px; font-size: 12px; }

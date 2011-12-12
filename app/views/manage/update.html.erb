@@ -1,0 +1,24 @@
+<%= form_tag('/update', :method => "post") %>
+
+<%= select_tag "kgs_names", options_from_collection_for_select(@user, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+<%= select_tag "division", options_for_select(["Alpha", "Beta I", "Beta II", "Gamma I", "Gamma II", "Gamma III", "Gamma IV", "Delta"]), :class => "division" %>
+
+<br />
+<%= submit_tag "Submit" %><br/>
+
+<table style="width:400px">
+<% @user.each do |item| %>
+
+	<tr>
+	  <td><%= item.kgs_names %>
+	  </td>
+	  <td>
+		<%= item.division %>
+
+		</td>
+	</tr>
+
+<% end %>
+
+</table>
+	

@@ -1,19 +1,5 @@
 class UsersController < ApplicationController
   def index  
-    @users = User.all     
-    @username = User.find_all_by(username)
-  end
-
-  def manage
-    @user = User.find_all_by_kgs_names
-    @division = User.first
-    #redirect_to manage_path
-  end
-  
-  def manage_users
-    @user = User.find_all_by_kgs_names
-    @division = User.first
-    #redirect_to manage_path
   end
   
   def add_to_division
@@ -25,8 +11,26 @@ class UsersController < ApplicationController
   end
   
   def test
-    @user = User.find_all_by_kgs_names
-    @test = User.where(params[:kgs_names]).inspect  
+    @user = User.select(:kgs_names)
+    new_division = params[:division]
+    kgs_names = params[:kgs_names]
+    
+    for x in kgs_names
+      user = User.where(:kgs_names => x)
+      user.each do |y|
+        y.division = new_division
+        y.save
+      end
+    end 
+  end
+  
+  def update_kgs_names
+   @user = User.find params[:id]
+   if @user.update_attributes(params[:kgs_names])
+    render :text => "Success"
+   else
+    render :text => "Error", :status => 500
+   end
   end
 
 end

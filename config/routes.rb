@@ -8,10 +8,13 @@ Asr::Application.routes.draw do
   resources :pages
   resources :users
   resources :admin
+  resources :manage
   
   #map.resources :users, :collection => { :division => :put }
   
-  match '/manage', :to => 'users#manage'
+  match '/manage', :to => 'manage#index'
+  match '/update', :to => 'manage#update'
+  match '/test', :to => 'manage#test'
   
   match '/contact', :to => 'pages#contact'
   match '/home', :to => 'pages#home'
@@ -21,7 +24,6 @@ Asr::Application.routes.draw do
   match '/prizes', :to => 'pages#prizes'
   match '/news', :to => 'pages#news'
   match '/users', :to => 'users#index'
-  match '/test', :to => 'users#test'
   
   root :to => "pages#home"
 

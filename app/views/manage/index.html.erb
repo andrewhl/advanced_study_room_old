@@ -1,7 +1,7 @@
 <table style="width:400px">
 	<tr>
-		<th><%= link_to "KGS Name", :sort => "kgs_names" %></th>
-		<th><%= link_to "Division", :sort => "division" %></th>
+		<th><%= sortable "kgs_names" %></th>
+		<th><%= sortable "division" %></th>
 	</tr>
 <% @user.each do |item| %>
 

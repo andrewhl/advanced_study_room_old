@@ -1,0 +1,19 @@
+
+<table style="width:400px">
+<% @user.each do |item| %>
+
+	<tr>
+	  <td><%= item.kgs_names %>
+	  </td>
+	  <td><% if item.division.nil? %>
+		  <%= "None" %>
+		<% else %>
+		<%= item.division %>
+		<% end %>
+		</td>
+	</tr>
+
+<% end %>
+
+</table>
+	

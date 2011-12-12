@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
   
+  validates_presence_of :kgs_names
+  validates_presence_of :division
+  
   has_many :matches
   has_many :points
   
