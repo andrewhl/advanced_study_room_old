@@ -54,7 +54,7 @@ module ApplicationHelper
       end
       puts "Scraping #{x.kgs_names}..."
       match_scraper(x.kgs_names)
-      sleep(15)
+      sleep(12)
     end
   end
 
@@ -68,9 +68,7 @@ module ApplicationHelper
 
     public_game = columns[i].content
     i += 1
-    
-    puts "Scraping rank info..."
-    
+        
     if columns[4].content == "Review"
       
       # Review games
@@ -78,7 +76,6 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       white_black_array = columns[i].content.scan(myRegex).uniq
-      puts "Processing review game: #{white_black_array[0][0]} vs #{white_black_array[1][0]}"
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
@@ -96,7 +93,6 @@ module ApplicationHelper
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       rank_array = columns[i].content.scan(myRegex)[0]
-      puts "Processing demonstration game: #{rank_array[0]}"
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our demoer
@@ -117,8 +113,15 @@ module ApplicationHelper
       rank_arrayb = columns[i].content.scan(myRegex)[0]
       i += 1
 
-      return false if not rank_array
-      return false if not rank_arrayb
+      if not rank_array
+        puts "Game discarded due to closed or banned KGS account"
+        return false
+      end
+
+      if not rank_arrayb
+        puts "Game discarded due to closed or banned KGS account"
+        return false
+      end
 
       # Calculate white player name and rank
       white_player_name = rank_array[0]
@@ -130,16 +133,26 @@ module ApplicationHelper
       
     end
 
-    return false if not User.find_by_kgs_names(black_player_name)
-    return false if not User.find_by_kgs_names(white_player_name)
+
+    if not User.find_by_kgs_names(black_player_name.downcase)
+      puts "Game Discarded due to non-ASR member"
+      return false 
+    end
+
+    if not User.find_by_kgs_names(white_player_name.downcase)
+      puts "Game Discarded due to non-ASR member"
+      return false 
+    end
     
     # Check both users are in the same division
-    return false if not User.find_by_kgs_names(white_player_name).division == User.find_by_kgs_names(black_player_name).division
+    if not User.find_by_kgs_names(black_player_name.downcase).division == User.find_by_kgs_names(white_player_name.downcase).division
+      puts "Game Discarded due to members being in different pools"
+      return false 
+    end
     
 
 
     # Parse board size
-    puts "Parsing board size and handicap: #{columns[i].content}"  
     board_size_and_handicap = columns[i].content
     boardArray = columns[i].content.scan(/[0-9]+/)
     board_size = Integer(boardArray[0])
@@ -152,7 +165,6 @@ module ApplicationHelper
     end
     
     # Calculate UNIX time
-    puts "Parsing UNIX time: #{columns[i].content}"
     date = columns[i].content
     i += 1
     unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
@@ -161,7 +173,6 @@ module ApplicationHelper
     i += 1
     
     # Parse game results
-    puts "Parsing game result: #{columns[i].content}"
     result = columns[i].content
     i += 1
 
@@ -198,37 +209,31 @@ module ApplicationHelper
     tree = parser.parse sgf_raw
     
     game_info = tree.root.children[0].properties
-    puts game_info.inspect
     valid_sgf = true
     invalid_reason = []
     
     # Confirm 'ASR League' is mentioned within first 30 moves
-    puts "Checking for tag line..."
     game = tree.root
     for i in 0..30
       comment = game.properties["C"]
       if not comment
         break
         invalid_reason << "did not contain any comments"
-        puts "Game invalid for #{invalid_reason.last}"
         valid_sgf = false
       end
       if comment.scan(/ASR League/i)
         valid_sgf = true
       else
         invalid_reason << "did not contain tag line"
-        puts "Game invalid for #{invalid_reason.last}"
         valid_sgf = false
       end
       game = game.children[0]
     end
     
     # Check that over time is at least 5x30 byo-yomi
-    puts "Checking time settings..."
     over_time = game_info["OT"]
     if over_time == nil
       invalid_reason << "over_time was nil"
-      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end
     
@@ -238,8 +243,7 @@ module ApplicationHelper
     byo_yomi_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
 
     if (byo_yomi_periods < 5) and (byo_yomi_seconds < 30)
-      invalid_reason << "incorrect byo-yomi: #{byo_yomi_periods}, #{byo_yomi_seconds}"
-      puts "Game invalid for #{invalid_reason.last}"
+      invalid_reason << "incorrect byo-yomi: #{byo_yomi_periods}x#{byo_yomi_seconds}"
       valid_sgf = false
     end
     
@@ -248,32 +252,25 @@ module ApplicationHelper
     
     if main_time < 1500
       invalid_reason << "incorrect main time: #{main_time}"
-      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end        
     
     # Check ruleset is Japanese
-    puts "Checking ruleset..."
     ruleset = game_info["RU"]
     
     if ruleset != "Japanese"
       invalid_reason << "incorrect ruleset: #{ruleset}"
-      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end
-    
-    # Omit games with the Canadian ruleset
-    if over_time["Canadian"]
-      ruleset = "Canadian"
-    end
+
+    # Add byo-yomi settings
+    ruleset = over_time[1]
     
     # Check komi is 6.5 or 0.5
-    puts "Checking komi..."
     komi = game_info["KM"][1..-2].to_f
     
     unless komi == 6.5
       invalid_reason << "incorrect komi: #{komi}"
-      puts "Game invalid for #{invalid_reason.last}"
       valid_sgf = false
     end
 
@@ -292,9 +289,12 @@ module ApplicationHelper
 
     # Check that page contains at least one game record
     if doc.css("h2").inner_html.include? '(0 games)'
+      puts "Teach hasn't played any games at all this month"
       return
     end
-        
+    
+    puts doc.css("h2").inner_html
+
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
     
@@ -311,8 +311,6 @@ module ApplicationHelper
 
     # Update ranking for this user
     user = User.find_by_kgs_names(kgs_name)
-    puts user.inspect
-    puts games.inspect
     
     if games[0]["white_player_name"] == kgs_name
       user.rank = games[0]["white_player_rank"]
@@ -323,37 +321,27 @@ module ApplicationHelper
     end
     
     # Various filters
-    puts "Checking game filters..."
-    invalid_reason = []
     for row in games
+      invalid_reason = []
       parsedurl = row["url"]
+
       if row["public_game"] == "No"
-        puts "Filtering private game..."
-        # puts "game was private"
+        puts "Game discarded due to being private"
         next
-      elsif User.where("url = {parsedurl}")
-        puts "Filtering duplicate url..."
-        # puts "Duplicate url"
+      elsif Match.find_by_url(parsedurl)
+        puts "Game already in Database"
         next
       elsif row["board_size"] != 19
-        puts "Filtering incorrect board size: #{row['board_size']}"
         invalid_reason << "incorrect board size"
-        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["game_type"] == "Rengo"
-        puts "Filtering rengo game"
         invalid_reason << "was a rengo game"
-        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["game_type"] == "Teaching"
-        puts "Filtering teaching game"
         invalid_reason << "was a teaching game"
-        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       elsif row["handi"] != 0
-        puts "Filtering incorrect handicap: #{row['handi']}"
         invalid_reason << "incorrect handicap"
-        puts "Game invalid for #{invalid_reason.last}"
         valid_game = false
       else
         sgf = sgfParser(row["url"])
@@ -363,7 +351,7 @@ module ApplicationHelper
         end
         
         if sgf[3] == "Canadian"
-          puts "Canadian ruleset not valid"
+          puts "Game discarded because Andrew hates Canadians"
           next
         end
         
@@ -372,7 +360,7 @@ module ApplicationHelper
         end
 
         # Submit game to DB
-        puts "Writing to database..."
+        puts "Game added to db as #{valid_game}: #{invalid_reason.to_s}"
         rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"],
                                                :white_player_rank => row["white_player_rank"],
                                                :black_player_name => row["black_player_name"], 
@@ -389,7 +377,7 @@ module ApplicationHelper
                                                :main_time => sgf[2],
                                                :byo_yomi_periods => sgf[0], 
                                                :byo_yomi_seconds => sgf[1],
-                                               :invalid_reason => invalid_reason.to_s,
+                                               :invalid_reason => invalid_reason.join(", ").capitalize,
                                                :valid_game => valid_game)
         rowadd.save
       end # End if .. else statement
