@@ -29,6 +29,8 @@ module ApplicationHelper
     doc = doc.css('tr:not(:first)')
     # if doc.inner_html.include? ('/(w+)/')
 
+    puts doc.first.css('td a')[1].content.scan(/(\w+)/)
+
     games = []
     
     doc.each do |row|
