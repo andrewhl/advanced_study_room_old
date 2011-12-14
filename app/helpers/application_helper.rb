@@ -27,25 +27,12 @@ module ApplicationHelper
     
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
-    # if doc.inner_html.include? ('/(w+)/')
+    a = doc.first.css('td a')[1].content.scan(/(\w+)/)
 
-    puts doc.first.css('td a')[1].content.scan(/(\w+)/)
+    puts String(a).casecmp('shinichi56')
+    puts a
+    puts 'shinichi56'
 
-    games = []
-    
-    doc.each do |row|
-      columns = row.css('td a')
-      #puts name
-      #puts columns[1].inner_html
-      first_player_name = columns[1].inner_html.scan('/(\w+)/')
-      puts first_player_name
-      # name = columns[1].scan()
-      # rowResult = row
-      # if rowResult != false
-      #   games << rowResult
-      # end
-    end
-    
   end
   
   def rank_convert(rank)
