@@ -20,21 +20,6 @@ module ApplicationHelper
     link_to title, {:sort => column, :direction => direction}, {:class => css_class}
   end
   
-  def get_correct_name(name)
-    require 'open-uri'
-    
-    doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{name}"))
-    
-    doc = doc.xpath('//table[1]')
-    doc = doc.css('tr:not(:first)')
-    a = doc.first.css('td a')[1].content.scan(/(\w+)/)
-
-    puts String(a).casecmp('shinichi56')
-    puts a
-    puts 'shinichi56'
-
-  end
-  
   def rank_convert(rank)
     if not rank
       return -31
