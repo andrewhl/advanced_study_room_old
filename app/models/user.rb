@@ -42,22 +42,29 @@ class KGSValidator < ActiveModel::Validator
       return
     end
     
-    myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
-    
-    a = doc.first.css('td')[1].content.scan(myRegex)
-    b = doc.first.css('td')[2].content.scan(myRegex)
+    # Check that page contains at least one game record
+    unless doc.css("h2").inner_html.include? '(0 games)'
 
-    # Politely changes the name to the correct version we scraped from the site.
-    if a[0][0].casecmp(name) == 0
-      record.kgs_names = a[0][0]
-      record.rank = rank_convert(a[0][1])
-    elsif b[0][0].casecmp(name) == 0
-      record.kgs_names = b[0][0]
-      record.rank = rank_convert(b[0][1])
-    #else
-      # Errors if we can't verify the account due to lack of games this month.
-      #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
+      myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
+
+      a = doc.first.css('td')[1].content.scan(myRegex)
+      b = doc.first.css('td')[2].content.scan(myRegex)
+
+      # Politely changes the name to the correct version we scraped from the site.
+      if a[0][0].casecmp(name) == 0
+        record.kgs_names = a[0][0]
+        record.rank = rank_convert(a[0][1])
+      elsif b[0][0].casecmp(name) == 0
+        record.kgs_names = b[0][0]
+        record.rank = rank_convert(b[0][1])
+      #else
+        # Errors if we can't verify the account due to lack of games this month.
+        #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
+      end
+
     end
+    
+    
 
   end
 end
