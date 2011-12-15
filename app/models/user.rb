@@ -33,39 +33,37 @@ class KGSValidator < ActiveModel::Validator
     name = record.kgs_names
 
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{name}"))
+
+    # Errors if page does not contain at least one game record
+    if doc.css("h2").inner_html.include? '(0 games)'
+      #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
+      return
+    end
+
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
-
+     
+    # Errors if there is no KGS page
     if not doc.first
-      # Errors if there is no KGS page
       record.errors[:kgs_names] << ("The KGS account you entered does not exist. Please ensure that your name matches the KGS name exactly.")
       return
     end
     
-    # Check that page contains at least one game record
-    unless doc.css("h2").inner_html.include? '(0 games)'
 
-      myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
+    myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
 
-      a = doc.first.css('td')[1].content.scan(myRegex)
-      b = doc.first.css('td')[2].content.scan(myRegex)
+    a = doc.first.css('td')[1].content.scan(myRegex)
+    b = doc.first.css('td')[2].content.scan(myRegex)
 
-      # Politely changes the name to the correct version we scraped from the site.
-      if a[0][0].casecmp(name) == 0
-        record.kgs_names = a[0][0]
-        record.rank = rank_convert(a[0][1])
-      elsif b[0][0].casecmp(name) == 0
-        record.kgs_names = b[0][0]
-        record.rank = rank_convert(b[0][1])
-      #else
-        # Errors if we can't verify the account due to lack of games this month.
-        #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
-      end
-
+    # Politely changes the name to the correct version we scraped from the site.
+    if a[0][0].casecmp(name) == 0
+      record.kgs_names = a[0][0]
+      record.rank = rank_convert(a[0][1])
+    elsif b[0][0].casecmp(name) == 0
+      record.kgs_names = b[0][0]
+      record.rank = rank_convert(b[0][1])
+    #else
     end
-    
-    
-
   end
 end
 
