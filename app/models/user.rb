@@ -1,4 +1,30 @@
 class KGSValidator < ActiveModel::Validator
+
+  # Eventually, remove rank_convert and replace with an appropriate reference to the application_helper method
+  def rank_convert(rank)
+    if not rank
+      return -31
+    end
+    if rank[-1,1] == "d"
+      newrank = rank.scan(/[1-9]/)[0]
+      newrank = Integer(newrank)
+      rank_boolean = true
+      return newrank
+    elsif rank[-1,1] == "k"
+      newrank = rank.scan(/[1-9]/)[0]
+      newrank = Integer(newrank) * -1 + 1
+      rank_boolean = true
+      return newrank
+    elsif (rank == "?") or (rank == "-")
+      newrank = -31
+      rank_boolean = false
+      return newrank
+    else
+      puts "I DID NOT KNOW WHAT TO DO."
+      return -31
+    end
+  end
+  
   def validate(record)
 
     # Record has all the submission info. record.errors will give you the error handler.
@@ -28,9 +54,9 @@ class KGSValidator < ActiveModel::Validator
     elsif b[0][0].casecmp(name) == 0
       record.kgs_names = b[0][0]
       record.rank = rank_convert(b[0][1])
-    else
+    #else
       # Errors if we can't verify the account due to lack of games this month.
-      record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
+      #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
     end
 
   end
