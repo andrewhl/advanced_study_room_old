@@ -8,6 +8,7 @@ gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
 gem 'gravatar_image_tag'
 gem 'whenever', :require => false
+gem 'mechanize'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'

@@ -10,7 +10,7 @@ class KGSValidator < ActiveModel::Validator
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
 
-    if not doc.first:
+    if not doc.first
       # Errors if there is no KGS page
       record.errors[:kgs_names] << ("The KGS account you entered does not exist. Please ensure that your name matches the KGS name exactly.")
       return

@@ -113,6 +113,11 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    mechanize (2.0.1)
+      net-http-digest_auth (~> 1.1, >= 1.1.1)
+      net-http-persistent (~> 1.8)
+      nokogiri (~> 1.4)
+      webrobots (~> 0.0, >= 0.0.9)
     meta_search (1.1.1)
       actionpack (~> 3.1.0)
       activerecord (~> 3.1.0)
@@ -120,6 +125,8 @@ GEM
       polyamorous (~> 0.5.0)
     mime-types (1.17.2)
     multi_json (1.0.3)
+    net-http-digest_auth (1.2)
+    net-http-persistent (1.9)
     nokogiri (1.5.0)
     orm_adapter (0.0.5)
     pg (0.11.0)
@@ -200,6 +207,8 @@ GEM
       multi_json (>= 1.0.2)
     warden (1.0.6)
       rack (>= 1.0)
+    webrobots (0.0.12)
+      nokogiri (>= 1.4.4)
     whenever (0.7.0)
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
@@ -223,6 +232,7 @@ DEPENDENCIES
   guard-rspec
   guard-spork
   jquery-rails
+  mechanize
   meta_search (>= 1.1.0.pre)
   nokogiri
   pg
