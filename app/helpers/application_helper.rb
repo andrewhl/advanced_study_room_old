@@ -385,4 +385,24 @@ module ApplicationHelper
    
    end
    
+   def rank_to_string(rank)
+     
+     if rank == 0
+        ranknum = 1
+        ranknum.to_s
+        rank = "#{ranknum} kyu"
+        return rank
+     elsif (rank < 0) or (rank > -31)
+        ranknum = rank
+        ranknum.to_s
+        rank = "#{ranknum} kyu"
+        return rank
+     elsif rank > 0
+       rank.to_s
+       rank = "#{rank} dan"
+       return rank
+     end
+        
+   end
+   
 end

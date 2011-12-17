@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   helper_method :sort_column, :sort_direction
   def index  
       params[:sort] ||= "rank"
+      params[:direction] ||= "desc"
       @user = User.order(sort_column + ' ' + sort_direction)
   end
   
