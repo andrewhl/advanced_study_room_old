@@ -39,10 +39,9 @@ class KGSValidator < ActiveModel::Validator
     
     if doc.css('a').length == 1
       record.rank = -31
-      return
     elsif (doc.css("h2").inner_html.include? '(0 games)') and (doc.css('a').length != 1) # Errors if page does not contain at least one game record 
       sleep(3)
-      href = doc.css('a').[-2]:href
+      href = doc.css('a')[-2][:href]
       doc = Nokogiri::HTML(open(href))
       #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
     end
