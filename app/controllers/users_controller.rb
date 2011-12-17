@@ -1,13 +1,8 @@
 class UsersController < ApplicationController
+  helper_method :sort_column, :sort_direction
   def index  
-    @user = User.find(params[:kgs_names])
-    # if params[:kgs_names]
-    #   @user = User.find(params[:id])
-    #   @games = Match.where("white_player_name = ? or black_player_name = ?", @user.kgs_names, @user.kgs_names)
-    # else
-    #   @user = User.all
-    #   @games = Match.all
-    # end
+      params[:sort] ||= "rank"
+      @user = User.order(sort_column + ' ' + sort_direction)
   end
   
   def add_to_division
@@ -19,7 +14,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    @user = User.find(params[:id])
+    @user = User.where(:username => params[:id])[0]
     @games = Match.where("white_player_name = ? or black_player_name = ?", @user.kgs_names, @user.kgs_names)
   end
   
@@ -52,6 +47,16 @@ class UsersController < ApplicationController
    else
     render :text => "Error", :status => 500
    end
+  end
+  
+  private
+  
+  def sort_column
+   User.column_names.include?(params[:sort]) ? params[:sort] : "name"
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
 end

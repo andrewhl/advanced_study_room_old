@@ -1,3 +1,13 @@
 <h1>Users</h1>
 
-<%= @username %>
+<table>
+	<tr><th><%= sortable "username" %></th>
+		<th><%= sortable "rank" %></th>
+	</tr>
+<% @user.each do |user| %>
+	<tr>
+	 <td><%= link_to user.username, user_path(user.username) %></td>
+	 <td><%= user.rank %></td>
+	</tr>
+<% end %>
+</table>
