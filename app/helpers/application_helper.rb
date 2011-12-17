@@ -54,7 +54,7 @@ module ApplicationHelper
       end
       puts "Scraping #{x.kgs_names}..."
       match_scraper(x.kgs_names)
-      sleep(12)
+      sleep(3)
     end
   end
 
@@ -134,18 +134,18 @@ module ApplicationHelper
     end
 
 
-    if not User.find_by_kgs_names(black_player_name.downcase)
+    if not User.find_by_kgs_names(black_player_name)
       puts "Game Discarded due to non-ASR member"
       return false 
     end
 
-    if not User.find_by_kgs_names(white_player_name.downcase)
+    if not User.find_by_kgs_names(white_player_name)
       puts "Game Discarded due to non-ASR member"
       return false 
     end
     
     # Check both users are in the same division
-    if not User.find_by_kgs_names(black_player_name.downcase).division == User.find_by_kgs_names(white_player_name.downcase).division
+    if not User.find_by_kgs_names(black_player_name).division == User.find_by_kgs_names(white_player_name).division
       puts "Game Discarded due to members being in different pools"
       return false 
     end

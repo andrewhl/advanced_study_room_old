@@ -6,6 +6,7 @@ gem "SgfParser", :path => "lib/assets/gems/SgfParser"
 gem 'ffaker'
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
+gem 'squeel'
 gem 'gravatar_image_tag'
 gem 'whenever', :require => false
 gem 'mechanize'

@@ -31,6 +31,9 @@ class KGSValidator < ActiveModel::Validator
 
     require 'open-uri'
     name = record.kgs_names
+    username = record.username
+    permalink = username.parameterize('-')
+    record.permalink = permalink
 
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{name}"))
 
@@ -65,6 +68,7 @@ class KGSValidator < ActiveModel::Validator
     #else
     end
   end
+
 end
 
 
@@ -73,10 +77,11 @@ class User < ActiveRecord::Base
   validates_presence_of :username
   validates_presence_of :kgs_names
 
-  validates_with KGSValidator
+  validates_with KGSValidator, :on => :create
 
-  has_many :matches
+  has_and_belongs_to_many :matches
   has_many :points
+  # before_save :set_permalink
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -85,6 +90,16 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :username, :kgs_names
+
+  # def to_param
+  #   id.to_s + permalink
+  # end
+  
+  
+  
+  # def set_permalink
+  #   self.permalink = title.parameterize
+  # end
 
 end
 

@@ -1,5 +1,13 @@
 class UsersController < ApplicationController
   def index  
+    @user = User.find(params[:kgs_names])
+    # if params[:kgs_names]
+    #   @user = User.find(params[:id])
+    #   @games = Match.where("white_player_name = ? or black_player_name = ?", @user.kgs_names, @user.kgs_names)
+    # else
+    #   @user = User.all
+    #   @games = Match.all
+    # end
   end
   
   def add_to_division
@@ -12,6 +20,7 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    @games = Match.where("white_player_name = ? or black_player_name = ?", @user.kgs_names, @user.kgs_names)
   end
   
   def create

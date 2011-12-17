@@ -1,18 +1,17 @@
 Asr::Application.routes.draw do
   
   ActiveAdmin.routes(self)
-
+  devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users
   resources :pages
   resources :users
   resources :admin
   resources :manage
   
-  devise_for :admin_users, ActiveAdmin::Devise.config
+ 
   
   match '/manage', :to => 'manage#index'
   match '/update', :to => 'manage#update'
-  match '/test', :to => 'manage#test'
   
   match '/contact', :to => 'pages#contact'
   match '/home', :to => 'pages#home'
@@ -22,6 +21,7 @@ Asr::Application.routes.draw do
   match '/prizes', :to => 'pages#prizes'
   match '/news', :to => 'pages#news'
   match '/users', :to => 'users#index'
+  match '/users/:id', :to => 'users#show'
   
   root :to => "pages#home"
 

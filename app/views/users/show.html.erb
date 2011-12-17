@@ -2,6 +2,21 @@
 
 <% if user_signed_in? %>
 	<p>Welcome!</p>
+	<table>
+		<tr>
+			<th>Black Player</th>
+			<th>White Player</th>
+			<th>Result</th>
+		</tr>
+	<% @games.each do |game| %>
+		<tr>
+			<td><%= game.black_player_name %></td>
+			<td><%= game.white_player_name %></td>
+			<td><%= game.result %></td>
+		</tr>
+	<% end %>
+	</table>
+	
 <% else %>
 	<p>You're not signed in!</p>
 <% end %>
