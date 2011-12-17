@@ -36,11 +36,15 @@ class KGSValidator < ActiveModel::Validator
     record.permalink = permalink
 
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{name}"))
-
-    # Errors if page does not contain at least one game record
-    if doc.css("h2").inner_html.include? '(0 games)'
-      #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
+    
+    if doc.css('a').length == 1
+      record.rank = -31
       return
+    elsif (doc.css("h2").inner_html.include? '(0 games)') and (doc.css('a').length != 1) # Errors if page does not contain at least one game record 
+      sleep(3)
+      href = doc.css('a').[-2]:href
+      doc = Nokogiri::HTML(open(href))
+      #record.errors[:kgs_names] << ("The KGS account you entered has not played any games lately, and we were unable to verify it. Please make certain you have at least one game, review, or demo this month.")
     end
 
     doc = doc.xpath('//table[1]')
@@ -81,7 +85,6 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :matches
   has_many :points
-  # before_save :set_permalink
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -90,16 +93,6 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :username, :kgs_names
-
-  # def to_param
-  #   id.to_s + permalink
-  # end
-  
-  
-  
-  # def set_permalink
-  #   self.permalink = title.parameterize
-  # end
 
 end
 
