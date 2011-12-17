@@ -82,7 +82,6 @@ class User < ActiveRecord::Base
 
   validates_with KGSValidator, :on => :create
 
-  has_and_belongs_to_many :matches
   has_many :points
   
   # Include default devise modules. Others available are:
