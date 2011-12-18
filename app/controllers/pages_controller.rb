@@ -17,6 +17,15 @@ class PagesController < ApplicationController
 
   def results
     @title = "Results"
+    divisions = ["Alpha", "Beta I", "Beta II", "Gamma I", "Gamma II", "Gamma III", "Gamma IV", "Delta"]
+    @division_players = User.where(:division => divisions)
+    
+    @games = Match.all
+    
+    @delta = User.where(:division => "Delta")
+    
+
+    
   end
 
   def prizes

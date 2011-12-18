@@ -6,7 +6,7 @@
 	</tr>
 <% @user.each do |user| %>
 	<tr>
-	 <td><%= link_to user.username, user_path(user.username) %></td>
+	 <td><%= link_to user.kgs_names, user_path(user.kgs_names) %></td>
 	 <td><%= rank_to_string(user.rank) %></td>
 	</tr>
 <% end %>

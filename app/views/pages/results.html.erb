@@ -1,4 +1,16 @@
 
+<% @delta.each do |player| %>
+	<h2>Delta</h2>
+	<table>
+		<tr>
+			<th>Player</th>
+		</tr>
+			<% player.each do |row| %>
+				<tr><td><%= row.kgs_names %></td></tr>
+			<% end %>
+	</table>
+<% end %>
+
 
 <h2>Database Schema for League Matches</h2>
 <table>

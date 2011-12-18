@@ -390,13 +390,11 @@ module ApplicationHelper
      if rank > 0
          return "#{rank} dan"
      elsif rank == -31
-         return "No rank or - or nothing or whatever"
+         return "-"
      else
        return "#{(rank - 1).abs} kyu"
      end    
-        
-        
-        
+              
    end
    
 end
