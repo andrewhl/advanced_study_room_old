@@ -214,23 +214,24 @@ module ApplicationHelper
     tree = parser.parse sgf_raw
     
     game_info = tree.root.children[0].properties
-    valid_sgf = true
     invalid_reason = []
     
     # Confirm 'ASR League' is mentioned within first 30 moves
     game = tree.root
     for i in 0..30
       comment = game.properties["C"]
+
       if not comment
-        break
-        invalid_reason << "did not contain any comments"
         valid_sgf = false
+        invalid_reason << "did not contain any comments"
+        break
       end
+
       if comment.scan(/ASR League/i)
         valid_sgf = true
       else
-        invalid_reason << "did not contain tag line"
         valid_sgf = false
+        invalid_reason << "did not contain tag line"
       end
       game = game.children[0]
     end
@@ -238,8 +239,8 @@ module ApplicationHelper
     # Check that over time is at least 5x30 byo-yomi
     over_time = game_info["OT"]
     if over_time == nil
-      invalid_reason << "over_time was nil"
       valid_sgf = false
+      invalid_reason << "over_time was nil"
     end
     
     # Restrict overtime settings
@@ -248,24 +249,24 @@ module ApplicationHelper
     byo_yomi_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
 
     if (byo_yomi_periods < 5) and (byo_yomi_seconds < 30)
-      invalid_reason << "incorrect byo-yomi: #{byo_yomi_periods}x#{byo_yomi_seconds}"
       valid_sgf = false
+      invalid_reason << "incorrect byo-yomi: #{byo_yomi_periods}x#{byo_yomi_seconds}"
     end
     
     # Check main time is not less than 1500
     main_time = game_info["TM"].to_i
     
     if main_time < 1500
-      invalid_reason << "incorrect main time: #{main_time}"
       valid_sgf = false
+      invalid_reason << "incorrect main time: #{main_time}"
     end        
     
     # Check ruleset is Japanese
     ruleset = game_info["RU"]
     
     if ruleset != "Japanese"
-      invalid_reason << "incorrect ruleset: #{ruleset}"
       valid_sgf = false
+      invalid_reason << "incorrect ruleset: #{ruleset}"
     end
 
     # Add byo-yomi settings
@@ -275,11 +276,9 @@ module ApplicationHelper
     komi = game_info["KM"].to_f
     
     unless komi == 6.5
-      invalid_reason << "incorrect komi: #{komi}"
       valid_sgf = false
+      invalid_reason << "incorrect komi: #{komi}"
     end
-
-    
     
     return [byo_yomi_periods, byo_yomi_seconds, main_time, ruleset, komi, valid_sgf, invalid_reason]
   end
@@ -327,65 +326,78 @@ module ApplicationHelper
     
     # Various filters
     for row in games
+      valid_game = true
       invalid_reason = []
       parsedurl = row["url"]
 
+      # KGS Archive parsing discard reasons
       if row["public_game"] == "No"
         puts "Game discarded due to being private"
         next
-      elsif Match.find_by_url(parsedurl)
+      end
+
+      if Match.find_by_url(parsedurl)
         puts "Game already in Database"
         next
-      elsif row["board_size"] != 19
+      end
+
+      if row["board_size"] != 19
         invalid_reason << "incorrect board size"
         valid_game = false
-      elsif row["game_type"] == "Rengo"
+      end
+
+      if row["game_type"] == "Rengo"
         invalid_reason << "was a rengo game"
         valid_game = false
-      elsif row["game_type"] == "Teaching"
+      end
+
+      if row["game_type"] == "Teaching"
         invalid_reason << "was a teaching game"
         valid_game = false
-      elsif row["handi"] != 0
+      end
+
+      if row["handi"] != 0
         invalid_reason << "incorrect handicap"
         valid_game = false
-      else
-        sgf = sgfParser(row["url"])
-        
+      end
+
+      # That's all we can get from the KGS Archives, now to check the SGF
+      sgf = sgfParser(row["url"])
+      
+      if sgf[3] == "Canadian"
+        puts "Game discarded because Andrew hates Canadians"
+        next
+      end
+
+      if sgf[5] == false
+        valid_game = false
         for x in sgf[6]
           invalid_reason << x
         end
-        
-        if sgf[3] == "Canadian"
-          puts "Game discarded because Andrew hates Canadians"
-          next
-        end
-        
-        if sgf[5] == false
-          valid_game = false
-        end
+      end
 
-        # Submit game to DB
-        puts "Game added to db as #{valid_game}: #{invalid_reason.to_s}"
-        rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"],
-                                               :white_player_rank => row["white_player_rank"],
-                                               :black_player_name => row["black_player_name"], 
-                                               :black_player_rank => row["black_player_rank"], 
-                                               :result_boolean => row["result_boolean"], 
-                                               :score => row["score"], 
-                                               :board_size => row["board_size"], 
-                                               :handi => row["handi"], 
-                                               :unixtime => row["unixtime"], 
-                                               :game_type => row["game_type"], 
-                                               :ruleset => sgf[3], 
-                                               :komi => sgf[4],
-                                               :result => row["result"],
-                                               :main_time => sgf[2],
-                                               :byo_yomi_periods => sgf[0], 
-                                               :byo_yomi_seconds => sgf[1],
-                                               :invalid_reason => invalid_reason.join(", ").capitalize,
-                                               :valid_game => valid_game)
-        rowadd.save
-      end # End if .. else statement
+      # Everything is green, submit game to DB
+      puts "Game added to db as #{valid_game}: #{invalid_reason.to_s}"
+      rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"],
+                                             :white_player_rank => row["white_player_rank"],
+                                             :black_player_name => row["black_player_name"], 
+                                             :black_player_rank => row["black_player_rank"], 
+                                             :result_boolean => row["result_boolean"], 
+                                             :score => row["score"], 
+                                             :board_size => row["board_size"], 
+                                             :handi => row["handi"], 
+                                             :unixtime => row["unixtime"], 
+                                             :game_type => row["game_type"], 
+                                             :ruleset => sgf[3], 
+                                             :komi => sgf[4],
+                                             :result => row["result"],
+                                             :main_time => sgf[2],
+                                             :byo_yomi_periods => sgf[0], 
+                                             :byo_yomi_seconds => sgf[1],
+                                             :invalid_reason => invalid_reason.join(", ").capitalize,
+                                             :valid_game => valid_game)
+      rowadd.save
+
     end # End for loop
    
    end
