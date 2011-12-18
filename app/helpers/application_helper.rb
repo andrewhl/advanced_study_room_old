@@ -397,4 +397,16 @@ module ApplicationHelper
               
    end
    
+   def test
+     
+     require 'open-uri'
+     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=morriell"))
+     doc = doc.xpath('//table[1]')
+     doc = doc.css('tr:not(:first)')
+     
+     doc = doc.css('tr').reject { |row| row.css('td')[5].content == "Rengo" }
+     puts doc
+     
+     
+   end
 end

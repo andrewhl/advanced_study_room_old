@@ -32,8 +32,6 @@ class KGSValidator < ActiveModel::Validator
     require 'open-uri'
     name = record.kgs_names
     username = record.username
-    permalink = username.parameterize('-')
-    record.permalink = permalink
 
     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=#{name}"))
     
@@ -48,18 +46,29 @@ class KGSValidator < ActiveModel::Validator
 
     doc = doc.xpath('//table[1]')
     doc = doc.css('tr:not(:first)')
-     
+    
     # Errors if there is no KGS page
     if not doc.first
       record.errors[:kgs_names] << ("The KGS account you entered does not exist. Please ensure that your name matches the KGS name exactly.")
       return
     end
     
+    # Omit rows of game type "Rengo"
+    doc = doc.css('tr').reject { |row| row.css('td')[5].content == "Rengo" }
 
     myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
-
+    
     a = doc.first.css('td')[1].content.scan(myRegex)
     b = doc.first.css('td')[2].content.scan(myRegex)
+    
+    # Check in the event of old user names that do not contain rank information
+    if (a.empty?)
+      myRegex = /(\w+)/
+      a = doc.first.css('td')[1].content.scan(myRegex)
+    elsif (b.empty?)
+      myRegex = /(\w+)/
+      b = doc.first.css('td')[2].content.scan(myRegex)
+    end
 
     # Politely changes the name to the correct version we scraped from the site.
     if a[0][0].casecmp(name) == 0
