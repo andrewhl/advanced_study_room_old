@@ -77,6 +77,11 @@ module ApplicationHelper
       
       white_black_array = columns[i].content.scan(myRegex).uniq
       i += 1
+      
+      if (not white_black_array[0]) or (not white_black_array[1])
+        puts "Game discarded due to closed or banned KGS account"
+        return false
+      end
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
       black_player_name = white_black_array[0][0]
@@ -267,7 +272,7 @@ module ApplicationHelper
     ruleset = over_time[1]
     
     # Check komi is 6.5 or 0.5
-    komi = game_info["KM"][1..-2].to_f
+    komi = game_info["KM"].to_f
     
     unless komi == 6.5
       invalid_reason << "incorrect komi: #{komi}"
@@ -397,16 +402,4 @@ module ApplicationHelper
               
    end
    
-   def test
-     
-     require 'open-uri'
-     doc = Nokogiri::HTML(open("http://www.gokgs.com/gameArchives.jsp?user=morriell"))
-     doc = doc.xpath('//table[1]')
-     doc = doc.css('tr:not(:first)')
-     
-     doc = doc.css('tr').reject { |row| row.css('td')[5].content == "Rengo" }
-     puts doc
-     
-     
-   end
 end

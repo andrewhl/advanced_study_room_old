@@ -15,7 +15,8 @@ task :signup_users => :environment do
     names = usernames[division]
     names.each do |x|
         puts "Saving #{x}"
-        @user = User.new(:username => x, :kgs_names => x, :division => division, :email => "#{x}@test.com", :password => "testtest", :password_confirmation => "testtest")
+        @user = User.new(:username => x, :kgs_names => x, :email => "#{x}@test.com", :password => "testtest", :password_confirmation => "testtest")
+        @user.division = division
         @user.save!
         sleep(3)
     end
