@@ -214,28 +214,28 @@ module ApplicationHelper
     tree = parser.parse sgf_raw
     
     game_info = tree.root.children[0].properties
+    valid_sgf = true
     invalid_reason = []
-    
+
     # Confirm 'ASR League' is mentioned within first 30 moves
     game = tree.root
+    found = false
     for i in 0..30
-      comment = game.properties["C"]
-
-      if not comment
-        valid_sgf = false
-        invalid_reason << "did not contain any comments"
-        break
+      comment = game.comments
+      if comment
+        if comment.scan(/ASR League/i)
+          found = true
+        end
       end
 
-      if comment.scan(/ASR League/i)
-        valid_sgf = true
-      else
-        valid_sgf = false
-        invalid_reason << "did not contain tag line"
-      end
       game = game.children[0]
     end
     
+    if found != true
+      valid_sgf = false
+      invalid_reason << "did not contain tag line"
+    end
+
     # Check that over time is at least 5x30 byo-yomi
     over_time = game_info["OT"]
     if over_time == nil
@@ -377,7 +377,7 @@ module ApplicationHelper
       end
 
       # Everything is green, submit game to DB
-      puts "Game added to db as #{valid_game}: #{invalid_reason.to_s}"
+      puts "Game added to db as #{valid_game}: #{invalid_reason.join(", ").capitalize}"
       rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"],
                                              :white_player_rank => row["white_player_rank"],
                                              :black_player_name => row["black_player_name"], 
