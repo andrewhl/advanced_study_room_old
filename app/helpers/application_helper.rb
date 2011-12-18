@@ -54,7 +54,7 @@ module ApplicationHelper
       end
       puts "Scraping #{x.kgs_names}..."
       match_scraper(x.kgs_names)
-      sleep(3)
+      sleep(2)
     end
   end
 
@@ -220,15 +220,22 @@ module ApplicationHelper
     # Confirm 'ASR League' is mentioned within first 30 moves
     game = tree.root
     found = false
-    for i in 0..30
-      comment = game.comments
-      if comment
-        if comment.scan(/ASR League/i)
-          found = true
-        end
-      end
 
-      game = game.children[0]
+    count = 0
+    tree.each { |node| count += 1 }
+
+    if count > 30
+      for i in 0..30
+
+        comment = game.comments
+        if comment
+          if comment.scan(/ASR League/i)
+            found = true
+          end
+        end
+
+        game = game.children[0]
+      end
     end
     
     if found != true
