@@ -384,41 +384,39 @@ module ApplicationHelper
         end
       end
       
+      player1 = row["black_player_name"]
+      player2 = row["white_player_name"]
+      
+      whereResult = Match.where('(black_player_name = ? or white_player_name = ?) and (black_player_name = ? or white_player_name = ?)', player1, player2, player2, player1)
+      
+      matchnum = 2 - whereResult.length
+      matchnum = 0 if matchnum < 0
+      
       # Points attribution
       if valid_game == true
         if row["result_boolean"] == false
           winner = User.find_by_kgs_names(row["black_player_name"])
           loser = User.find_by_kgs_names(row["white_player_name"])
-          if winner.points.nil?
-            winner.points = 0
-          end
-          if loser.points.nil?
-            loser.points = 0
-          end
-          winner.points += 2
-          puts "#{row["black_player_name"]} +2 points"
-          loser.points += 1
-          puts "#{row["white_player_name"]} +1 point"
-          winner.save
-          loser.save
-        end   
-        if row["result_boolean"] == true
+        else
           winner = User.find_by_kgs_names(row["white_player_name"])
           loser = User.find_by_kgs_names(row["black_player_name"])
-          if winner.points.nil?
-            winner.points = 0
-          end
-          if loser.points.nil?
-            loser.points = 0
-          end
-          winner.points += 2
-          puts "#{row["white_player_name"]} +2 points"
-          loser.points += 1
-          puts "#{row["black_player_name"]} +1 point"
-          winner.save
-          loser.save
+        end   
+
+        if winner.points.nil?
+          winner.points = 0
+        end
+        if loser.points.nil?
+          loser.points = 0
         end
 
+        winner.points += 1 * matchnum
+        loser.points += 0.5 * matchnum
+
+        puts "#{winner.kgs_names} +#{1 * matchnum}"
+        puts "#{loser.kgs_names} +#{0.5 * matchnum}"
+
+        winner.save
+        loser.save
       end
 
       # Everything is green, submit game to DB
