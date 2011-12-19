@@ -48,14 +48,15 @@ module ApplicationHelper
     
     kgsnames = User.select("kgs_names")
     
-    for x in kgsnames
-      if not x.kgs_names
-        next
-      end
-      puts "Scraping #{x.kgs_names}..."
-      match_scraper(x.kgs_names)
-      sleep(2)
-    end
+    # for x in kgsnames
+    #   if not x.kgs_names
+    #     next
+    #   end
+    #   puts "Scraping #{x.kgs_names}..."
+    #   match_scraper(x.kgs_names)
+    #   sleep(2)
+    # end
+    match_scraper('Shinichi56')
   
   end
 
@@ -387,7 +388,7 @@ module ApplicationHelper
       player1 = row["black_player_name"]
       player2 = row["white_player_name"]
       
-      whereResult = Match.where('(black_player_name=? OR white_player_name=?) AND (black_player_name=? OR white_player_name=?)', player1, player2, player2, player1)
+      whereResult = Match.where('(black_player_name=? OR white_player_name=?) AND (black_player_name=? OR white_player_name=?)', player1, player1, player2, player2)
 
       matchnum = 2 - whereResult.length
       matchnum = 0 if matchnum < 0
