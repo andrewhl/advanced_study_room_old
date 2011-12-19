@@ -387,8 +387,8 @@ module ApplicationHelper
       player1 = row["black_player_name"]
       player2 = row["white_player_name"]
       
-      whereResult = Match.where('(black_player_name = ? or white_player_name = ?) and (black_player_name = ? or white_player_name = ?)', player1, player2, player2, player1)
-      
+      whereResult = Match.where('(black_player_name=? OR white_player_name=?) AND (black_player_name=? OR white_player_name=?)', player1, player2, player2, player1)
+
       matchnum = 2 - whereResult.length
       matchnum = 0 if matchnum < 0
       
