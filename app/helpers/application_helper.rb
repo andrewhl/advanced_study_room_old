@@ -56,7 +56,7 @@ module ApplicationHelper
     #   match_scraper(x.kgs_names)
     #   sleep(2)
     # end
-    match_scraper('Shinichi56')
+    match_scraper('LonelyJoy')
   
   end
 
@@ -77,13 +77,23 @@ module ApplicationHelper
       
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
-      white_black_array = columns[i].content.scan(myRegex).uniq
-      i += 1
+      white_black_array = columns[i].content.scan(myRegex)
       
       if (not white_black_array[0]) or (not white_black_array[1])
         puts "Game discarded due to closed or banned KGS account"
         return false
       end
+      
+      if white_black_array[0][0] == white_black_array[1][0]
+        white_black_array.delete(white_black_array[1])
+      end
+      if white_black_array[0][0] == white_black_array[2][0]
+        white_black_array.delete(white_black_array[2])
+      end
+      
+      i += 1
+      
+      
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
       black_player_name = white_black_array[0][0]
