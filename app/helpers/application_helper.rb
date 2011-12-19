@@ -46,16 +46,18 @@ module ApplicationHelper
     
   def scrape
     
-    kgsnames = User.select("kgs_names")
+    # kgsnames = User.select("kgs_names")
     
-    for x in kgsnames
-      if not x.kgs_names
-        next
-      end
-      puts "Scraping #{x.kgs_names}..."
-      match_scraper(x.kgs_names)
-      sleep(2)
-    end
+    # for x in kgsnames
+    #   if not x.kgs_names
+    #     next
+    #   end
+    #   puts "Scraping #{x.kgs_names}..."
+    #   match_scraper(x.kgs_names)
+    #   sleep(2)
+    # end
+    
+    match_scraper("kabradarf")
   end
 
   def processRow(row)
@@ -140,18 +142,18 @@ module ApplicationHelper
 
 
     if not User.find_by_kgs_names(black_player_name)
-      puts "Game Discarded due to non-ASR member"
+      puts "Game discarded due to non-ASR member"
       return false 
     end
 
     if not User.find_by_kgs_names(white_player_name)
-      puts "Game Discarded due to non-ASR member"
+      puts "Game discarded due to non-ASR member"
       return false 
     end
     
     # Check both users are in the same division
     if not User.find_by_kgs_names(black_player_name).division == User.find_by_kgs_names(white_player_name).division
-      puts "Game Discarded due to members being in different pools"
+      puts "Game discarded due to members being in different pools"
       return false 
     end
     
@@ -381,6 +383,43 @@ module ApplicationHelper
         for x in sgf[6]
           invalid_reason << x
         end
+      end
+      
+      # Points attribution
+      if valid_game == true
+        if row["result_boolean"] == false
+          winner = User.find_by_kgs_names(row["black_player_name"])
+          loser = User.find_by_kgs_names(row["white_player_name"])
+          if winner.points.nil?
+            winner.points = 0
+          end
+          if loser.points.nil?
+            loser.points = 0
+          end
+          winner.points += 2
+          puts "#{row["black_player_name"]} +2 points"
+          loser.points += 1
+          puts "#{row["white_player_name"]} +1 point"
+          winner.save
+          loser.save
+        end   
+        if row["result_boolean"] == true
+          winner = User.find_by_kgs_names(row["white_player_name"])
+          loser = User.find_by_kgs_names(row["black_player_name"])
+          if winner.points.nil?
+            winner.points = 0
+          end
+          if loser.points.nil?
+            loser.points = 0
+          end
+          winner.points += 2
+          puts "#{row["white_player_name"]} +2 points"
+          loser.points += 1
+          puts "#{row["black_player_name"]} +1 point"
+          winner.save
+          loser.save
+        end
+
       end
 
       # Everything is green, submit game to DB

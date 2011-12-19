@@ -90,8 +90,6 @@ class User < ActiveRecord::Base
   validates_presence_of :kgs_names
 
   validates_with KGSValidator, :on => :create
-
-  has_many :points
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
