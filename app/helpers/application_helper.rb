@@ -46,18 +46,17 @@ module ApplicationHelper
     
   def scrape
     
-    # kgsnames = User.select("kgs_names")
+    kgsnames = User.select("kgs_names")
     
-    # for x in kgsnames
-    #   if not x.kgs_names
-    #     next
-    #   end
-    #   puts "Scraping #{x.kgs_names}..."
-    #   match_scraper(x.kgs_names)
-    #   sleep(2)
-    # end
-    
-    match_scraper("kabradarf")
+    for x in kgsnames
+      if not x.kgs_names
+        next
+      end
+      puts "Scraping #{x.kgs_names}..."
+      match_scraper(x.kgs_names)
+      sleep(2)
+    end
+  
   end
 
   def processRow(row)
@@ -313,7 +312,7 @@ module ApplicationHelper
     
     games = []
     
-    doc.each do |row|
+    doc.reverse_each do |row|
       rowResult = processRow(row)
       if rowResult != false
         games << rowResult
