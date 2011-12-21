@@ -56,7 +56,8 @@ module ApplicationHelper
     #   match_scraper(x.kgs_names)
     #   sleep(2)
     # end
-    match_scraper('LonelyJoy')
+    # match_scraper('LonelyJoy')
+    match_scraper('thesirjay')
   
   end
 
@@ -75,30 +76,30 @@ module ApplicationHelper
       
       # Review games
       
+      # TO DO: Add logic for cloned games where first user is different from league player(s)
+      
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       white_black_array = columns[i].content.scan(myRegex)
       
-      if (not white_black_array[0]) or (not white_black_array[1])
+      if (not white_black_array[0]) or (not white_black_array[1]) or (not white_black_array[2])
         puts "Game discarded due to closed or banned KGS account"
         return false
       end
       
+      # Check for rank drift and remove duplicates of the reviewer's name
       if white_black_array[0][0] == white_black_array[1][0]
-        white_black_array.delete(white_black_array[1])
-      end
-      if white_black_array[0][0] == white_black_array[2][0]
-        white_black_array.delete(white_black_array[2])
+        white_black_array.delete_at(1)
+      elsif white_black_array[0][0] == white_black_array[2][0]
+        white_black_array.delete_at(2)
       end
       
       i += 1
-      
-      
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
       black_player_name = white_black_array[0][0]
       black_player_rank = rank_convert(white_black_array[0][1])
-
+      
       # Calculate white player name and rank - Note that white will ALWAYS be our reviewee
       white_player_name = white_black_array[1][0]
       white_player_rank = rank_convert(white_black_array[1][1])
