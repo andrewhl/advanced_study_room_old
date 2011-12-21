@@ -32,3 +32,4 @@ select.division { clear: both; display: block; }
 input.submit { clear: both; }
 
 .notice { clear: both; }
+.self td { font-weight: bold; }

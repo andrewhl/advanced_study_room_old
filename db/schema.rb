@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111218210856) do
+ActiveRecord::Schema.define(:version => 20111221065419) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -104,6 +104,7 @@ ActiveRecord::Schema.define(:version => 20111218210856) do
     t.integer  "rank"
     t.string   "permalink"
     t.float    "points"
+    t.float    "month_points"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -48,16 +48,16 @@ module ApplicationHelper
     
     kgsnames = User.select("kgs_names")
     
-    # for x in kgsnames
-    #   if not x.kgs_names
-    #     next
-    #   end
-    #   puts "Scraping #{x.kgs_names}..."
-    #   match_scraper(x.kgs_names)
-    #   sleep(2)
-    # end
+    for x in kgsnames
+      if not x.kgs_names
+        next
+      end
+      puts "Scraping #{x.kgs_names}..."
+      match_scraper(x.kgs_names)
+      sleep(2)
+    end
     # match_scraper('LonelyJoy')
-    match_scraper('thesirjay')
+    # match_scraper('thesirjay')
   
   end
 
@@ -76,8 +76,6 @@ module ApplicationHelper
       
       # Review games
       
-      # TO DO: Add logic for cloned games where first user is different from league player(s)
-      
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       white_black_array = columns[i].content.scan(myRegex)
@@ -92,8 +90,11 @@ module ApplicationHelper
         white_black_array.delete_at(1)
       elsif white_black_array[0][0] == white_black_array[2][0]
         white_black_array.delete_at(2)
+      else
+        puts "Game discarded, reviewed by someone else"
+        return false
       end
-      
+    
       i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
@@ -121,6 +122,11 @@ module ApplicationHelper
       white_player_name = "None"
       white_player_rank = -31
 
+      elsif columns[4].content == "Unfinished"
+
+        # Unfinished games
+        puts "Game discarded because it was unfinished"
+        return false
 
     else
 
@@ -403,6 +409,11 @@ module ApplicationHelper
 
       matchnum = 2 - whereResult.length
       matchnum = 0 if matchnum < 0
+      
+      if whereResult.length > 2
+        valid_game = false
+        invalid_reason << "third or higher game against same opponent"
+      end
       
       # Points attribution
       if valid_game == true

@@ -3,10 +3,27 @@
 	<h2>Delta</h2>
 	<table>
 		<tr>
-			<th>Player</th>
+			<th><%= sortable "username" %></th>
+			<th><%= sortable "points" %></th>
+			<th><%= sortable "matches played" %></th>
+			<th><%= sortable "wins" %></th>
+			<th><%= sortable "losses" %></th>
 		</tr>
 		<% @delta.each do |player| %>
-				<tr><td><%= player.kgs_names %></td></tr>
+			<% if (user_signed_in?) and (current_user == player) %>
+			<tr class="self">
+				<td><%= current_user.kgs_names %></td>
+				<td><%= current_user.points %></td>
+			</tr>
+			<% else %>		
+				<tr>
+					<td><%= player.kgs_names %></td>
+					<td><%= player.points %></td>
+					<td><%= @total_games %></td>
+					<td><%= @wins %></td>
+					<td><%= @losses %></td>
+				</tr>
+			<% end %>
 		<% end %>
 	</table>
 
