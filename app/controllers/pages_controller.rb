@@ -20,25 +20,48 @@ class PagesController < ApplicationController
     
     params[:sort] ||= "points"
     params[:direction] ||= "desc"
-    @delta = User.where(:division => "Delta").order(sort_column + ' ' + sort_direction)
-    @delta.each do |player|
-      white_wins = Match.where("white_player_name=? AND result_boolean=true AND valid_game=true", player.kgs_names).length
-      black_wins = Match.where("black_player_name=? AND result_boolean=false AND valid_game=true", player.kgs_names).length
-      @wins = white_wins + black_wins
-      @total_games = Match.where("(white_player_name=? OR black_player_name=?) AND valid_game=true", player.kgs_names).length
-      @losses = total_games - wins
+  
+    if params[:sort] == ("username" or "points")
+      delta = User.where(:division => "Delta").order(sort_column + ' ' + sort_direction)
+    else
+      delta = User.where(:division => "Delta")
     end
-      
+
+    @deltaArr = []
+    delta.each do |player|
+      white_wins = Match.where("white_player_name=? AND result_boolean=? AND valid_game=?", player.kgs_names, true, true).length
+      black_wins = Match.where("black_player_name=? AND result_boolean=? AND valid_game=?", player.kgs_names, false, true).length
+      wins = white_wins + black_wins
+      total_games = Match.where("(white_player_name=? OR black_player_name=?) AND valid_game=?", player.kgs_names, player.kgs_names, true).length
+      losses = total_games - wins
+      @deltaArr << [player.kgs_names, player.points, total_games, wins, losses]
+    end
+
+    if params[:sort] == "matches played"
+      if params[:direction] == "desc"
+        @deltaArr.sort! {|x,y| y[2] <=> x[2]}
+      else
+        @deltaArr.sort! {|x,y| x[2] <=> y[2]}
+      end
+    elsif params[:sort] == "wins"
+      if params[:direction] == "desc"
+        @deltaArr.sort! {|x,y| y[3] <=> x[3]}
+      else
+        @deltaArr.sort! {|x,y| x[3] <=> y[3]}
+      end
+    elsif params[:sort] == "losses"
+      if params[:direction] == "desc"
+        @deltaArr.sort! {|x,y| y[4] <=> x[4]}
+      else
+        @deltaArr.sort! {|x,y| x[4] <=> y[4]}
+      end
+    end
+
+
     @title = "Results"
     divisions = ["Alpha", "Beta I", "Beta II", "Gamma I", "Gamma II", "Gamma III", "Gamma IV", "Delta"]
     @division_players = User.where(:division => divisions)
-    
-    @games = Match.all
-    
-    # @delta = User.where(:division => "Delta")
-    
-
-    
+        
   end
 
   def prizes
@@ -60,3 +83,4 @@ class PagesController < ApplicationController
   end
 
 end
+
