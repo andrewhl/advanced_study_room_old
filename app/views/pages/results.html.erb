@@ -1,4 +1,20 @@
-
+<h2>Alpha</h2>
+<table class="results">
+	<tr>
+		<th></th>
+<% @alpha.each do |player| %>
+		<th><%= player.kgs_names %></th>
+<% end %>
+	</tr>
+<% @alpha.each do |player| %>
+	<tr>
+		<td><%= player.kgs_names %></td>
+		<% @alpha.length.times do %>
+		<td></td>
+		<% end %>
+	</tr>
+<% end %>
+</table>
 <h2>Delta</h2>
 <table>
 	<tr>

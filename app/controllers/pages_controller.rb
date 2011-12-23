@@ -18,13 +18,15 @@ class PagesController < ApplicationController
 
   def results
     
+    @alpha = User.where(:division => "Alpha")
+    
     # Default values for the page sorting.
     params[:sort] ||= "points"
     params[:direction] ||= "desc"
   
     # Checks to see if we're sorting by a user column. If we are, it uses SQL's sort (.order) because it's faster than ruby's array.sort
     # If you didn't want to hardcode the values, you could rewrite this to do a dynamic check to see if the column name exists in the model.
-    # But currently it's hardcoded for conveinance.
+    # But currently it's hardcoded for convenience.
     if params[:sort] == ("username" or "points")
       delta = User.where(:division => "Delta").order(sort_column + ' ' + sort_direction)
     else

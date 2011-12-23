@@ -33,3 +33,5 @@ input.submit { clear: both; }
 
 .notice { clear: both; }
 .self td { font-weight: bold; }
+
+table.results th {transform:rotate(-70deg);}
