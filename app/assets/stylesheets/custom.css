@@ -34,4 +34,15 @@ input.submit { clear: both; }
 .notice { clear: both; }
 .self td { font-weight: bold; }
 
-table.results th {transform:rotate(-70deg);}
+table.results th {
+	display: inline-block;
+	position: relative;
+	width: 15px;
+	left: 50px;
+	transform:rotate(-70deg);
+	-ms-transform:rotate(-70deg); /* Internet Explorer */
+	-moz-transform:rotate(-70deg); /* Firefox */
+	-webkit-transform:rotate(-70deg); /* Safari and Chrome */
+	-o-transform:rotate(-70deg); /* Opera */
+}
+table.results td.first_col { font-weight: bold; }

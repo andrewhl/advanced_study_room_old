@@ -1,14 +1,14 @@
 <h2>Alpha</h2>
 <table class="results">
 	<tr>
-		<th></th>
+		<th class="first_col"></th>
 <% @alpha.each do |player| %>
 		<th><%= player.kgs_names %></th>
 <% end %>
 	</tr>
 <% @alpha.each do |player| %>
 	<tr>
-		<td><%= player.kgs_names %></td>
+		<td class="first_col" colspan="19"><%= player.kgs_names %></td>
 		<% @alpha.length.times do %>
 		<td></td>
 		<% end %>
