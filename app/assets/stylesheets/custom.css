@@ -33,16 +33,45 @@ input.submit { clear: both; }
 
 .notice { clear: both; }
 .self td { font-weight: bold; }
-
-table.results th {
-	display: inline-block;
-	position: relative;
-	width: 15px;
-	left: 50px;
-	transform:rotate(-70deg);
-	-ms-transform:rotate(-70deg); /* Internet Explorer */
-	-moz-transform:rotate(-70deg); /* Firefox */
-	-webkit-transform:rotate(-70deg); /* Safari and Chrome */
-	-o-transform:rotate(-70deg); /* Opera */
-}
-table.results td.first_col { font-weight: bold; }
+table.results { margin-top: 55px; width: 900px }
+table.results th { font-weight: normal; padding-top: 0px; }
+table.results th.first_col { width: 75px; }
+table.results th > span {
+      position: relative;
+    }
+table.results 	th > span > span {
+	  /* Must remove span from normal flow in order to keep columns from widening */
+	  position: absolute;
+	  left: -5px;
+	  white-space: nowrap;
+    -moz-transform: rotate(-70deg) skewX(20deg);
+    -o-transform: rotate(-70deg) skewX(20deg);
+    -webkit-transform: rotate(-70deg) skewX(20deg);
+    -moz-transform-origin: 0% 0%;
+    -o-transform-origin: 0% 0%;
+    -webkit-transform-origin: 0% 0%;
+	  border: 1px solid;
+	  padding: 9px;
+	  height: 23px;
+	  width: 100px;
+	  /* Illustrate where it's at with color */
+	  background-color: #E5ECF9;
+	  /* If one wants centered text, this is the place to reset it */
+	  /* From a design point of view it might not be desirable */
+	  text-align: center;
+	}
+	/* CSS filter for Safari */
+	@media screen and (-webkit-min-device-pixel-ratio: 0){
+	  th > span > span {
+	    top: 0;
+	  }
+	}
+table.results th > span > span > span {
+	  /* Rotate the text back, so it will be easier to read */
+    -moz-transform: skewX(-20deg);
+    -o-transform: skewX(-20deg);
+    -webkit-transform: skewX(-20deg);
+	}
+/*table.results tr:first-child td { padding-top: 0px; }
+*/table.results td.first_col { font-weight: bold; }
+table.results td { border-right: 1px solid black; text-align: center; }

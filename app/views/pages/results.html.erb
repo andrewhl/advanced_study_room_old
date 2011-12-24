@@ -3,14 +3,26 @@
 	<tr>
 		<th class="first_col"></th>
 <% @alpha.each do |player| %>
-		<th><%= player.kgs_names %></th>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
 <% end %>
 	</tr>
-<% @alpha.each do |player| %>
+<% @alpha.each do |row| %>
 	<tr>
-		<td class="first_col" colspan="19"><%= player.kgs_names %></td>
-		<% @alpha.length.times do %>
-		<td></td>
+		<td class="first_col"><%= row.kgs_names %></td>
+		<% @alpha.each do |column| %>
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", column.kgs_names, row.kgs_names, false).length >= 1) %>
+				<td>Win (B)</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", row.kgs_names, column.kgs_names, false).length >= 1) %>
+				<td>Loss (W)</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", column.kgs_names, row.kgs_names, true).length >= 1) %>
+				<td>Loss (B)</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", row.kgs_names, column.kgs_names, true).length >= 1) %>
+				<td>Win (W)</td>
+			<% else %>
+				<td></td>
+			<% end %>
 		<% end %>
 	</tr>
 <% end %>
