@@ -12,14 +12,10 @@
 		<% @alpha.each do |column| %>
 			<% if column.kgs_names == row.kgs_names %>
 				<td>X</td>
-			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", column.kgs_names, row.kgs_names, false).length >= 1) %>
-				<td>Win (B)</td>
-			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", row.kgs_names, column.kgs_names, false).length >= 1) %>
-				<td>Loss (W)</td>
-			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", column.kgs_names, row.kgs_names, true).length >= 1) %>
-				<td>Loss (B)</td>
-			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=?", row.kgs_names, column.kgs_names, true).length >= 1) %>
-				<td>Win (W)</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
+				<td>W</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
+				<td>L</td>
 			<% else %>
 				<td></td>
 			<% end %>
@@ -27,6 +23,163 @@
 	</tr>
 <% end %>
 </table>
+
+<h2>Beta I</h2>
+<table class="results">
+	<tr>
+		<th class="first_col"></th>
+<% @betaI.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
+<% end %>
+	</tr>
+<% @betaI.each do |row| %>
+	<tr>
+		<td class="first_col"><%= row.kgs_names %></td>
+		<% @betaI.each do |column| %>
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
+				<td>W</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
+				<td>L</td>
+			<% else %>
+				<td></td>
+			<% end %>
+		<% end %>
+	</tr>
+<% end %>
+</table>
+
+<h2>Beta II</h2>
+<table class="results">
+	<tr>
+		<th class="first_col"></th>
+<% @betaII.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
+<% end %>
+	</tr>
+<% @betaII.each do |row| %>
+	<tr>
+		<td class="first_col"><%= row.kgs_names %></td>
+		<% @betaII.each do |column| %>
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
+				<td>W</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
+				<td>L</td>
+			<% else %>
+				<td></td>
+			<% end %>
+		<% end %>
+	</tr>
+<% end %>
+</table>
+
+<h2>Gamma I</h2>
+<table class="results">
+	<tr>
+		<th class="first_col"></th>
+<% @gammaI.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
+<% end %>
+	</tr>
+<% @gammaI.each do |row| %>
+	<tr>
+		<td class="first_col"><%= row.kgs_names %></td>
+		<% @gammaI.each do |column| %>
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
+				<td>W</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
+				<td>L</td>
+			<% else %>
+				<td></td>
+			<% end %>
+		<% end %>
+	</tr>
+<% end %>
+</table>
+
+<h2>Gamma II</h2>
+<table class="results">
+	<tr>
+		<th class="first_col"></th>
+<% @gammaII.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
+<% end %>
+	</tr>
+<% @gammaII.each do |row| %>
+	<tr>
+		<td class="first_col"><%= row.kgs_names %></td>
+		<% @gammaII.each do |column| %>
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
+				<td>W</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
+				<td>L</td>
+			<% else %>
+				<td></td>
+			<% end %>
+		<% end %>
+	</tr>
+<% end %>
+</table>
+
+<h2>Gamma III</h2>
+<table class="results">
+	<tr>
+		<th class="first_col"></th>
+<% @gammaIII.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
+<% end %>
+	</tr>
+<% @gammaIII.each do |row| %>
+	<tr>
+		<td class="first_col"><%= row.kgs_names %></td>
+		<% @gammaIII.each do |column| %>
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
+				<td>W</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
+				<td>L</td>
+			<% else %>
+				<td></td>
+			<% end %>
+		<% end %>
+	</tr>
+<% end %>
+</table>
+
+<h2>Gamma IV</h2>
+<table class="results">
+	<tr>
+		<th class="first_col"></th>
+<% @gammaIV.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
+<% end %>
+	</tr>
+<% @gammaIV.each do |row| %>
+	<tr>
+		<td class="first_col"><%= row.kgs_names %></td>
+		<% @gammaIV.each do |column| %>
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
+				<td>W</td>
+			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
+				<td>L</td>
+			<% else %>
+				<td></td>
+			<% end %>
+		<% end %>
+	</tr>
+<% end %>
+</table>
+
 <h2>Delta</h2>
 <table>
 	<tr>

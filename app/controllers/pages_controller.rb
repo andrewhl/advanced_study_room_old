@@ -19,6 +19,12 @@ class PagesController < ApplicationController
   def results
     
     @alpha = User.where(:division => "Alpha")
+    @betaI = User.where(:division => "Beta I")
+    @betaII = User.where(:division => "Beta II")
+    @gammaI = User.where(:division => "Gamma I")
+    @gammaII = User.where(:division => "Gamma II")
+    @gammaIII = User.where(:division => "Gamma III")
+    @gammaIV = User.where(:division => "Gamma IV")
     
     # Default values for the page sorting.
     params[:sort] ||= "points"
