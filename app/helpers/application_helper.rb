@@ -319,7 +319,7 @@ module ApplicationHelper
 
     # Check that page contains at least one game record
     if doc.css("h2").inner_html.include? '(0 games)'
-      puts "Teach hasn't played any games at all this month"
+      puts "#{kgs_name} hasn't played any games at all this month"
       return
     end
     
@@ -410,7 +410,7 @@ module ApplicationHelper
       matchnum = 2 - whereResult.length
       matchnum = 0 if matchnum < 0
       
-      if whereResult.length > 2
+      if whereResult.length >= 2
         valid_game = false
         invalid_reason << "third or higher game against same opponent"
       end
