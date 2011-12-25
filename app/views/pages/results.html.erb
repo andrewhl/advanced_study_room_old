@@ -1,3 +1,4 @@
+
 <h2>Alpha</h2>
 <table class="results">
 	<tr>
@@ -10,14 +11,14 @@
 	<tr>
 		<td class="first_col"><%= row.kgs_names %></td>
 		<% @alpha.each do |column| %>
+		
+		<% wins = (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length) + (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length) %>
+		<% losses = (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length) + (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length) %>
+		
 			<% if column.kgs_names == row.kgs_names %>
 				<td>X</td>
-			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length >= 1) %>
-				<td>W</td>
-			<% elsif (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length >= 1) or (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length >= 1) %>
-				<td>L</td>
 			<% else %>
-				<td></td>
+				<td><%= "W" * wins + "L" * losses %></td>
 			<% end %>
 		<% end %>
 	</tr>
