@@ -18,13 +18,13 @@ class PagesController < ApplicationController
 
   def results
     
-    @alpha = User.where(:division => "Alpha")
-    @betaI = User.where(:division => "Beta I")
-    @betaII = User.where(:division => "Beta II")
-    @gammaI = User.where(:division => "Gamma I")
-    @gammaII = User.where(:division => "Gamma II")
-    @gammaIII = User.where(:division => "Gamma III")
-    @gammaIV = User.where(:division => "Gamma IV")
+    @alpha = User.where(:division => "Alpha").sort { |a,b| a.kgs_names <=> b.kgs_names }
+    @betaI = User.where(:division => "Beta I").sort { |a,b| a.kgs_names <=> b.kgs_names }
+    @betaII = User.where(:division => "Beta II").sort { |a,b| a.kgs_names <=> b.kgs_names }
+    @gammaI = User.where(:division => "Gamma I").sort { |a,b| a.kgs_names <=> b.kgs_names }
+    @gammaII = User.where(:division => "Gamma II").sort { |a,b| a.kgs_names <=> b.kgs_names }
+    @gammaIII = User.where(:division => "Gamma III").sort { |a,b| a.kgs_names <=> b.kgs_names }
+    @gammaIV = User.where(:division => "Gamma IV").sort { |a,b| a.kgs_names <=> b.kgs_names }
     
     # Default values for the page sorting.
     params[:sort] ||= "points"

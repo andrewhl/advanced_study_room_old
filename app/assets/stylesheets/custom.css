@@ -53,7 +53,7 @@ table.results 	th > span > span {
 	  border: 1px solid;
 	  padding: 9px;
 	  height: 23px;
-	  width: 100px;
+	  width: 60px;
 	  /* Illustrate where it's at with color */
 	  background-color: #E5ECF9;
 	  /* If one wants centered text, this is the place to reset it */
@@ -61,7 +61,7 @@ table.results 	th > span > span {
 	  text-align: center;
 	}
 	/* CSS filter for Safari */
-	@media screen and (-webkit-min-device-pixel-ratio: 0){
+	@media screen and (-webkit-min-device-pixel-ratio: 0) {
 	  th > span > span {
 	    top: 0;
 	  }
@@ -72,6 +72,6 @@ table.results th > span > span > span {
     -o-transform: skewX(-20deg);
     -webkit-transform: skewX(-20deg);
 	}
-/*table.results tr:first-child td { padding-top: 0px; }
-*/table.results td.first_col { font-weight: bold; }
-table.results td { border-right: 1px solid black; text-align: center; }
+/* table.results tr:first-child td { padding-top: 0px; } */
+table.results td.first_col { font-weight: bold; }
+table.results td { border-right: 1px solid black; text-align: center; width: 40px; }
