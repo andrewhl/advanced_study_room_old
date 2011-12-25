@@ -71,7 +71,16 @@ module ApplicationHelper
 
     public_game = columns[i].content
     i += 1
-        
+    
+    if (columns[4].content != "Review") and (columns[5].content == "Unfinished")
+      
+       # Unfinished games
+      
+       puts "Game discarded because it was unfinished"
+       return false
+       
+    end
+    
     if columns[4].content == "Review"
       
       # Review games
@@ -121,12 +130,6 @@ module ApplicationHelper
       # THERE IS NO WHITE
       white_player_name = "None"
       white_player_rank = -31
-
-      elsif columns[4].content == "Unfinished"
-
-        # Unfinished games
-        puts "Game discarded because it was unfinished"
-        return false
 
     else
 
@@ -379,6 +382,11 @@ module ApplicationHelper
 
       if row["game_type"] == "Teaching"
         invalid_reason << "was a teaching game"
+        valid_game = false
+      end
+      
+      if row["game_type"] == "Review"
+        invalid_reason << "review game"
         valid_game = false
       end
 
