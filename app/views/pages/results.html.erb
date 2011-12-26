@@ -27,18 +27,20 @@
 		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
 		<% @alpha.each do |column| %>
 		
-		<% losses = (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length) + (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length) %>
-		<% wins = (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length) + (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length) %>
+		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).limit(2) %>
+		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).limit(2) %>
+		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).limit(2) %>
+		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).limit(2) %>
 		
 			<% if column.kgs_names == row.kgs_names %>
 				<td>X</td>
 			<% else %>
 			<td>
-				<% wins.times do %>
-					<%= image_tag("tick.png", :alt => "win") %>
+				<% wins.each do |win| %>
+					<% link_to image_tag("tick.png", :alt => "win"), win.url %>
 				<% end %>
-				<% losses.times do %>
-					<%= image_tag("bullet_cross.png", :alt => "loss") %>
+				<% losses.each do |loss| %>
+					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
 				<% end %>
 			</td>
 				
@@ -69,18 +71,20 @@
 		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
 		<% @betaI.each do |column| %>
 		
-		<% losses = (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).length) + (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).length) %>
-		<% wins = (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).length) + (Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).length) %>
+		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at).limit(2) %>
+		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at).limit(2) %>
+		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at).limit(2) %>
+		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at).limit(2) %>
 		
 			<% if column.kgs_names == row.kgs_names %>
 				<td>X</td>
 			<% else %>
 			<td>
-				<% wins.times do %>
-					<%= image_tag("tick.png", :alt => "win") %>
+				<% wins.each do |win| %>
+					<% link_to image_tag("tick.png", :alt => "win"), win.url %>
 				<% end %>
-				<% losses.times do %>
-					<%= image_tag("bullet_cross.png", :alt => "loss") %>
+				<% losses.each do |loss| %>
+					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
 				<% end %>
 			</td>
 				
