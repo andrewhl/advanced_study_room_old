@@ -17,7 +17,7 @@ class PagesController < ApplicationController
   end
 
   def results
-    
+    #@alpha = User.where(:division => "Alpha").order("users.points DESC, users.kgs_names ASC")
     @alpha = User.where(:division => "Alpha").sort { |a,b| a.kgs_names <=> b.kgs_names }
     @betaI = User.where(:division => "Beta I").sort { |a,b| a.kgs_names <=> b.kgs_names }
     @betaII = User.where(:division => "Beta II").sort { |a,b| a.kgs_names <=> b.kgs_names }
