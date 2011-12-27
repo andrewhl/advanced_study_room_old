@@ -3,4 +3,5 @@ log/*.log
 tmp/
 .sass-cache/
 .rvmrc
+config/database.yml
 
