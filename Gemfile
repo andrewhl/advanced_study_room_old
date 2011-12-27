@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
 gem 'nokogiri'
-gem "SgfParser", :path => "lib/assets/gems/SgfParser"
+gem 'SgfParser', :git => 'git://github.com/Trevoke/SGFParser.git' 
 gem 'ffaker'
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
@@ -10,20 +10,9 @@ gem 'squeel'
 gem 'gravatar_image_tag'
 gem 'whenever', :require => false
 gem 'mechanize'
-
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
-group :production do
-  gem 'pg'
-end
-
-group :test, :development do  
-  gem 'sqlite3'
-end
+gem 'pg'
 
 gem 'devise', '1.4.9'
-
 gem "rspec-rails", :group => [:test, :development]
 
 # Gems used only for assets and not required
@@ -57,6 +46,5 @@ group :test do
   gem 'guard-spork'
   gem 'guard-rspec'
   gem 'guard-pow'
-  gem 'growl_notify'
   gem "spork", "> 0.9.0.rc"
 end
