@@ -16,45 +16,44 @@
 <table class="results">
 	<tr>
 		<th class="first_col"></th>
+
 <% @alpha.each do |player| %>
-		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
-		
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
 <% end %>
+
 <th><span><span><span>Points</span></span></span></th>
 	</tr>
+<% parity = 'even' %>
 <% @alpha.each do |row| %>
 	<tr>
 		<% advance = User.where(:division => "Alpha").order("users.points DESC").limit(4) %>
+		<td class="first_col, <%= parity %>"
 		<% advance.each do |advance_user| %>
 			<% if advance_user.kgs_names == row.kgs_names %>
-				<td class="first_col" style="background:blue;"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
-			<% else %>
-				<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+				style="background:blue;"
+			<% end %>
+		
+		<% end %>
 
-		<% end %>
-		<% end %>
+
+		><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
 		<% @alpha.each do |column| %>
 		
-		<!-- Get wins and losses -->
-		
-		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at) %>
-		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at) %>
-		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at) %>
-		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at) %>
-		
-		
-		
 			<% if column.kgs_names == row.kgs_names %>
 				<td>X</td>
 			<% else %>
-			<td>
-				<% wins.each do |win| %>
-					<%= link_to image_tag("tick.png", :alt => "win"), win.url %>
-				<% end %>
-				<% losses.each do |loss| %>
-					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
-				<% end %>
-			</td>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
 				
 			<% end %>
 			
@@ -64,384 +63,14 @@
 		<% else %>
 			<td>0.0</td>
 		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
 	</tr>
 <% end %>
 </table>
 
-<h2 id="betaI">Beta I</h2>
-<table class="results">
-	<tr>
-		<th class="first_col"></th>
-<% @betaI.each do |player| %>
-		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
-		
-<% end %>
-<th><span><span><span>Points</span></span></span></th>
-	</tr>
-<% @betaI.each do |row| %>
-	<tr>
-		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
-		<% @betaI.each do |column| %>
-		
-		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at) %>
-		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at) %>
-		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at) %>
-		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at) %>
-		
-			<% if column.kgs_names == row.kgs_names %>
-				<td>X</td>
-			<% else %>
-			<td>
-				<% wins.each do |win| %>
-					<%= link_to image_tag("tick.png", :alt => "win"), win.url %>
-				<% end %>
-				<% losses.each do |loss| %>
-					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
-				<% end %>
-			</td>
-				
-			<% end %>
-			
-		<% end %>
-		<% if row.points %>
-			<td><%= row.points %></td>
-		<% else %>
-			<td>0.0</td>
-		<% end %>
-	</tr>
-<% end %>
-</table>
-
-<h2 id="betaII">Beta II</h2>
-<table class="results">
-	<tr>
-		<th class="first_col"></th>
-<% @betaII.each do |player| %>
-		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
-		
-<% end %>
-<th><span><span><span>Points</span></span></span></th>
-	</tr>
-<% @betaII.each do |row| %>
-	<tr>
-		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
-		<% @betaII.each do |column| %>
-		
-		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at) %>
-		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at) %>
-		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at) %>
-		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at) %>
-		
-			<% if column.kgs_names == row.kgs_names %>
-				<td>X</td>
-			<% else %>
-			<td>
-				<% wins.each do |win| %>
-					<%= link_to image_tag("tick.png", :alt => "win"), win.url %>
-				<% end %>
-				<% losses.each do |loss| %>
-					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
-				<% end %>
-			</td>
-				
-			<% end %>
-			
-		<% end %>
-		<% if row.points %>
-			<td><%= row.points %></td>
-		<% else %>
-			<td>0.0</td>
-		<% end %>
-	</tr>
-<% end %>
-</table>
-
-<h2 id="gammaI">Gamma I</h2>
-<table class="results">
-	<tr>
-		<th class="first_col"></th>
-<% @gammaI.each do |player| %>
-		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
-		
-<% end %>
-<th><span><span><span>Points</span></span></span></th>
-	</tr>
-<% @gammaI.each do |row| %>
-	<tr>
-		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
-		<% @gammaI.each do |column| %>
-		
-		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at) %>
-		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at) %>
-		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at) %>
-		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at) %>
-		
-			<% if column.kgs_names == row.kgs_names %>
-				<td>X</td>
-			<% else %>
-			<td>
-				<% wins.each do |win| %>
-					<%= link_to image_tag("tick.png", :alt => "win"), win.url %>
-				<% end %>
-				<% losses.each do |loss| %>
-					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
-				<% end %>
-			</td>
-				
-			<% end %>
-			
-		<% end %>
-		<% if row.points %>
-			<td><%= row.points %></td>
-		<% else %>
-			<td>0.0</td>
-		<% end %>
-	</tr>
-<% end %>
-</table>
-
-<h2 id="gammaII">Gamma II</h2>
-<table class="results">
-	<tr>
-		<th class="first_col"></th>
-<% @gammaII.each do |player| %>
-		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
-		
-<% end %>
-<th><span><span><span>Points</span></span></span></th>
-	</tr>
-<% @gammaII.each do |row| %>
-	<tr>
-		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
-		<% @gammaII.each do |column| %>
-		
-		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at) %>
-		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at) %>
-		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at) %>
-		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at) %>
-		
-			<% if column.kgs_names == row.kgs_names %>
-				<td>X</td>
-			<% else %>
-			<td>
-				<% wins.each do |win| %>
-					<%= link_to image_tag("tick.png", :alt => "win"), win.url %>
-				<% end %>
-				<% losses.each do |loss| %>
-					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
-				<% end %>
-			</td>
-				
-			<% end %>
-			
-		<% end %>
-		<% if row.points %>
-			<td><%= row.points %></td>
-		<% else %>
-			<td>0.0</td>
-		<% end %>
-	</tr>
-<% end %>
-</table>
-
-<h2 id="gammaIII">Gamma III</h2>
-<table class="results">
-	<tr>
-		<th class="first_col"></th>
-<% @gammaIII.each do |player| %>
-		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
-		
-<% end %>
-<th><span><span><span>Points</span></span></span></th>
-	</tr>
-<% @gammaIII.each do |row| %>
-	<tr>
-		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
-		<% @gammaIII.each do |column| %>
-		
-		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at) %>
-		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at) %>
-		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at) %>
-		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at) %>
-		
-			<% if column.kgs_names == row.kgs_names %>
-				<td>X</td>
-			<% else %>
-			<td>
-				<% wins.each do |win| %>
-					<%= link_to image_tag("tick.png", :alt => "win"), win.url %>
-				<% end %>
-				<% losses.each do |loss| %>
-					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
-				<% end %>
-			</td>
-				
-			<% end %>
-			
-		<% end %>
-		<% if row.points %>
-			<td><%= row.points %></td>
-		<% else %>
-			<td>0.0</td>
-		<% end %>
-	</tr>
-<% end %>
-</table>
-
-<h2 id="gammaIV">Gamma IV</h2>
-<table class="results">
-	<tr>
-		<th class="first_col"></th>
-<% @gammaIV.each do |player| %>
-		<th><span><span><span><%= player.kgs_names %></span></span></span></th>
-		
-<% end %>
-<th><span><span><span>Points</span></span></span></th>
-	</tr>
-<% @gammaIV.each do |row| %>
-	<tr>
-		
-		<td class="first_col"><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
-		<% @gammaIV.each do |column| %>
-		
-		<% losses = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, false, true).order(:created_at) %>
-		<% losses += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, true, true).order(:created_at) %>
-		<% wins = Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", column.kgs_names, row.kgs_names, true, true).order(:created_at) %>
-		<% wins += Match.where("black_player_name=? AND white_player_name=? AND result_boolean=? AND valid_game=?", row.kgs_names, column.kgs_names, false, true).order(:created_at) %>
-		
-			<% if column.kgs_names == row.kgs_names %>
-				<td>X</td>
-			<% else %>
-			<td>
-				<% wins.each do |win| %>
-					<%= link_to image_tag("tick.png", :alt => "win"), win.url %>
-				<% end %>
-				<% losses.each do |loss| %>
-					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), loss.url %>
-				<% end %>
-			</td>
-				
-			<% end %>
-			
-		<% end %>
-		<% if row.points %>
-			<td><%= row.points %></td>
-		<% else %>
-			<td>0.0</td>
-		<% end %>
-	</tr>
-<% end %>
-</table>
-
-<h2 id="delta">Delta</h2>
-<table>
-	<tr>
-		<th><%= sortable "username" %></th>
-		<th><%= sortable "points" %></th>
-		<th><%= sortable "matches played" %></th>
-		<th><%= sortable "wins" %></th>
-		<th><%= sortable "losses" %></th>
-	</tr>
-	<% @deltaArr.each do |player| %>
-		<% if (user_signed_in?) and (current_user.kgs_names == player[0]) %>
-			<tr class="self">
-		<% else %>		
-			<tr>
-		<% end %>
-				<td><%= player[0] %></td>
-				<td><%= player[1] %></td>
-				<td><%= player[2] %></td>
-				<td><%= player[3] %></td>
-				<td><%= player[4] %></td>
-			</tr>
-	<% end %>
-</table>
-
-
-
-<h2>Database Schema for League Matches</h2>
-<table>
-	<tr>
-		<th>ID</th>
-		<th>Date</th>
-		<th>Result</th>
-		<th>White's KGS Name</th>
-		<th>Black's KGS Name</th>
-		<th>White Player</th>
-		<th>Black Player</th>
-		<th># of Moves</th>
-		<th>Komi</th>
-		<th>Handicap</th>
-		<th>Reviewed</th>
-		<th>SGF</th>
-	</tr>
-	<tr>
-		<td>1</td>
-		<td>February 20, 2012</td>
-		<td>W+R</td>
-		<td>blublu</td>
-		<td>huh</td>
-		<td>Mac</td>
-		<td>Dorkinsky</td>
-		<td>234</td>
-		<td>6.5</td>
-		<td>None</td>
-		<td>No</td>
-		<td>Link</td>
-	</tr>
-	<tr>
-		<td>2</td>
-		<td>January 10, 2012</td>
-		<td>B+5.5</td>
-		<td>jimbo</td>
-		<td>sum1</td>
-		<td>Geezer</td>
-		<td>Hullabaloo</td>
-		<td>310</td>
-		<td>0.5</td>
-		<td>3H</td>
-		<td>Yes</td>
-		<td>Link</td>
-	</tr>
-</table>
-
-<h2>Database Schema for Users</h2>
-<table>
-	<tr>
-		<th>ID</th>
-		<th>Date Created</th>
-		<th>KGS Name</th>
-		<th>Name</th>
-		<th>Email</th>
-		<th>Password (encrypted)</th>
-		<th>Points</th>
-		<th>Rank</th>
-		<th>Level</th>
-	</tr>
-	<tr>
-		<td>1</td>
-		<td>February 20, 2012</td>
-		<td>spanky</td>
-		<td>Boozer</td>
-		<td>boozer@gmail.com</td>
-		<td>nebejg@UBfiu3h8391f3(*#3f932bif2)</td>
-		<td>30400</td>
-		<td>5k</td>
-		<td>4</td>
-	</tr>
-	<tr>
-		<td>2</td>
-		<td>January 10, 2012</td>
-		<td>homme</td>
-		<td>Homie</td>
-		<td>homie@gmail.com</td>
-		<td>efjioej28)(#0hf3b2of208fhn.,nlshfa980230f</td>
-		<td>4929</td>
-		<td>1k</td>
-		<td>8</td>
-	</tr>
-</table>
-
-<h2>Database Schema for User ==> Has Many</h2>
-
-User ==> Has Many Awards, Achievements, Points, Events, Followers, Messages, Teachers
