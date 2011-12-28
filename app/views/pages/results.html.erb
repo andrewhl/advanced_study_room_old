@@ -15,7 +15,7 @@
 <h2 id="alpha">Alpha</h2>
 <table class="results">
 	<tr>
-		<th class="first_col"></th>
+		<th class="first_col odd"></th>
 
 <% @alpha.each do |player| %>
 		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
@@ -27,16 +27,18 @@
 <% @alpha.each do |row| %>
 	<tr>
 		<% advance = User.where(:division => "Alpha").order("users.points DESC").limit(4) %>
-		<td class="first_col, <%= parity %>"
+		<td 
 		<% advance.each do |advance_user| %>
 			<% if advance_user.kgs_names == row.kgs_names %>
-				style="background:blue;"
+				class="first_col, <%= parity %>, advance"
+			<% else %>
+				class="first_col, <%= parity %>"
 			<% end %>
 		
 		<% end %>
+		>
 
-
-		><%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
 
 		<% @alpha.each do |column| %>
 		
