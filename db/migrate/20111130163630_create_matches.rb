@@ -14,6 +14,7 @@ class CreateMatches < ActiveRecord::Migration
       t.string :game_type
       t.float :komi
       t.string :result
+      t.boolean :valid_game
 
       t.timestamps
     end
