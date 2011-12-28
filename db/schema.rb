@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20111221065419) do
     t.string   "game_type"
     t.float    "komi"
     t.string   "result"
+    t.boolean  "valid_game"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "byo_yomi_periods"
