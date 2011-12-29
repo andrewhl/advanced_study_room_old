@@ -24,8 +24,11 @@
 <th><span><span><span>Points</span></span></span></th>
 	</tr>
 <% parity = 'even' %>
+<% advance = User.where("division = 'Alpha' AND points IS NOT NULL", "Alpha").order("users.points DESC").limit(4) %>
+
 <% @alpha.each do |row| %>
 	<tr>
+<<<<<<< HEAD
 		<% advance = User.where(:division => "Alpha").order("users.points DESC").limit(1) %>
 		<% class_name = "#{parity}"%>
 		<% advance.each do |advance_user| %>		
@@ -183,6 +186,15 @@
 		
 		
 		
+=======
+    <% 
+       cell_class = "first_col #{parity}"
+       if advance.map(&:kgs_names).include?(row.kgs_names)
+         cell_class << " advance"
+       end
+    -%>
+		<td class="<%= cell_class %>">
+>>>>>>> c4851b0c5d9cd9b237d1d2fff816903f0edc5829
 
 		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
 
