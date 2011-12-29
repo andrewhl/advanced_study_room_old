@@ -75,4 +75,7 @@ table.results th > span > span > span {
 /* table.results tr:first-child td { padding-top: 0px; } */
 table.results td.first_col { font-weight: bold; }
 table.results td { border-right: 1px solid black; text-align: center; width: 40px; }
-table.results td.advance.odd { background-color: #88FC7B; }
+table.results td.advance.odd { background-color: #27EA0E; }
+table.results td.advance.even { background-color: #B1F7A8; }
+table.results td.demote.odd { background-color: #FCB737; }
+table.results td.demote.even { background-color: #F9D390; }

@@ -18,13 +18,13 @@ class PagesController < ApplicationController
 
   def results
     #@alpha = User.where(:division => "Alpha").order("users.points DESC, users.kgs_names ASC")
-    @alpha = User.where(:division => "Alpha").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @betaI = User.where(:division => "Beta I").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @betaII = User.where(:division => "Beta II").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaI = User.where(:division => "Gamma I").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaII = User.where(:division => "Gamma II").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaIII = User.where(:division => "Gamma III").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaIV = User.where(:division => "Gamma IV").sort { |a,b| a.kgs_names <=> b.kgs_names }
+    @alpha = User.where(:division => "Alpha").order("kgs_names ASC")
+    @betaI = User.where(:division => "Beta I").order("kgs_names ASC")
+    @betaII = User.where(:division => "Beta II").order("kgs_names ASC")
+    @gammaI = User.where(:division => "Gamma I").order("kgs_names ASC")
+    @gammaII = User.where(:division => "Gamma II").order("kgs_names ASC")
+    @gammaIII = User.where(:division => "Gamma III").order("kgs_names ASC")
+    @gammaIV = User.where(:division => "Gamma IV").order("kgs_names ASC")
     
     # Default values for the page sorting.
     params[:sort] ||= "points"

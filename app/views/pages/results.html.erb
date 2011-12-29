@@ -26,17 +26,23 @@
 <% parity = 'even' %>
 <% @alpha.each do |row| %>
 	<tr>
-		<% advance = User.where(:division => "Alpha").order("users.points DESC").limit(4) %>
-		<td 
-		<% advance.each do |advance_user| %>
+		<% advance = User.where(:division => "Alpha").order("users.points DESC").limit(1) %>
+		<% class_name = "#{parity}"%>
+		<% advance.each do |advance_user| %>		
 			<% if advance_user.kgs_names == row.kgs_names %>
-				class="first_col, <%= parity %>, advance"
-			<% else %>
-				class="first_col, <%= parity %>"
+				<% class_name = "#{parity} advance" %>
 			<% end %>
-		
 		<% end %>
-		>
+		<% demote = User.where(:division => "Alpha").order("users.points ASC").limit(4) %>
+		<% demote.each do |demote_user| %>
+			<% if demote_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} demote" %>
+			<% end %>
+		<% end %>
+		<td class="<%= class_name %>">
+		
+		
+		
 
 		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
 
@@ -76,3 +82,447 @@
 <% end %>
 </table>
 
+<h2 id="betaI">Beta I</h2>
+<table class="results">
+	<tr>
+		<th class="first_col odd"></th>
+
+<% @betaI.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
+<% end %>
+
+<th><span><span><span>Points</span></span></span></th>
+	</tr>
+<% parity = 'even' %>
+<% @betaI.each do |row| %>
+	<tr>
+		<% advance = User.where(:division => "Beta I").order("users.points DESC").limit(4) %>
+		<% class_name = "#{parity}"%>
+		<% advance.each do |advance_user| %>		
+			<% if advance_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} advance" %>
+			<% end %>
+		<% end %>
+		<% demote = User.where(:division => "Beta I").order("users.points ASC").limit(4) %>
+		<% demote.each do |demote_user| %>
+			<% if demote_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} demote" %>
+			<% end %>
+		<% end %>
+		<td class="<%= class_name %>">
+		
+		
+		
+
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
+		<% @betaI.each do |column| %>
+		
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% else %>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
+				
+			<% end %>
+			
+		<% end %>
+		<% if row.points %>
+			<td><%= row.points %></td>
+		<% else %>
+			<td>0.0</td>
+		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
+	</tr>
+<% end %>
+</table>
+
+<h2 id="betaII">Beta II</h2>
+<table class="results">
+	<tr>
+		<th class="first_col odd"></th>
+
+<% @betaII.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
+<% end %>
+
+<th><span><span><span>Points</span></span></span></th>
+	</tr>
+<% parity = 'even' %>
+<% @betaII.each do |row| %>
+	<tr>
+		<% advance = User.where(:division => "Beta II").order("users.points DESC").limit(4) %>
+		<% class_name = "#{parity}"%>
+		<% advance.each do |advance_user| %>		
+			<% if advance_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} advance" %>
+			<% end %>
+		<% end %>
+		<% demote = User.where(:division => "Beta II").order("users.points ASC").limit(4) %>
+		<% demote.each do |demote_user| %>
+			<% if demote_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} demote" %>
+			<% end %>
+		<% end %>
+		<td class="<%= class_name %>">
+		
+		
+		
+
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
+		<% @betaII.each do |column| %>
+		
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% else %>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
+				
+			<% end %>
+			
+		<% end %>
+		<% if row.points %>
+			<td><%= row.points %></td>
+		<% else %>
+			<td>0.0</td>
+		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
+	</tr>
+<% end %>
+</table>
+
+<h2 id="gammaI">Gamma I</h2>
+<table class="results">
+	<tr>
+		<th class="first_col odd"></th>
+
+<% @gammaI.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
+<% end %>
+
+<th><span><span><span>Points</span></span></span></th>
+	</tr>
+<% parity = 'even' %>
+<% @gammaI.each do |row| %>
+	<tr>
+		<% advance = User.where(:division => "Gamma I").order("users.points DESC").limit(4) %>
+		<% class_name = "#{parity}"%>
+		<% advance.each do |advance_user| %>		
+			<% if advance_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} advance" %>
+			<% end %>
+		<% end %>
+		<% demote = User.where(:division => "Gamma I").order("users.points ASC").limit(4) %>
+		<% demote.each do |demote_user| %>
+			<% if demote_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} demote" %>
+			<% end %>
+		<% end %>
+		<td class="<%= class_name %>">
+		
+		
+		
+
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
+		<% @gammaI.each do |column| %>
+		
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% else %>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
+				
+			<% end %>
+			
+		<% end %>
+		<% if row.points %>
+			<td><%= row.points %></td>
+		<% else %>
+			<td>0.0</td>
+		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
+	</tr>
+<% end %>
+</table>
+
+<h2 id="gammaII">Gamma II</h2>
+<table class="results">
+	<tr>
+		<th class="first_col odd"></th>
+
+<% @gammaII.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
+<% end %>
+
+<th><span><span><span>Points</span></span></span></th>
+	</tr>
+<% parity = 'even' %>
+<% @gammaII.each do |row| %>
+	<tr>
+		<% advance = User.where(:division => "Gamma II").order("users.points DESC").limit(4) %>
+		<% class_name = "#{parity}"%>
+		<% advance.each do |advance_user| %>		
+			<% if advance_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} advance" %>
+			<% end %>
+		<% end %>
+		<% demote = User.where(:division => "Gamma II").order("users.points ASC").limit(4) %>
+		<% demote.each do |demote_user| %>
+			<% if demote_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} demote" %>
+			<% end %>
+		<% end %>
+		<td class="<%= class_name %>">
+		
+		
+		
+
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
+		<% @gammaII.each do |column| %>
+		
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% else %>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
+				
+			<% end %>
+			
+		<% end %>
+		<% if row.points %>
+			<td><%= row.points %></td>
+		<% else %>
+			<td>0.0</td>
+		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
+	</tr>
+<% end %>
+</table>
+
+<h2 id="gammaIII">Gamma III</h2>
+<table class="results">
+	<tr>
+		<th class="first_col odd"></th>
+
+<% @gammaIII.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
+<% end %>
+
+<th><span><span><span>Points</span></span></span></th>
+	</tr>
+<% parity = 'even' %>
+<% @gammaIII.each do |row| %>
+	<tr>
+		<% advance = User.where(:division => "Gamma III").order("users.points DESC").limit(4) %>
+		<% class_name = "#{parity}"%>
+		<% advance.each do |advance_user| %>		
+			<% if advance_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} advance" %>
+			<% end %>
+		<% end %>
+		<% demote = User.where(:division => "Gamma III").order("users.points ASC").limit(4) %>
+		<% demote.each do |demote_user| %>
+			<% if demote_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} demote" %>
+			<% end %>
+		<% end %>
+		<td class="<%= class_name %>">
+		
+		
+		
+
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
+		<% @gammaIII.each do |column| %>
+		
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% else %>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
+				
+			<% end %>
+			
+		<% end %>
+		<% if row.points %>
+			<td><%= row.points %></td>
+		<% else %>
+			<td>0.0</td>
+		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
+	</tr>
+<% end %>
+</table>
+
+<h2 id="gammaIV">Gamma IV</h2>
+<table class="results">
+	<tr>
+		<th class="first_col odd"></th>
+
+<% @gammaIV.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
+<% end %>
+
+<th><span><span><span>Points</span></span></span></th>
+	</tr>
+<% parity = 'even' %>
+<% @gammaIV.each do |row| %>
+	<tr>
+		<% advance = User.where(:division => "Gamma IV").order("users.points DESC").limit(4) %>
+		<% class_name = "#{parity}"%>
+		<% advance.each do |advance_user| %>		
+			<% if advance_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} advance" %>
+			<% end %>
+		<% end %>
+		<% demote = User.where(:division => "Gamma IV").order("users.points ASC").limit(4) %>
+		<% demote.each do |demote_user| %>
+			<% if demote_user.kgs_names == row.kgs_names %>
+				<% class_name = "#{parity} demote" %>
+			<% end %>
+		<% end %>
+		<td class="<%= class_name %>">
+		
+		
+		
+
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
+		<% @gammaIV.each do |column| %>
+		
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% else %>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
+				
+			<% end %>
+			
+		<% end %>
+		<% if row.points %>
+			<td><%= row.points %></td>
+		<% else %>
+			<td>0.0</td>
+		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
+	</tr>
+<% end %>
+</table>
+
+<h2 id="delta">Delta</h2>
+
+<table>
+  <tr>
+    <th><%= sortable "username" %></th>
+    <th><%= sortable "points" %></th>
+    <th><%= sortable "matches played" %></th>
+    <th><%= sortable "wins" %></th>
+    <th><%= sortable "losses" %></th>
+  </tr>
+  <% @deltaArr.each do |player| %>
+    <% if (user_signed_in?) and (current_user.kgs_names == player[0]) %>
+      <tr class="self">
+    <% else %>    
+      <tr>
+    <% end %>
+        <td><%= player[0] %></td>
+        <td><%= player[1] %></td>
+        <td><%= player[2] %></td>
+        <td><%= player[3] %></td>
+        <td><%= player[4] %></td>
+      </tr>
+  <% end %>
+</table>
