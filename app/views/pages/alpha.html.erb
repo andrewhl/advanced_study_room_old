@@ -1,0 +1,67 @@
+<h2 id="alpha">Alpha</h2>
+<table class="results">
+	<tr>
+		<th class="first_col odd"></th>
+
+<% @alpha.each do |player| %>
+		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
+<% end %>
+
+<th><span><span><span>Points</span></span></span></th>
+	</tr>
+<% parity = 'even' %>
+
+<% advance = User.where("division = 'Alpha' AND points IS NOT NULL", "Alpha").order("users.points DESC").limit(4) %>
+<% demote = User.where("division = 'Alpha' AND points IS NOT NULL", "Alpha").order("users.points ASC").limit(4) %>
+<% @alpha.each do |row| %>
+
+	<tr>
+		<% 
+		   cell_class = "first_col #{parity}"
+		   if advance.map(&:kgs_names).include?(row.kgs_names)
+		     cell_class << " advance"
+		   end
+		   if demote.map(&:kgs_names).include?(row.kgs_names)
+			 cell_class << " demote"
+		   end
+		%>
+		<td class="<%= cell_class %>">
+		
+
+		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
+
+		<% @alpha.each do |column| %>
+		
+			<% if column.kgs_names == row.kgs_names %>
+				<td>X</td>
+			<% else %>
+
+				<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", column.kgs_names, row.kgs_names, column.kgs_names, row.kgs_names, true).order(:created_at) %>
+				<td>
+					<% games.each do |game| %>
+						<% if (game.black_player_name == row.kgs_names and game.result_boolean == false) or (game.white_player_name == row.kgs_names and game.result_boolean == true) %>
+							<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+						<% else %>
+							<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+						<% end %>
+					<% end %>
+				</td>
+				
+			<% end %>
+			
+		<% end %>
+		<% if row.points %>
+			<td><%= row.points %></td>
+		<% else %>
+			<td>0.0</td>
+		<% end %>
+
+
+		<% if parity == 'even'
+			parity = 'odd'
+		   else
+		   	parity = 'even'
+		   end %>
+	</tr>
+<% end %>
+</table>
