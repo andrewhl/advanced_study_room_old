@@ -2,6 +2,10 @@
 
 <% if user_signed_in? %>
 	<p>Welcome!</p>
+
+<h2>Your Points</h2>
+<p>Total: <%= @user.points %></p>
+<h2>Your Games</h2>
 	<table>
 		<tr>
 			<th>Black Player</th>

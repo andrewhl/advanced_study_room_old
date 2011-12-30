@@ -17,6 +17,9 @@ class UsersController < ApplicationController
   def show
     @user = User.where(:kgs_names => params[:id])[0]
     @games = Match.where("white_player_name = ? or black_player_name = ?", @user.kgs_names, @user.kgs_names).where(:valid_game => true)
+    
+
+
   end
   
   def create
