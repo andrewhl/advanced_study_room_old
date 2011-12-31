@@ -48,7 +48,7 @@ class PagesController < ApplicationController
       total_games = Match.where("(white_player_name=? OR black_player_name=?) AND valid_game=?", player.kgs_names, player.kgs_names, true).length
       losses = total_games - wins
 
-      # Puts all our shit into @deltaArr
+      # Puts all our shit into @big_division
       @big_division << [player.kgs_names, player.points, total_games, wins, losses]
     end
 

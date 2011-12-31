@@ -194,7 +194,7 @@ module ApplicationHelper
     # Calculate UNIX time
     date = columns[i].content
     i += 1
-    unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
+    unixtime = DateTime.strptime(date, "%m/%d/%y %I:%M %p").utc.to_time.to_i
     
     game_type = columns[i].content
     i += 1
