@@ -1,22 +1,69 @@
-<%= @user.username %>, <%= @user.email %>
-
 <% if user_signed_in? %>
-	<p>Welcome!</p>
+	<h2>Welcome, <%= @user.kgs_names %></h2>
+
+
+<h2>Your Points</h2>
+<p>Total: <%= @user.points %><br />
+This month: <%= if @user.month_points.nil?
+	"0.0"
+else
+	@user.month_points
+end
+	 %>	
+</p>
+
+<h2>Your Games V. 2</h2>
+<table>
+	<tr>
+		<th>Position</th>
+		<th>Points</th>
+		<th>Name</th>
+		<th>Games</th>
+	</tr>
+	<% position = 1 %>
+	<% @division.each do |opponent| %>
+	<tr>
+		<td><%= position %></td>
+		<td><%= if opponent.month_points.nil?
+				"0.0"
+			else 
+				opponent.month_points
+			end
+			 %></td>
+		<td><%= link_to opponent.kgs_names, user_path(opponent.kgs_names) %></td>
+		<% games = Match.where("black_player_name in (?, ?) AND white_player_name in (?, ?) AND valid_game=?", opponent.kgs_names, @user.kgs_names, opponent.kgs_names, @user.kgs_names, true).order(:created_at) %>
+		<td>
+			<% games.each do |game| %>
+				<% if (game.black_player_name == @user.kgs_names and game.result_boolean == false) or (game.white_player_name == @user.kgs_names and game.result_boolean == true) %>
+					<%= link_to image_tag("tick.png", :alt => "win"), game.url %>
+				<% else %>
+					<%= link_to image_tag("bullet_cross.png", :alt => "loss"), game.url %>
+				<% end %>
+			<% end %>
+			
+			</td>
+	</tr>
+	<% position += 1 %>
+	<% end %>
+</table>
+<h2>Your Games</h2>
 	<table>
 		<tr>
 			<th>Black Player</th>
 			<th>White Player</th>
 			<th>Result</th>
+			<th>Date Played</th>
 		</tr>
 	<% @games.each do |game| %>
 		<tr>
-			<td><%= game.black_player_name %></td>
-			<td><%= game.white_player_name %></td>
-			<td><%= game.result %></td>
+			<td><%= link_to game.black_player_name, user_path(game.black_player_name) %></td>
+			<td><%= link_to game.white_player_name, user_path(game.white_player_name) %></td>
+			<td><%= link_to game.result, game.url %></td>
+			<td><%= Time.at(game.unixtime).strftime("%B %d %Y") %>
 		</tr>
 	<% end %>
 	</table>
 	
 <% else %>
-	<p>You're not signed in!</p>
+	<p>You're viewing <%= @user.kgs_names %>'s page.</p>
 <% end %>

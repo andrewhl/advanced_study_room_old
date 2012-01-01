@@ -1,44 +1,68 @@
 <div><h3>Quick Links</h3>
 	<ul>
-		<li><a href="#alpha">Alpha</a></li>
-		<li><a href="#betaI">Beta I</a></li>
-		<li><a href="#betaII">Beta II</a></li>
-		<li><a href="#gammaI">Gamma I</a></li>
-		<li><a href="#gammaII">Gamma II</a></li>
-		<li><a href="#gammaIII">Gamma III</a></li>
-		<li><a href="#gammaIV">Gamma IV</a></li>
-		<li><a href="#delta">Delta</a></li>
+		<li><%= link_to "Alpha", {:division => "Alpha"} %></li>
+		<li><%= link_to "Beta I", {:division => "Beta I"} %></li>
+		<li><%= link_to "Beta II", {:division => "Beta II"} %></li>
+		<li><%= link_to "Gamma I", {:division => "Gamma I"} %></li>
+		<li><%= link_to "Gamma II", {:division => "Gamma II"} %></li>
+		<li><%= link_to "Gamma III", {:division => "Gamma III"} %></li>
+		<li><%= link_to "Gamma IV", {:division => "Gamma IV"} %></li>
+		<li><%= link_to "Delta", {:division => "Delta"} %></li>
 	</ul>
 </div>
+<% case params[:division]
+when "Alpha"
+	css_id = "alpha"
+when "Beta I"
+	css_id = "betaI"
+when "Beta II"
+	css_id = "betaII"
+when "Gamma I"
+	css_id = "gammaI"
+when "Gamma II"
+	css_id = "gammaII"
+when "Gamma III"
+	css_id = "gammaIII"
+when "Gamma IV"
+	css_id = "gammaIV"
+when "Delta"
+	css_id = "delta"
+end
+%>
 
+<% if @division_count <= 24 # Set the table limit size for BFTs %>
 
-<h2 id="alpha">Alpha</h2>
+<h2 id="<%= css_id %>"><%= params[:division] %></h2>
 <table class="results">
 	<tr>
 		<th class="first_col odd"></th>
 
-<% @alpha.each do |player| %>
+<% @division.each do |player| %>
 		<th><span><span><span><%= player.kgs_names %></span></span></span></th>		
 <% end %>
 
 <th><span><span><span>Points</span></span></span></th>
 	</tr>
 <% parity = 'even' %>
-<% advance = User.where("division = 'Alpha' AND points IS NOT NULL", "Alpha").order("users.points DESC").limit(4) %>
+<% advance = User.where("division=? AND points IS NOT NULL", params[:division]).order("users.points DESC").limit(4) %>
+<% demote = User.where("division=? AND points IS NOT NULL", params[:division]).order("users.points ASC").limit(4) %>
+<% @division.each do |row| %>
 
-<% @alpha.each do |row| %>
 	<tr>
-    <% 
-       cell_class = "first_col #{parity}"
-       if advance.map(&:kgs_names).include?(row.kgs_names)
-         cell_class << " advance"
-       end
-    -%>
+		<% 
+		   cell_class = "first_col #{parity}"
+		   if advance.map(&:kgs_names).include?(row.kgs_names)
+		     cell_class << " advance"
+		   end
+		   if demote.map(&:kgs_names).include?(row.kgs_names)
+			 cell_class << " demote"
+		   end
+		%>
 		<td class="<%= cell_class %>">
 
 		<%= link_to row.kgs_names, user_path(row.kgs_names) %></td>
 
-		<% @alpha.each do |column| %>
+		<% @division.each do |column| %>
 		
 			<% if column.kgs_names == row.kgs_names %>
 				<td>X</td>
@@ -74,3 +98,32 @@
 <% end %>
 </table>
 
+<% else %>
+
+
+<h2 id="<%= css_id %>"><%= params[:division] %></h2>
+
+<table>
+  <tr>
+    <th><%= sortable "username" %></th>
+    <th><%= sortable "points" %></th>
+    <th><%= sortable "matches played" %></th>
+    <th><%= sortable "wins" %></th>
+    <th><%= sortable "losses" %></th>
+  </tr>
+  <% @big_division.each do |player| %>
+    <% if (user_signed_in?) and (current_user.kgs_names == player[0]) %>
+      <tr class="self">
+    <% else %>    
+      <tr>
+    <% end %>
+        <td><%= player[0] %></td>
+        <td><%= player[1] %></td>
+        <td><%= player[2] %></td>
+        <td><%= player[3] %></td>
+        <td><%= player[4] %></td>
+      </tr>
+  <% end %>
+</table>
+
+<% end %>

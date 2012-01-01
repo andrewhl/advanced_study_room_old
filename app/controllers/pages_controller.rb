@@ -16,15 +16,13 @@ class PagesController < ApplicationController
     @title = "League"
   end
 
-  def results
-    #@alpha = User.where(:division => "Alpha").order("users.points DESC, users.kgs_names ASC")
-    @alpha = User.where(:division => "Alpha").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @betaI = User.where(:division => "Beta I").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @betaII = User.where(:division => "Beta II").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaI = User.where(:division => "Gamma I").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaII = User.where(:division => "Gamma II").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaIII = User.where(:division => "Gamma III").sort { |a,b| a.kgs_names <=> b.kgs_names }
-    @gammaIV = User.where(:division => "Gamma IV").sort { |a,b| a.kgs_names <=> b.kgs_names }
+  def results    
+    # Default value for displaying division
+    
+    params[:division] ||= "Alpha"
+    
+    @division = User.where(:division => params[:division]).order("kgs_names ASC")
+    @division_count = User.where(:division => params[:division]).count
     
     # Default values for the page sorting.
     params[:sort] ||= "points"
@@ -34,14 +32,14 @@ class PagesController < ApplicationController
     # If you didn't want to hardcode the values, you could rewrite this to do a dynamic check to see if the column name exists in the model.
     # But currently it's hardcoded for convenience.
     if params[:sort] == ("username" or "points")
-      delta = User.where(:division => "Delta").order(sort_column + ' ' + sort_direction)
+      big_division = User.where(:division => params[:division]).order(sort_column + ' ' + sort_direction)
     else
-      delta = User.where(:division => "Delta")
+      big_division = User.where(:division => params[:division])
     end
 
     # We're gonna loop through all the users now, and put the information we want into @deltaArr so we can access it on the page
-    @deltaArr = []
-    delta.each do |player|
+    @big_division = []
+    big_division.each do |player|
       
       # Calculates all our dynamic shit
       white_wins = Match.where("white_player_name=? AND result_boolean=? AND valid_game=?", player.kgs_names, true, true).length
@@ -50,8 +48,8 @@ class PagesController < ApplicationController
       total_games = Match.where("(white_player_name=? OR black_player_name=?) AND valid_game=?", player.kgs_names, player.kgs_names, true).length
       losses = total_games - wins
 
-      # Puts all our shit into @deltaArr
-      @deltaArr << [player.kgs_names, player.points, total_games, wins, losses]
+      # Puts all our shit into @big_division
+      @big_division << [player.kgs_names, player.points, total_games, wins, losses]
     end
 
     # A big statment checking for hardcoded column names. No way around this, unless you use numbers
@@ -61,21 +59,21 @@ class PagesController < ApplicationController
     # to sort either by ascending or descending (just swaps x/y positions). The slice is the index we added to @deltaArr
     if params[:sort] == "matches played"
       if params[:direction] == "desc"
-        @deltaArr.sort! {|x,y| y[2] <=> x[2]}
+        @big_division.sort! {|x,y| y[2] <=> x[2]}
       else
-        @deltaArr.sort! {|x,y| x[2] <=> y[2]}
+        @big_division.sort! {|x,y| x[2] <=> y[2]}
       end
     elsif params[:sort] == "wins"
       if params[:direction] == "desc"
-        @deltaArr.sort! {|x,y| y[3] <=> x[3]}
+        @big_division.sort! {|x,y| y[3] <=> x[3]}
       else
-        @deltaArr.sort! {|x,y| x[3] <=> y[3]}
+        @big_division.sort! {|x,y| x[3] <=> y[3]}
       end
     elsif params[:sort] == "losses"
       if params[:direction] == "desc"
-        @deltaArr.sort! {|x,y| y[4] <=> x[4]}
+        @big_division.sort! {|x,y| y[4] <=> x[4]}
       else
-        @deltaArr.sort! {|x,y| x[4] <=> y[4]}
+        @big_division.sort! {|x,y| x[4] <=> y[4]}
       end
     end
 

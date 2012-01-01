@@ -8,8 +8,6 @@ Asr::Application.routes.draw do
   resources :admin
   resources :manage
   
- 
-  
   match '/manage', :to => 'manage#index'
   match '/update', :to => 'manage#update'
   
@@ -22,6 +20,15 @@ Asr::Application.routes.draw do
   match '/news', :to => 'pages#news'
   match '/users', :to => 'users#index'
   match '/users/:id', :to => 'users#show'
+  
+  match '/alpha', :to => 'pages#alpha'
+  match '/beta_i', :to => 'pages#beta_i'
+  match '/beta_ii', :to => 'pages#beta_ii'
+  match '/gamma_i', :to => 'pages#gamma_i'
+  match '/gamma_ii', :to => 'pages#gamma_ii'
+  match '/gamma_iii', :to => 'pages#gamma_iii'
+  match '/gamma_iv', :to => 'pages#gamma_iv'
+  match '/delta', :to => 'pages#delta'
   
   root :to => "pages#home"
 

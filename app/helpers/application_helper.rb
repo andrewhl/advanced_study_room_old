@@ -194,7 +194,7 @@ module ApplicationHelper
     # Calculate UNIX time
     date = columns[i].content
     i += 1
-    unixtime = DateTime.strptime(date, "%m/%d/%Y %I:%M %p").utc.to_time.to_i * -1
+    unixtime = DateTime.strptime(date, "%m/%d/%y %I:%M %p").utc.to_time.to_i
     
     game_type = columns[i].content
     i += 1
@@ -436,12 +436,20 @@ module ApplicationHelper
         if winner.points.nil?
           winner.points = 0
         end
+        if winner.month_points.nil?
+          winner.month_points = 0
+        end
         if loser.points.nil?
           loser.points = 0
         end
+        if loser.month_points.nil?
+          loser.month_points = 0
+        end
 
         winner.points += 1 * matchnum
+        winner.month_points += 1 * matchnum
         loser.points += 0.5 * matchnum
+        loser.month_points += 0.5 * matchnum
 
         puts "#{winner.kgs_names} +#{1 * matchnum}"
         puts "#{loser.kgs_names} +#{0.5 * matchnum}"
