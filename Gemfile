@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source :rubygems
 
 gem 'rails', '3.1.1'
 gem 'nokogiri'
@@ -13,8 +13,6 @@ gem 'mechanize'
 gem 'pg'
 
 gem 'devise', '1.4.9'
-gem "rspec-rails", :group => [:test, :development]
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -37,11 +35,15 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
+group :test, :development do
+  gem "rspec-rails"
+end
+
 group :test do
   # Pretty printed test output
+  gem "webrat", "0.7.3"
   gem 'turn', :require => false
   gem "factory_girl_rails"
-  gem "capybara"
   gem 'spork', '> 0.9.0.rc'
   gem 'guard-spork'
   gem 'guard-rspec'

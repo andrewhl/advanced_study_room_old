@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/Trevoke/SGFParser.git
-  revision: 389662adf49cf368be95d2ea8a313cc85cdbe91e
+  revision: f4664e4a38a09911e9b09fb13020b868f04529b5
   specs:
     SgfParser (1.0.1)
 
@@ -48,15 +48,6 @@ GEM
     arel (2.2.1)
     bcrypt-ruby (3.0.1)
     builder (3.0.0)
-    capybara (1.1.2)
-      mime-types (>= 1.16)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      selenium-webdriver (~> 2.0)
-      xpath (~> 0.1.4)
-    childprocess (0.2.4)
-      ffi (~> 1.0.6)
     chronic (0.6.6)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)
@@ -93,7 +84,7 @@ GEM
       thor (~> 0.14.6)
     guard-pow (0.2.1)
       guard (>= 0.3.0)
-    guard-rspec (0.5.10)
+    guard-rspec (0.5.11)
       guard (>= 0.8.4)
     guard-spork (0.4.1)
       guard (>= 0.8.4)
@@ -183,18 +174,12 @@ GEM
       activesupport (~> 3.0)
       railties (~> 3.0)
       rspec (~> 2.7.0)
-    rubyzip (0.9.5)
     sass (3.1.12)
     sass-rails (3.1.5)
       actionpack (~> 3.1.0)
       railties (~> 3.1.0)
       sass (~> 3.1.10)
       tilt (~> 1.3.2)
-    selenium-webdriver (2.15.0)
-      childprocess (>= 0.2.1)
-      ffi (~> 1.0.9)
-      multi_json (~> 1.0.4)
-      rubyzip
     spork (0.9.0.rc9)
     sprockets (2.0.3)
       hike (~> 1.2)
@@ -220,13 +205,15 @@ GEM
     unf_ext (0.0.4)
     warden (1.0.6)
       rack (>= 1.0)
+    webrat (0.7.3)
+      nokogiri (>= 1.2.0)
+      rack (>= 1.0)
+      rack-test (>= 0.5.3)
     webrobots (0.0.12)
       nokogiri (>= 1.4.4)
     whenever (0.7.2)
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
-    xpath (0.1.4)
-      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
@@ -234,7 +221,6 @@ PLATFORMS
 DEPENDENCIES
   SgfParser!
   activeadmin
-  capybara
   coffee-rails (~> 3.1.1)
   devise (= 1.4.9)
   factory_girl_rails
@@ -255,4 +241,5 @@ DEPENDENCIES
   squeel
   turn
   uglifier (>= 1.0.3)
+  webrat (= 0.7.3)
   whenever

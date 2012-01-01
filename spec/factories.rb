@@ -1,8 +1,8 @@
-Factory.define :user do |f|
-  f.sequence(:email) { |n| "foo#{n}@example.com" }
-  first_name 'Kabra'
-  last_name 'Darf'
-  kgs_names 'kabradarf'
-  username 'kabradarf'
-  f.password "secret"
+Factory.define :user do |obj|
+  obj.sequence(:email) { |n| "foo#{n}@example.com" }
+  obj.first_name 'Kabra'
+  obj.last_name 'Darf'
+  obj.kgs_names 'kabradarf'
+  obj.username 'kabradarf'
+  obj.password "secret"
 end
