@@ -45,16 +45,16 @@ class ManageController < ApplicationController
   
   def rules
         
-    @rules = Rules.first
+    @rules = Rules.new
         
     params.each do |key, value|
       puts "Key: #{key}", "Value: #{value.inspect}"
-      if value == true
+      if value == "true"
         puts "Rules.key before assignment: #{@rules.key}"
         @rules.send(key) = true
         puts "Rules.key after assignment: #{@rules.key}"
         @rules.save
-      elsif value == false
+      elsif value == "false"
         puts "Rules.key before assignment: #{@rules.key}"
         @rules.send(key) = false
         puts "Rules.key after assignment: #{@rules.key}"

@@ -2,6 +2,11 @@
 
 <%= form_tag('/rules', :method => "post") %>
 
+<h3>Select month</h3>
+
+<p><%= select_tag "month", options_for_select(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]), :class => "division" %>
+</p>
+
 <h3>Select valid game types</h3>
 
 <p>
@@ -26,16 +31,16 @@
 <p>Tag required:</p>
 
 <p>
-<%= radio_button_tag 'tag_required', true, :checked => true %>True<br />
-<%= radio_button_tag 'tag_required', false %>False
+<%= radio_button_tag 'tag_boolean', true, :checked => true %>True<br />
+<%= radio_button_tag 'tag_boolean', false %>False
 </p>
 
 <h3>Time settings</h3>
 
 <p>Overtime required:</p>
 
-<p><%= radio_button_tag 'ot_required', true, :checked => true %>True<br />
-<%= radio_button_tag 'ot_required', false %>False<br />
+<p><%= radio_button_tag 'ot_boolean', true, :checked => true %>True<br />
+<%= radio_button_tag 'ot_boolean', false %>False<br />
 </p>
 
 <p>Byo_yomi:</p>
@@ -53,8 +58,8 @@
 <p>Ruleset required:</p>
 
 <p>
-<%= radio_button_tag 'ruleset_required', true, :checked => true %>True<br />
-<%= radio_button_tag 'ruleset_required', false %>False
+<%= radio_button_tag 'ruleset_boolean', true, :checked => true %>True<br />
+<%= radio_button_tag 'ruleset_boolean', false %>False
 </p>
 
 <h3>Handicap settings</h3>
@@ -65,8 +70,8 @@
 <p>Komi required:</p>
 
 <p>
-<%= radio_button_tag 'komi_required', true, :checked => true %>True<br />
-<%= radio_button_tag 'komi_required', false %>False
+<%= radio_button_tag 'komi_boolean', true, :checked => true %>True<br />
+<%= radio_button_tag 'komi_boolean', false %>False
 </p>
 
 <p>Handicap required (0-9):</p>
@@ -74,8 +79,8 @@
 <p>Handicap:</p>
 
 <p>
-<%= radio_button_tag 'handicap_required', true %>True<br />
-<%= radio_button_tag 'handicap_required', false, :checked => true %>False
+<%= radio_button_tag 'handicap_boolean', true %>True<br />
+<%= radio_button_tag 'handicap_boolean', false, :checked => true %>False
 </p>
 
 <h3>Board size</h3>
