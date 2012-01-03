@@ -1,0 +1,85 @@
+<h2>Manage Rules</h2>
+
+<%= form_tag('/rules', :method => "post") %>
+
+<h3>Select valid game types</h3>
+
+<p>
+<%= check_box_tag 'rengo', 'rengo' %>Rengo<br />
+<%= check_box_tag 'teaching', 'teaching' %>Teaching<br />
+<%= check_box_tag 'review', 'review' %>Review<br />
+<%= check_box_tag 'demonstration', 'demonstration' %>Demonstration<br />
+<%= check_box_tag 'rated', 'rated', true %>Rated<br />
+<%= check_box_tag 'free', 'free', true %>Free
+</p>
+
+<h3>Tag definition</h3>
+
+<p>Tag position (enter a game move # between 1 and 300):</p>
+
+<p><%= number_field_tag('tag_position', 'tag_position', :min => "1", :max => "300")%></p>
+
+<p>Tag phrase:</p>
+
+<p><%= text_field_tag('tag_phrase') %></p>
+
+<p>Tag required:</p>
+
+<p>
+<%= radio_button_tag 'tag_required', true, :checked => true %>True<br />
+<%= radio_button_tag 'tag_required', false %>False
+</p>
+
+<h3>Time settings</h3>
+
+<p>Overtime required:</p>
+
+<p><%= radio_button_tag 'ot_required', true, :checked => true %>True<br />
+<%= radio_button_tag 'ot_required', false %>False<br />
+</p>
+
+<p>Byo_yomi:</p>
+
+<p>
+<%= number_field_tag('byo_yomi_periods', 'byo_yomi_periods', :min => "1", :max => "50")%>Byo-yomi periods (min 1, max 50)<br />
+<%= number_field_tag('byo_yomi_seconds', 'byo_yomi_seconds', :min => "1", :max => "360")%>Byo-yomi seconds (min 1, max 360)
+</p>
+
+<p>Ruleset</p>
+
+<p><%= select_tag "division", options_for_select(["Japanese", "Canadian", "AGA"]), :class => "division" %>
+</p>
+
+<p>Ruleset required:</p>
+
+<p>
+<%= radio_button_tag 'ruleset_required', true, :checked => true %>True<br />
+<%= radio_button_tag 'ruleset_required', false %>False
+</p>
+
+<h3>Handicap settings</h3>
+
+<p>Komi:</p>
+<p><%= number_field_tag('komi', 'komi', :min => "0.5") %></p>
+
+<p>Komi required:</p>
+
+<p>
+<%= radio_button_tag 'komi_required', true, :checked => true %>True<br />
+<%= radio_button_tag 'komi_required', false %>False
+</p>
+
+<p>Handicap required (0-9):</p>
+<p><%= number_field_tag('handicap', 'handicap', :min => "0", :max => "9") %></p>
+<p>Handicap:</p>
+
+<p>
+<%= radio_button_tag 'handicap_required', true %>True<br />
+<%= radio_button_tag 'handicap_required', false, :checked => true %>False
+</p>
+
+<h3>Board size</h3>
+<p><%= select_tag "division", options_for_select(["19x19", "13x13", "9x9"]), :class => "division" %>
+</p>
+
+<%= submit_tag "Submit", :class => "submit" %>

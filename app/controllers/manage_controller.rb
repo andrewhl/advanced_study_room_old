@@ -43,6 +43,29 @@ class ManageController < ApplicationController
     end
   end
   
+  def rules
+        
+    @rules = Rules.first
+        
+    params.each do |key, value|
+      puts key, value
+      if value == true
+        puts "Rules.key before assignment: #{@rules.key}"
+        @rules.key = true
+        puts "Rules.key after assignment: #{@rules.key}"
+        @rules.save
+      elsif value == false
+        puts "Rules.key before assignment: #{@rules.key}"
+        @rules.key = true
+        puts "Rules.key after assignment: #{@rules.key}"
+        @rules.save
+        @rules.key = false
+        @rules.save
+      end
+    end
+          
+  end
+  
   def destroy
   end
   

@@ -265,7 +265,7 @@ module ApplicationHelper
       invalid_reason << "did not contain tag line"
     end
 
-    # Check that over time is at least 5x30 byo-yomi
+    # Check that over time is at least 5x30 byo-yomi, not absolute
     over_time = game_info["OT"]
     if over_time == nil
       valid_sgf = false
@@ -366,7 +366,7 @@ module ApplicationHelper
       end
 
       if Match.find_by_url(parsedurl)
-        puts "Game already in Database"
+        puts "Game already in database"
         next
       end
 
@@ -399,7 +399,7 @@ module ApplicationHelper
       sgf = sgfParser(row["url"])
       
       if sgf[3] == "Canadian"
-        puts "Game discarded because Andrew hates Canadians"
+        puts "Game discarded because Canadian ruleset"
         next
       end
 
