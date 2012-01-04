@@ -46,6 +46,7 @@ module ApplicationHelper
     
   def scrape
     
+    @rules = Rules.last
     kgsnames = User.select("kgs_names")
     
     for x in kgsnames
@@ -246,8 +247,8 @@ module ApplicationHelper
     count = 0
     tree.each { |node| count += 1 }
 
-    if count > 30
-      for i in 0..30
+    if (count > @rules.tag_pos) and (@rules.tag_boolean == true)
+      for i in 0..@rules.tag_pos
 
         comment = game.comments
         if comment
@@ -260,7 +261,7 @@ module ApplicationHelper
       end
     end
     
-    if found != true
+    if (found != true) and (@rules.tag_boolean == true)
       valid_sgf = false
       invalid_reason << "did not contain tag line"
     end
@@ -277,36 +278,36 @@ module ApplicationHelper
     byo_yomi_periods = over_time[0].split('x')[0].to_i # Parse SGF overtime periods
     byo_yomi_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
 
-    if (byo_yomi_periods < 5) and (byo_yomi_seconds < 30)
+    if (byo_yomi_periods < @rules.byo_yomi_periods) and (byo_yomi_seconds < @rules.byo_yomi_seconds) and (@rules.ruleset == "Japanese")
       valid_sgf = false
-      invalid_reason << "incorrect byo-yomi: #{byo_yomi_periods}x#{byo_yomi_seconds}"
+      invalid_reason << "incorrect byo-yomi; expected: #{@rules.byo_yomi_periods}x#{@rules.byo_yomi_seconds}; was: #{byo_yomi_periods}x#{byo_yomi_seconds}"
     end
     
     # Check main time is not less than 1500
     main_time = game_info["TM"].to_i
     
-    if main_time < 1500
+    if (main_time < @rules.main_time) and (@rules.main_time_boolean == true)
       valid_sgf = false
-      invalid_reason << "incorrect main time: #{main_time}"
+      invalid_reason << "incorrect main time; expected: #{@rules.main_time}; was: #{main_time}"
     end        
     
-    # Check ruleset is Japanese
+    # Check ruleset
     ruleset = game_info["RU"]
     
-    if ruleset != "Japanese"
+    if ruleset != @rules.ruleset
       valid_sgf = false
-      invalid_reason << "incorrect ruleset: #{ruleset}"
+      invalid_reason << "incorrect ruleset; expected: #{@rules.ruleset}; was: #{ruleset}"
     end
 
     # Add byo-yomi settings
     ruleset = over_time[1]
     
-    # Check komi is 6.5 or 0.5
+    # Check komi
     komi = game_info["KM"].to_f
     
-    unless komi == 6.5
+    unless (komi == @rules.komi) or (@rules.komi_boolean == false)
       valid_sgf = false
-      invalid_reason << "incorrect komi: #{komi}"
+      invalid_reason << "incorrect komi; expected: #{@rules.komi}; was: #{komi}"
     end
     
     return [byo_yomi_periods, byo_yomi_seconds, main_time, ruleset, komi, valid_sgf, invalid_reason]
@@ -314,7 +315,6 @@ module ApplicationHelper
 
   def match_scraper(kgs_name)
 
-    
     require 'open-uri'
     require 'time'
 
@@ -370,27 +370,27 @@ module ApplicationHelper
         next
       end
 
-      if row["board_size"] != 19
-        invalid_reason << "incorrect board size"
+      if row["board_size"] != @rules.board_size
+        invalid_reason << "incorrect board size; expected: #{@rules.board_size}; was: #{row["board_size"]} "
         valid_game = false
       end
 
-      if row["game_type"] == "Rengo"
+      if (row["game_type"] == "Rengo") and (@rules.rengo == false)
         invalid_reason << "was a rengo game"
         valid_game = false
       end
 
-      if row["game_type"] == "Teaching"
+      if (row["game_type"] == "Teaching") and (@rules.teaching == false)
         invalid_reason << "was a teaching game"
         valid_game = false
       end
       
-      if row["game_type"] == "Review"
+      if (row["game_type"] == "Review") and (@rules.review == false)
         invalid_reason << "review game"
         valid_game = false
       end
 
-      if row["handi"] != 0
+      if row["handi"] != @rules.handicap
         invalid_reason << "incorrect handicap"
         valid_game = false
       end
@@ -398,10 +398,12 @@ module ApplicationHelper
       # That's all we can get from the KGS Archives, now to check the SGF
       sgf = sgfParser(row["url"])
       
-      if sgf[3] == "Canadian"
+      if (sgf[3] == "Canadian") and (@rules.ruleset != "Canadian")
         puts "Game discarded because Canadian ruleset"
         next
       end
+
+      # To do: add parsing for Canadian overtime settings
 
       if sgf[5] == false
         valid_game = false
@@ -415,12 +417,12 @@ module ApplicationHelper
       
       whereResult = Match.where('(black_player_name=? OR white_player_name=?) AND (black_player_name=? OR white_player_name=?)', player1, player1, player2, player2)
 
-      matchnum = 2 - whereResult.length
+      matchnum = @rules.max_games - whereResult.length
       matchnum = 0 if matchnum < 0
       
-      if whereResult.length >= 2
+      if whereResult.length >= @rules.max_games
         valid_game = false
-        invalid_reason << "third or higher game against same opponent"
+        invalid_reason << "more than #{@rules.max_games} game(s) against same opponent"
       end
       
       # Points attribution
@@ -446,13 +448,13 @@ module ApplicationHelper
           loser.month_points = 0
         end
 
-        winner.points += 1 * matchnum
-        winner.month_points += 1 * matchnum
-        loser.points += 0.5 * matchnum
-        loser.month_points += 0.5 * matchnum
+        winner.points += @rules.points_per_win * matchnum
+        winner.month_points += @rules.points_per_win * matchnum
+        loser.points += @rules.points_per_loss * matchnum
+        loser.month_points += @rules.points_per_loss * matchnum
 
-        puts "#{winner.kgs_names} +#{1 * matchnum}"
-        puts "#{loser.kgs_names} +#{0.5 * matchnum}"
+        puts "#{winner.kgs_names} +#{@rules.points_per_win * matchnum}"
+        puts "#{loser.kgs_names} +#{@rules.points_per_loss * matchnum}"
 
         winner.save
         loser.save

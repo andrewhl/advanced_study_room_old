@@ -72,6 +72,20 @@
 
 <h3>Time settings</h3>
 
+<p>Main time required (i.e., whether game must have time settings at all):</p>
+<p>
+<% if @current_ruleset.main_time_boolean == true %>
+	<%= radio_button_tag 'main_time_boolean', true, :checked => true %>True<br />
+	<%= radio_button_tag 'main_time_boolean', false %>False
+<% else %>
+	<%= radio_button_tag 'main_time_boolean', true %>True<br />
+	<%= radio_button_tag 'main_time_boolean', false, :checked => true %>False		
+<% end %>
+</p>
+
+<p>Main time (in seconds):</p>
+<p><%= number_field_tag('main_time',  @current_ruleset.main_time, :min => "1")%></p>
+
 <p>Overtime required:</p>
 
 <p>
@@ -144,4 +158,12 @@
 <p><%= select_tag "board_size", options_for_select(["19", "13", "9"], @current_ruleset.board_size) %>
 </p>
 
+<h3>Point settings</h3>
+<p>Note: multiply these values by the number of games played. For example, if you set points per win to 2, then the first win will be worth 2 points, the second 1 (n * # of games played)</p>
+<p>Points per win:</p>
+<p><%= number_field_tag('points_per_win', @current_ruleset.points_per_win, :min => "0") %></p>
+<p>Points per loss:</p>
+<p><%= number_field_tag('points_per_loss', @current_ruleset.points_per_loss, :min => "0") %></p>
+<p>Max number of matches:</p>
+<p><%= number_field_tag('max_games', @current_ruleset.max_games, :min => "1") %></p>
 <%= submit_tag "Submit", :class => "submit" %>
