@@ -44,23 +44,27 @@ class ManageController < ApplicationController
   end
   
   def rules
+    
+    if params[:commit]
+    
+      @rules = Rules.new
         
-    @rules = Rules.new
-        
-    params.each do |key, value|
-      puts "Key: #{key}", "Value: #{value.inspect}"
-      if value == "true"
-        puts "Rules.key before assignment: #{@rules.key}"
-        @rules.send(key) = true
-        puts "Rules.key after assignment: #{@rules.key}"
-        @rules.save
-      elsif value == "false"
-        puts "Rules.key before assignment: #{@rules.key}"
-        @rules.send(key) = false
-        puts "Rules.key after assignment: #{@rules.key}"
-        @rules.save
+      params.each do |key, value|
+        if value == "true"
+          @rules[key] = true
+          @rules.save
+        elsif value == "false"
+          @rules[key] = false
+          @rules.save
+        elsif not value.nil?
+          @rules[key] = value
+          @rules.save
+        end
       end
+    
     end
+    
+    @current_ruleset = Rules.last
           
   end
   

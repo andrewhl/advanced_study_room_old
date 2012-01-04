@@ -4,87 +4,144 @@
 
 <h3>Select month</h3>
 
-<p><%= select_tag "month", options_for_select(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]), :class => "division" %>
+<p><%= select_tag "month", options_for_select(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], @current_ruleset.month) %>
 </p>
 
 <h3>Select valid game types</h3>
 
 <p>
-<%= check_box_tag 'rengo', 'rengo' %>Rengo<br />
-<%= check_box_tag 'teaching', 'teaching' %>Teaching<br />
-<%= check_box_tag 'review', 'review' %>Review<br />
-<%= check_box_tag 'demonstration', 'demonstration' %>Demonstration<br />
-<%= check_box_tag 'rated', 'rated', true %>Rated<br />
-<%= check_box_tag 'free', 'free', true %>Free
+<%=
+	if @current_ruleset.rengo == true
+		check_box_tag 'rengo', true, true
+	else
+		check_box_tag 'rengo', true
+	end %>Rengo<br />
+<%=
+	if @current_ruleset.teaching == true
+		check_box_tag 'teaching', true, true
+	else
+		check_box_tag 'teaching', true
+	end %>Teaching<br />
+<%=
+	if @current_ruleset.review == true
+		check_box_tag 'review', true, true
+	else
+		check_box_tag 'review', true
+	end %>Review<br />
+<%=
+	if @current_ruleset.demonstration == true
+		check_box_tag 'demonstration', true, true
+	else
+		check_box_tag 'demonstration', true
+	end %>Demonstration<br />
+<%=
+	if @current_ruleset.rated == true
+		check_box_tag 'rated', true, true
+	else
+		check_box_tag 'rated', true
+	end %>Rated<br />
+<%=
+	if @current_ruleset.free == true
+		check_box_tag 'free', true, true
+	else
+		check_box_tag 'free', true
+	end %>Free
 </p>
 
 <h3>Tag definition</h3>
 
 <p>Tag position (enter a game move # between 1 and 300):</p>
 
-<p><%= number_field_tag('tag_position', 'tag_position', :min => "1", :max => "300")%></p>
+<p><%= number_field_tag('tag_pos', @current_ruleset.tag_pos, :min => "1", :max => "300")%></p>
 
 <p>Tag phrase:</p>
 
-<p><%= text_field_tag('tag_phrase') %></p>
+<p><%= text_field_tag('tag_phrase', @current_ruleset.tag_phrase) %></p>
 
 <p>Tag required:</p>
 
 <p>
-<%= radio_button_tag 'tag_boolean', true, :checked => true %>True<br />
-<%= radio_button_tag 'tag_boolean', false %>False
+<% if @current_ruleset.tag_boolean == true %>
+	<%= radio_button_tag 'tag_boolean', true, :checked => true %>True<br />
+	<%= radio_button_tag 'tag_boolean', false %>False
+<% else %>
+	<%= radio_button_tag 'tag_boolean', true %>True<br />
+	<%= radio_button_tag 'tag_boolean', false, :checked => true %>False		
+<% end %>
 </p>
 
 <h3>Time settings</h3>
 
 <p>Overtime required:</p>
 
-<p><%= radio_button_tag 'ot_boolean', true, :checked => true %>True<br />
-<%= radio_button_tag 'ot_boolean', false %>False<br />
+<p>
+<% if @current_ruleset.ot_boolean == true %>
+	<%= radio_button_tag 'ot_boolean', true, :checked => true %>True<br />
+	<%= radio_button_tag 'ot_boolean', false %>False
+<% else %>
+	<%= radio_button_tag 'ot_boolean', true %>True<br />
+	<%= radio_button_tag 'ot_boolean', false, :checked => true %>False		
+<% end %>
 </p>
 
 <p>Byo_yomi:</p>
 
 <p>
-<%= number_field_tag('byo_yomi_periods', 'byo_yomi_periods', :min => "1", :max => "50")%>Byo-yomi periods (min 1, max 50)<br />
-<%= number_field_tag('byo_yomi_seconds', 'byo_yomi_seconds', :min => "1", :max => "360")%>Byo-yomi seconds (min 1, max 360)
+<%= number_field_tag('byo_yomi_periods',  @current_ruleset.byo_yomi_periods, :min => "1", :max => "50")%>Byo-yomi periods (min 1, max 50)<br />
+<%= number_field_tag('byo_yomi_seconds', @current_ruleset.byo_yomi_seconds, :min => "1", :max => "360")%>Byo-yomi seconds (min 1, max 360)
 </p>
 
 <p>Ruleset</p>
 
-<p><%= select_tag "division", options_for_select(["Japanese", "Canadian", "AGA"]), :class => "division" %>
+<p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA"], @current_ruleset.ruleset) %>
 </p>
 
 <p>Ruleset required:</p>
 
 <p>
-<%= radio_button_tag 'ruleset_boolean', true, :checked => true %>True<br />
-<%= radio_button_tag 'ruleset_boolean', false %>False
+	<% if @current_ruleset.ruleset_boolean == true %>
+		<%= radio_button_tag 'ruleset_boolean', true, :checked => true %>True<br />
+		<%= radio_button_tag 'ruleset_boolean', false %>False
+	<% else %>
+		<%= radio_button_tag 'ruleset_boolean', true %>True<br />
+		<%= radio_button_tag 'ruleset_boolean', false, :checked => true %>False		
+	<% end %>
+
 </p>
 
 <h3>Handicap settings</h3>
 
 <p>Komi:</p>
-<p><%= number_field_tag('komi', 'komi', :min => "0.5") %></p>
+<p><%= number_field_tag('komi', @current_ruleset.komi, :min => "0.5") %></p>
 
 <p>Komi required:</p>
 
 <p>
-<%= radio_button_tag 'komi_boolean', true, :checked => true %>True<br />
-<%= radio_button_tag 'komi_boolean', false %>False
+	<% if @current_ruleset.komi_boolean == true %>
+		<%= radio_button_tag 'komi_boolean', true, :checked => true %>True<br />
+		<%= radio_button_tag 'komi_boolean', false %>False
+	<% else %>
+		<%= radio_button_tag 'komi_boolean', true %>True<br />
+		<%= radio_button_tag 'komi_boolean', false, :checked => true %>False		
+	<% end %>
 </p>
 
-<p>Handicap required (0-9):</p>
-<p><%= number_field_tag('handicap', 'handicap', :min => "0", :max => "9") %></p>
-<p>Handicap:</p>
+<p>Handicap (0-9):</p>
+<p><%= number_field_tag('handicap', @current_ruleset.handicap, :min => "0", :max => "9") %></p>
+<p>Handicap required:</p>
 
 <p>
-<%= radio_button_tag 'handicap_boolean', true %>True<br />
-<%= radio_button_tag 'handicap_boolean', false, :checked => true %>False
+	<% if @current_ruleset.handicap_boolean == true %>
+		<%= radio_button_tag 'handicap_boolean', true, :checked => true %>True<br />
+		<%= radio_button_tag 'handicap_boolean', false %>False
+	<% else %>
+		<%= radio_button_tag 'handicap_boolean', true %>True<br />
+		<%= radio_button_tag 'handicap_boolean', false, :checked => true %>False		
+	<% end %>
 </p>
 
 <h3>Board size</h3>
-<p><%= select_tag "division", options_for_select(["19x19", "13x13", "9x9"]), :class => "division" %>
+<p><%= select_tag "board_size", options_for_select(["19", "13", "9"], @current_ruleset.board_size) %>
 </p>
 
 <%= submit_tag "Submit", :class => "submit" %>
