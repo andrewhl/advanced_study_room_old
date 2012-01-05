@@ -49,16 +49,17 @@ module ApplicationHelper
     @rules = Rules.last
     kgsnames = User.select("kgs_names")
     
-    for x in kgsnames
-      if not x.kgs_names
-        next
-      end
-      puts "Scraping #{x.kgs_names}..."
-      match_scraper(x.kgs_names)
-      sleep(2)
-    end
+    # for x in kgsnames
+    #   if not x.kgs_names
+    #     next
+    #   end
+    #   puts "Scraping #{x.kgs_names}..."
+    #   match_scraper(x.kgs_names)
+    #   sleep(2)
+    # end
     # match_scraper('LonelyJoy')
     # match_scraper('thesirjay')
+    match_scraper('Smarre')
   
   end
 
@@ -132,6 +133,15 @@ module ApplicationHelper
       white_player_name = "None"
       white_player_rank = -31
 
+    elsif columns[4].content == "Rengo"
+      
+      # Rengo games
+      
+      myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
+      
+      rank_array = columns[i].content.scan(myRegex)[0]
+      puts "**************RENGO OUTPUT: #{rank_array}"
+      
     else
 
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
