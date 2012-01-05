@@ -265,70 +265,54 @@ module ApplicationHelper
       valid_sgf = false
       invalid_reason << "did not contain tag line"
     end
-    
-    # Identify time system for absolute and none games
-    if (game_info["TM"] == nil) and (game_info["OT"] != nil)
-      time_system = "Absolute"
-    elsif (game_info["TM"] == nil) and (game_info["OT"] == nil)
-      time_system = "None"
-    end
-    
-    # Check for absolute time setting
-    if ((game_info["OT"] == nil) and (game_info["TM"] != nil)) and (@rules.time_system.split(', ').include? "Absolute")
-      valid_sgf = true
+  
+    # Check Overtime Settings
+    if game_info["OT"] == nil       # No overtime
       overtime_periods = 0
       overtime_seconds = 0
-    elsif ((game_info["OT"] == nil) and (game_info["TM"] != nil)) and (not @rules.time_system.split(', ').include? "Absolute")
-      valid_sgf = false
-      overtime_periods = 0
-      overtime_seconds = 0
-      invalid_reason << "game used absolute time when not permitted to"
-    end
-    
-    # Check for no time setting
-    if (game_info["TM"] == nil) and (@rules.time_system.split(', ').include? "None")
-      valid_sgf = true
-      overtime_periods = 0
-      overtime_seconds = 0
-    elsif (game_info["TM"] == nil) and (not @rules.time_system.split(', ').include? "None")
-      valid_sgf = false
-      overtime_periods = 0
-      overtime_seconds = 0
-      invalid_reason << "game used no time setting when not permitted to"
-    end
-    
-    # Restrict overtime settings
-    if game_info["OT"] != nil
+
+      if game_info["TM"] == nil     # No main time
+        time_system = "None"
+        valid_sgf = false if not @rules.time_system.split(', ').include? "None"
+        invalid_reason << "game had unlimited time"
+
+      else                          # Has main time
+        time_system = "Absolute"
+        valid_sgf = false if not @rules.time_system.split(', ').include? "Absolute"
+        invalid_reason << "game used absolute time when not permitted to"
+      end
+
+    else                            # Has overtime
       over_time = game_info["OT"]
       over_time = over_time.split(' ')
       time_system = over_time[1]
-      puts "Time system: #{time_system}"
       
-      if over_time[1] == "Byo-Yomi"
-        
-        overtime_periods = over_time[0].split('x')[0].to_i # Parse SGF overtime periods
-        overtime_seconds = over_time[0].split('x')[1].to_i # Parse SGF overtime seconds
+      if over_time[1] == "Byo-Yomi" # Has Byo-yomi
+        ot_split = over_time[0].split('x')
 
-        if (overtime_periods < @rules.byo_yomi_periods) and (overtime_seconds < @rules.byo_yomi_seconds) and (@rules.ruleset == "Japanese")
+        if (ot_split[0].to_i < @rules.byo_yomi_periods) and (ot_split[1].to_i < @rules.byo_yomi_seconds)
           valid_sgf = false
           invalid_reason << "incorrect byo-yomi; expected: #{@rules.byo_yomi_periods}x#{@rules.byo_yomi_seconds}; was: #{overtime_periods}x#{overtime_seconds}"
         end
         
-      elsif over_time[1] == "Canadian"
+      elsif over_time[1] == "Canadian"  # Has Canadian
+        ot_split = over_time[0].split('/')
         
-        overtime_periods = over_time[0].split('/')[0].to_i # Parse number of stones per period
-        overtime_seconds = over_time[0].split('/')[1].to_i # Parse time available per period
-        
-        if (overtime_periods < @rules.canadian_stones) and (overtime_seconds < @rules.canadian_time)
+        if (ot_split[0].to_i < @rules.canadian_stones) and (ot_split[1].to_i < @rules.canadian_time)
           valid_sgf = false
           invalid_reason << "incorrect canadian time settings; expected: #{@rules.canadian_stones}/#{@rules.canadian_time}; was: #{overtime_periods}/#{overtime_seconds}"
         end
-        
+
+      else                          # Mystery Meat
+        ot_split = ["0", "0"]
+        valid_sgf = false
+        invalid_reason << "overtime settings were unidentifiable"
       end
-    end # Ends: if game_info["OT"] != nil
-      
-      
-    
+
+      overtime_periods = ot_split[0].to_i # Parse SGF overtime periods
+      overtime_seconds = ot_split[1].to_i # Parse SGF overtime seconds
+    end 
+
     # Check main time
     main_time = game_info["TM"].to_i
     
@@ -344,13 +328,7 @@ module ApplicationHelper
       valid_sgf = false
       invalid_reason << "incorrect ruleset; expected: #{@rules.ruleset}; was: #{ruleset}"
     end
-    
-    # Check time system(s)
-    #time_system = 
-
-    # Add byo-yomi settings
-    ruleset = over_time[1]
-    
+        
     # Check komi
     komi = game_info["KM"].to_f
     
@@ -447,13 +425,10 @@ module ApplicationHelper
       # That's all we can get from the KGS Archives, now to check the SGF
       sgf = sgfParser(row["url"])
       
-      # if not @rules.ruleset.split(', ').includes? sgf[3]
-      # # if (sgf[3] == "Canadian") and (@rules.ruleset != "Canadian")
-      #   puts "Game discarded because it used an invalid ruleset"
-      #   next
-      # end
-
-      # To do: add parsing for Canadian overtime settings
+      if not @rules.ruleset.split(', ').includes? sgf[3]
+        valid_game = false
+        invalid_reason << "Game discarded because it used an invalid ruleset"
+      end
 
       if sgf[5] == false
         valid_game = false
