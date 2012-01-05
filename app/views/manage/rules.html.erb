@@ -72,6 +72,10 @@
 
 <h3>Time settings</h3>
 
+<p>Time systems:</p>
+<p><%= select_tag "time_system", options_for_select(["None", "Absolute", "Byo-Yomi", "Canadian"], @current_ruleset.time_system), :multiple => true %>
+</p>
+
 <p>Main time required (i.e., whether game must have time settings at all):</p>
 <p>
 <% if @current_ruleset.main_time_boolean == true %>
@@ -86,7 +90,7 @@
 <p>Main time (in seconds):</p>
 <p><%= number_field_tag('main_time',  @current_ruleset.main_time, :min => "1")%></p>
 
-<p>Overtime required:</p>
+<p>Overtime required (if set to true, absolute time games will not be permitted):</p>
 
 <p>
 <% if @current_ruleset.ot_boolean == true %>
@@ -105,12 +109,19 @@
 <%= number_field_tag('byo_yomi_seconds', @current_ruleset.byo_yomi_seconds, :min => "1", :max => "360")%>Byo-yomi seconds (min 1, max 360)
 </p>
 
-<p>Ruleset</p>
+<p>Canadian:</p>
 
-<p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA"], @current_ruleset.ruleset) %>
+<p>
+<%= number_field_tag('canadian_stones',  @current_ruleset.canadian_stones)%>Byo-yomi periods (min 1, max 50)<br />
+<%= number_field_tag('canadian_time', @current_ruleset.canadian_time)%>Byo-yomi seconds (min 1, max 360)
 </p>
 
-<p>Ruleset required:</p>
+<p>Ruleset</p>
+
+<p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA", "New Zealand"], @current_ruleset.ruleset), :multiple => true %>
+</p>
+
+<p>Ruleset(s) required:</p>
 
 <p>
 	<% if @current_ruleset.ruleset_boolean == true %>
