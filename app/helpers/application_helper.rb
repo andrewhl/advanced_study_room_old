@@ -274,11 +274,11 @@ module ApplicationHelper
     end
     
     # Check for absolute time setting
-    if ((game_info["OT"] == nil) and (game_info["TM"] != nil)) and (@rules.time_system.include? "Absolute")
+    if ((game_info["OT"] == nil) and (game_info["TM"] != nil)) and (@rules.time_system.split(', ').include? "Absolute")
       valid_sgf = true
       overtime_periods = 0
       overtime_seconds = 0
-    elsif ((game_info["OT"] == nil) and (game_info["TM"] != nil)) and (not @rules.time_system.include? "Absolute")
+    elsif ((game_info["OT"] == nil) and (game_info["TM"] != nil)) and (not @rules.time_system.split(', ').include? "Absolute")
       valid_sgf = false
       overtime_periods = 0
       overtime_seconds = 0
@@ -286,11 +286,11 @@ module ApplicationHelper
     end
     
     # Check for no time setting
-    if (game_info["TM"] == nil) and (@rules.time_system.include? "None")
+    if (game_info["TM"] == nil) and (@rules.time_system.split(', ').include? "None")
       valid_sgf = true
       overtime_periods = 0
       overtime_seconds = 0
-    elsif (game_info["TM"] == nil) and (not @rules.time_system.include? "None")
+    elsif (game_info["TM"] == nil) and (not @rules.time_system.split(', ').include? "None")
       valid_sgf = false
       overtime_periods = 0
       overtime_seconds = 0
@@ -315,6 +315,7 @@ module ApplicationHelper
         end
         
       elsif over_time[1] == "Canadian"
+        
         overtime_periods = over_time[0].split('/')[0].to_i # Parse number of stones per period
         overtime_seconds = over_time[0].split('/')[1].to_i # Parse time available per period
         

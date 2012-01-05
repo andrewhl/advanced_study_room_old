@@ -116,7 +116,7 @@
 <%= number_field_tag('canadian_time', @current_ruleset.canadian_time)%>Byo-yomi seconds (min 1, max 360)
 </p>
 
-<p>Ruleset</p>
+<p>Ruleset:</p>
 
 <p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA", "New Zealand"], @current_ruleset.ruleset), :multiple => true %>
 </p>
@@ -166,7 +166,7 @@
 </p>
 
 <h3>Board size</h3>
-<p><%= select_tag "board_size", options_for_select(["19", "13", "9"], @current_ruleset.board_size) %>
+<p><%= select_tag "board_size", options_for_select(["19", "13", "9"], @current_ruleset.board_size), :multiple => true %>
 </p>
 
 <h3>Point settings</h3>
