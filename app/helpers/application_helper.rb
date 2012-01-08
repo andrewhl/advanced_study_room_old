@@ -303,10 +303,7 @@ module ApplicationHelper
         if not @rules.time_system.split(', ').include? "Byo-Yomi"
           valid_sgf = false
           invalid_reason << "used byo-yomi overtime"
-          break
-        end
-
-        if (ot_split[0].to_i < @rules.byo_yomi_periods) or (ot_split[1].to_i < @rules.byo_yomi_seconds)
+        elsif (ot_split[0].to_i < @rules.byo_yomi_periods) or (ot_split[1].to_i < @rules.byo_yomi_seconds)
           valid_sgf = false
           invalid_reason << "incorrect byo-yomi; expected: #{@rules.byo_yomi_periods}x#{@rules.byo_yomi_seconds}; was: #{overtime_periods}x#{overtime_seconds}"
         end
@@ -317,10 +314,7 @@ module ApplicationHelper
         if not @rules.time_system.split(', ').include? "Canadian"
           valid_sgf = false
           invalid_reason << "used Canadian overtime"
-          break
-        end
-
-        if (ot_split[0].to_i < @rules.canadian_stones) or (ot_split[1].to_i < @rules.canadian_time)
+        elsif (ot_split[0].to_i < @rules.canadian_stones) or (ot_split[1].to_i < @rules.canadian_time)
           valid_sgf = false
           invalid_reason << "incorrect canadian time settings; expected: #{@rules.canadian_stones}/#{@rules.canadian_time}; was: #{overtime_periods}/#{overtime_seconds}"
         end
