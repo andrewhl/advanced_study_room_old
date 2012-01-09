@@ -59,19 +59,16 @@ class ManageController < ApplicationController
       params.each do |key, value|
         if value == "true"
           @rules[key] = true
-          @rules.save
         elsif value == "false"
           @rules[key] = false
-          @rules.save
         elsif (not value.nil?) and (not value.class == Array)
           @rules[key] = value
-          @rules.save
         elsif (not value.nil?) and (value.class == Array)
-          value.join(',')
-          @rules[key] = value
-          @rules.save
+          @rules[key] = value.join(',')
+          puts value
         end
       end
+      @rules.save
     
     end
     
