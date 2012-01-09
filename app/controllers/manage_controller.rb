@@ -47,7 +47,7 @@ class ManageController < ApplicationController
     
     # Set the defaults if no rules have been set.
     if Rules.count == 0
-      @rules = Rules.new(:division_boolean => true, :time_system => "Byo-Yomi", :canadian_stones => 25, :canadian_time => 300, :max_games => 2, :points_per_win => 1, :points_per_loss => 0.5, :main_time => 1500, :main_time_boolean => true, :tag_phrase => "ASR League", :board_size => 19, :month => "January", :handicap => 0, :handicap_boolean => false, :ruleset => "Japanese", :ruleset_boolean => true, :komi => 6.5, :komi_boolean => true, :tag_pos => 30, :tag_boolean => true, :ot_boolean => true, :byo_yomi_periods => 5, :byo_yomi_seconds => 25, :rengo => false, :teaching => false, :review => false, :free => true, :rated => true, :demonstration => false, :unfinished => false) 
+      @rules = Rules.new(:board_size_boolean => true, :division_boolean => true, :time_system => "Byo-Yomi", :canadian_stones => 25, :canadian_time => 300, :max_games => 2, :points_per_win => 1, :points_per_loss => 0.5, :main_time => 1500, :main_time_boolean => true, :tag_phrase => "ASR League", :board_size => "19", :month => "January", :handicap => "0", :handicap_boolean => false, :ruleset => "Japanese", :ruleset_boolean => true, :komi => 6.5, :komi_boolean => true, :tag_pos => 30, :tag_boolean => true, :ot_boolean => true, :byo_yomi_periods => 5, :byo_yomi_seconds => 25, :rengo => false, :teaching => false, :review => false, :free => true, :rated => true, :demonstration => false, :unfinished => false) 
       @rules.save
     end
     
@@ -63,7 +63,11 @@ class ManageController < ApplicationController
         elsif value == "false"
           @rules[key] = false
           @rules.save
-        elsif not value.nil?
+        elsif (not value.nil?) and (not value.class == Array)
+          @rules[key] = value
+          @rules.save
+        elsif (not value.nil?) and (value.class == Array)
+          value.join(',')
           @rules[key] = value
           @rules.save
         end

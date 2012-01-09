@@ -85,7 +85,7 @@
 <h3>Time settings</h3>
 
 <p>Time systems:</p>
-<p><%= select_tag "time_system", options_for_select(["None", "Absolute", "Byo-Yomi", "Canadian"], @current_ruleset.time_system), :multiple => true %>
+<p><%= select_tag "time_system", options_for_select(["None", "Absolute", "Byo-Yomi", "Canadian"], @current_ruleset.time_system.split(',')), :multiple => true %>
 </p>
 
 <p>Main time required (i.e., whether game must have time settings at all):</p>
@@ -130,7 +130,7 @@
 
 <p>Ruleset:</p>
 
-<p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA", "New Zealand"], @current_ruleset.ruleset), :multiple => true %>
+<p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA", "New Zealand"], @current_ruleset.ruleset).split(','), :multiple => true %>
 </p>
 
 <p>Ruleset(s) required:</p>
@@ -163,10 +163,8 @@
 	<% end %>
 </p>
 
-<p>Handicap (0-9):</p>
-<p><%= number_field_tag('handicap', @current_ruleset.handicap, :min => "0", :max => "9") %></p>
-<p>Handicap required:</p>
 
+<p>Handicap required:</p>
 <p>
 	<% if @current_ruleset.handicap_boolean == true %>
 		<%= radio_button_tag 'handicap_boolean', true, :checked => true %>True<br />
@@ -176,10 +174,26 @@
 		<%= radio_button_tag 'handicap_boolean', false, :checked => true %>False		
 	<% end %>
 </p>
+<p>Handicap (0-9):</p>
+<p><%= select_tag "handicap", options_for_select([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], @current_ruleset.handicap.split(',')), :multiple => true %>
+</p>
 
 <h3>Board size</h3>
-<p><%= select_tag "board_size", options_for_select([19, 13, 9], @current_ruleset.board_size), :multiple => true %>
+<p>Board size required:</p>
+
+<p>
+	<% if @current_ruleset.board_size_boolean == true %>
+		<%= radio_button_tag 'board_size_boolean', true, :checked => true %>True<br />
+		<%= radio_button_tag 'board_size_boolean', false %>False
+	<% else %>
+		<%= radio_button_tag 'board_size_boolean', true %>True<br />
+		<%= radio_button_tag 'board_size_boolean', false, :checked => true %>False		
+	<% end %>
 </p>
+<p>Dimensions:</p>
+<p><%= select_tag "board_size", options_for_select([19, 13, 9], @current_ruleset.board_size.split(',')), :multiple => true %>
+</p>
+
 
 <h3>Point settings</h3>
 <p>Note: multiply these values by the number of games played. For example, if you set points per win to 2, then the first win will be worth 2 points, the second 1 (n * # of games played)</p>

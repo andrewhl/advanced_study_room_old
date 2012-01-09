@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120108024526) do
+ActiveRecord::Schema.define(:version => 20120109061858) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -102,13 +102,11 @@ ActiveRecord::Schema.define(:version => 20120108024526) do
     t.boolean  "ruleset_boolean"
     t.float    "komi"
     t.boolean  "komi_boolean"
-    t.integer  "handicap"
     t.boolean  "handicap_boolean"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "month"
     t.string   "tag_phrase"
-    t.integer  "board_size"
     t.integer  "max_games"
     t.float    "points_per_win"
     t.float    "points_per_loss"
@@ -118,6 +116,9 @@ ActiveRecord::Schema.define(:version => 20120108024526) do
     t.integer  "canadian_stones"
     t.integer  "canadian_time"
     t.boolean  "division_boolean"
+    t.string   "handicap"
+    t.string   "board_size"
+    t.boolean  "board_size_boolean"
   end
 
   create_table "users", :force => true do |t|

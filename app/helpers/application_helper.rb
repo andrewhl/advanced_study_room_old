@@ -417,7 +417,7 @@ module ApplicationHelper
         next
       end
 
-      if row["board_size"] != @rules.board_size
+      if (row["board_size"] != @rules.board_size) and (@rules.board_size_boolean == true)
         invalid_reason << "incorrect board size; expected: #{@rules.board_size}; was: #{row["board_size"]} "
         valid_game = false
       end
