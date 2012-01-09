@@ -48,6 +48,18 @@
 	end %>Free
 </p>
 
+<p>Check division membership:</p>
+
+<p>
+	<% if @current_ruleset.division_boolean == true %>
+		<%= radio_button_tag 'division_boolean', true, :checked => true %>True<br />
+		<%= radio_button_tag 'division_boolean', false %>False
+	<% else %>
+		<%= radio_button_tag 'division_boolean', true %>True<br />
+		<%= radio_button_tag 'division_boolean', false, :checked => true %>False		
+	<% end %>
+</p>
+
 <h3>Tag definition</h3>
 
 <p>Tag position (enter a game move # between 1 and 300):</p>
@@ -166,15 +178,15 @@
 </p>
 
 <h3>Board size</h3>
-<p><%= select_tag "board_size", options_for_select(["19", "13", "9"], @current_ruleset.board_size), :multiple => true %>
+<p><%= select_tag "board_size", options_for_select([19, 13, 9], @current_ruleset.board_size), :multiple => true %>
 </p>
 
 <h3>Point settings</h3>
 <p>Note: multiply these values by the number of games played. For example, if you set points per win to 2, then the first win will be worth 2 points, the second 1 (n * # of games played)</p>
 <p>Points per win:</p>
-<p><%= number_field_tag('points_per_win', @current_ruleset.points_per_win, :min => "0") %></p>
+<p><%= number_field_tag('points_per_win', @current_ruleset.points_per_win, :min => 0) %></p>
 <p>Points per loss:</p>
-<p><%= number_field_tag('points_per_loss', @current_ruleset.points_per_loss, :min => "0") %></p>
+<p><%= number_field_tag('points_per_loss', @current_ruleset.points_per_loss, :min => 0, :step => 0.5) %></p>
 <p>Max number of matches:</p>
-<p><%= number_field_tag('max_games', @current_ruleset.max_games, :min => "1") %></p>
+<p><%= number_field_tag('max_games', @current_ruleset.max_games, :min => 1) %></p>
 <%= submit_tag "Submit", :class => "submit" %>

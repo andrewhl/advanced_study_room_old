@@ -59,7 +59,7 @@ module ApplicationHelper
     # end
     # match_scraper('LonelyJoy')
     # match_scraper('thesirjay')
-    match_scraper('Smarre')
+    match_scraper('NannyOgg')
   
   end
 
@@ -183,9 +183,9 @@ module ApplicationHelper
     end
     
     # Check both users are in the same division
-    if not User.find_by_kgs_names(black_player_name).division == User.find_by_kgs_names(white_player_name).division
+    if (not User.find_by_kgs_names(black_player_name).division == User.find_by_kgs_names(white_player_name).division) and (@rules.division_boolean == true)
       puts "Game discarded due to members being in different pools"
-      return false 
+      return false
     end
     
 
@@ -340,9 +340,13 @@ module ApplicationHelper
     # Check ruleset(s)
     ruleset = game_info["RU"]
     
-    if not @rules.ruleset.split(', ').include? ruleset
+    if @rules.ruleset_boolean == true
+      
+      if not @rules.ruleset.split(', ').include? ruleset
       valid_sgf = false
       invalid_reason << "incorrect ruleset; expected: #{@rules.ruleset}; was: #{ruleset}"
+      end
+      
     end
         
     # Check komi
@@ -441,9 +445,13 @@ module ApplicationHelper
       # That's all we can get from the KGS Archives, now to check the SGF
       sgf = sgfParser(row["url"])
       
-      if not @rules.ruleset.split(', ').includes? sgf[3]
-        valid_game = false
-        invalid_reason << "Game discarded because it used an invalid ruleset"
+      if @rules.ruleset == true
+        
+        if not @rules.ruleset.split(', ').includes? sgf[3]
+          valid_game = false
+          invalid_reason << "Game discarded because it used an invalid ruleset"
+        end
+        
       end
 
       if sgf[5] == false

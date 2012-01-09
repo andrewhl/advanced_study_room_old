@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120105012839) do
+ActiveRecord::Schema.define(:version => 20120108024526) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(:version => 20120105012839) do
     t.integer  "overtime_periods"
     t.integer  "overtime_seconds"
     t.string   "time_system"
+    t.string   "black_player_name_2"
+    t.string   "white_player_name_2"
   end
 
   create_table "points", :force => true do |t|
@@ -115,6 +117,7 @@ ActiveRecord::Schema.define(:version => 20120105012839) do
     t.string   "time_system"
     t.integer  "canadian_stones"
     t.integer  "canadian_time"
+    t.boolean  "division_boolean"
   end
 
   create_table "users", :force => true do |t|
