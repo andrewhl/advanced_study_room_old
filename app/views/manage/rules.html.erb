@@ -8,44 +8,65 @@
 </p>
 
 <h3>Select valid game types</h3>
-
+<p>Rengo:</p>
 <p>
-<%=
-	if @current_ruleset.rengo == true
-		check_box_tag 'rengo', true, true
-	else
-		check_box_tag 'rengo', true
-	end %>Rengo<br />
-<%=
-	if @current_ruleset.teaching == true
-		check_box_tag 'teaching', true, true
-	else
-		check_box_tag 'teaching', true
-	end %>Teaching<br />
-<%=
-	if @current_ruleset.review == true
-		check_box_tag 'review', true, true
-	else
-		check_box_tag 'review', true
-	end %>Review<br />
-<%=
-	if @current_ruleset.demonstration == true
-		check_box_tag 'demonstration', true, true
-	else
-		check_box_tag 'demonstration', true
-	end %>Demonstration<br />
-<%=
-	if @current_ruleset.rated == true
-		check_box_tag 'rated', true, true
-	else
-		check_box_tag 'rated', true
-	end %>Rated<br />
-<%=
-	if @current_ruleset.free == true
-		check_box_tag 'free', true, true
-	else
-		check_box_tag 'free', true
-	end %>Free
+	<% if @current_ruleset.rengo == true %>
+		<%= radio_button_tag 'rengo', true, :checked => true %>True<br />
+		<%= radio_button_tag 'rengo', false %>False
+	<% else %>
+		<%= radio_button_tag 'rengo', true %>True<br />
+		<%= radio_button_tag 'rengo', false, :checked => true %>False		
+	<% end %>
+</p>
+<p>Teaching:</p>
+<p>
+	<% if @current_ruleset.teaching == true %>
+		<%= radio_button_tag 'teaching', true, :checked => true %>True<br />
+		<%= radio_button_tag 'teaching', false %>False
+	<% else %>
+		<%= radio_button_tag 'teaching', true %>True<br />
+		<%= radio_button_tag 'teaching', false, :checked => true %>False		
+	<% end %>
+</p>
+<p>Review</p>
+<p>
+	<% if @current_ruleset.review == true %>
+		<%= radio_button_tag 'review', true, :checked => true %>True<br />
+		<%= radio_button_tag 'review', false %>False
+	<% else %>
+		<%= radio_button_tag 'review', true %>True<br />
+		<%= radio_button_tag 'review', false, :checked => true %>False		
+	<% end %>
+</p>
+<p>Demonstration</p>
+<p>
+	<% if @current_ruleset.demonstration == true %>
+		<%= radio_button_tag 'demonstration', true, :checked => true %>True<br />
+		<%= radio_button_tag 'demonstration', false %>False
+	<% else %>
+		<%= radio_button_tag 'demonstration', true %>True<br />
+		<%= radio_button_tag 'demonstration', false, :checked => true %>False		
+	<% end %>
+</p>
+<p>Rated</p>
+<p>
+	<% if @current_ruleset.rated == true %>
+		<%= radio_button_tag 'rated', true, :checked => true %>True<br />
+		<%= radio_button_tag 'rated', false %>False
+	<% else %>
+		<%= radio_button_tag 'rated', true %>True<br />
+		<%= radio_button_tag 'rated', false, :checked => true %>False		
+	<% end %>
+</p>
+<p>Free</p>
+<p>
+	<% if @current_ruleset.free == true %>
+		<%= radio_button_tag 'free', true, :checked => true %>True<br />
+		<%= radio_button_tag 'free', false %>False
+	<% else %>
+		<%= radio_button_tag 'free', true %>True<br />
+		<%= radio_button_tag 'free', false, :checked => true %>False		
+	<% end %>
 </p>
 
 <p>Check division membership:</p>
@@ -130,7 +151,7 @@
 
 <p>Ruleset:</p>
 
-<p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA", "New Zealand"], @current_ruleset.ruleset).split(','), :multiple => true %>
+<p><%= select_tag "ruleset", options_for_select(["Japanese", "Canadian", "AGA", "New Zealand"], @current_ruleset.ruleset.split(',')), :multiple => true %>
 </p>
 
 <p>Ruleset(s) required:</p>

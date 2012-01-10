@@ -61,11 +61,10 @@ class ManageController < ApplicationController
           @rules[key] = true
         elsif value == "false"
           @rules[key] = false
-        elsif (not value.nil?) and (not value.class == Array)
-          @rules[key] = value
-        elsif (not value.nil?) and (value.class == Array)
+        elsif value.class == Array
           @rules[key] = value.join(',')
-          puts value
+        elsif not value.nil?
+          @rules[key] = value
         end
       end
       @rules.save

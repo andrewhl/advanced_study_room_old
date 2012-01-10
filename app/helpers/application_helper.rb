@@ -83,6 +83,16 @@ module ApplicationHelper
        
     end
     
+    if columns[5].content != "Rengo"
+      
+      # Dummy values for non rengo games
+      white_player_name_2 = "None"
+      white_player_rank_2 = -31
+      black_player_name_2 = "None"
+      black_player_rank_2 = -31
+    
+    end
+    
     if columns[4].content == "Review"
       
       # Review games
@@ -133,15 +143,41 @@ module ApplicationHelper
       white_player_name = "None"
       white_player_rank = -31
 
-    elsif columns[4].content == "Rengo"
+    elsif columns[5].content == "Rengo"
       
       # Rengo games
       
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
       
       rank_array = columns[i].content.scan(myRegex)[0]
-      puts "**************RENGO OUTPUT: #{rank_array}"
+      rank_arrayb = columns[i].content.scan(myRegex)[1]
       
+      i += 1
+      
+      rank_arrayc = columns[i].content.scan(myRegex)[0]
+      rank_arrayd = columns[i].content.scan(myRegex)[1]
+      
+      if (not rank_array) or (not rank_arrayb) or (not rank_arrayc) or (not rank_arrayd)
+        puts "Game discarded due to closed or banned KGS account"
+        return false
+      end
+      
+      # Calculate first white player name and rank
+      white_player_name = rank_array[0]
+      white_player_rank = rank_convert(rank_array[1])
+      
+      # Calculate second white player name and rank
+      white_player_name_2 = rank_arrayb[0]
+      white_player_rank_2 = rank_convert(rank_arrayb[1])
+
+      # Calculate first black player name and rank
+      black_player_name = rank_arrayc[0]
+      black_player_rank = rank_convert(rank_arrayc[1])
+      
+      # Calculate second black player name and rank
+      black_player_name_2 = rank_arrayd[0]
+      black_player_rank_2 = rank_convert(rank_arrayd[1])
+
     else
 
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
@@ -182,13 +218,22 @@ module ApplicationHelper
       return false 
     end
     
+    # Check that all users in a rengo game are in the same division
+    if (columns[5].content == "Rengo") and (@rules.division_boolean == true)
+      rengo_divisions = []
+      rengo_divisions << User.find_by_kgs_names(black_player_name).division << User.find_by_kgs_names(black_player_name_2).division << User.find_by_kgs_names(white_player_name).division << User.find_by_kgs_names(white_player_name_2).division
+      
+      if rengo_divisions.uniq.length != 1
+        puts "Game discarded due to members being in different pools"
+        return false
+      end
+    end  
+    
     # Check both users are in the same division
     if (not User.find_by_kgs_names(black_player_name).division == User.find_by_kgs_names(white_player_name).division) and (@rules.division_boolean == true)
       puts "Game discarded due to members being in different pools"
       return false
     end
-    
-
 
     # Parse board size
     board_size_and_handicap = columns[i].content
@@ -233,7 +278,7 @@ module ApplicationHelper
       score = Float(resArray[1])
     end 
   
-    return {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "result_boolean" => result_boolean, "score" => score, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "public_game" => public_game, "result" =>result}
+    return {"url" => url, "white_player_name" => white_player_name, "white_player_rank" => white_player_rank, "black_player_name" => black_player_name, "black_player_rank" => black_player_rank, "white_player_name_2" => white_player_name_2, "white_player_rank_2" => white_player_rank_2, "black_player_name_2" => black_player_name_2, "black_player_rank_2" => black_player_rank_2, "result_boolean" => result_boolean, "score" => score, "board_size" => board_size, "handi" => handi, "unixtime" => unixtime, "game_type" => game_type, "public_game" => public_game, "result" =>result}
   end
 
   def sgfParser(url)
@@ -395,8 +440,14 @@ module ApplicationHelper
     if games[0]["white_player_name"] == kgs_name
       user.rank = games[0]["white_player_rank"]
       user.save
+    elsif games[0]["white_player_name_2"] == kgs_name
+      user.rank = games[0]["white_player_rank_2"]
+      user.save
     elsif games[0]["black_player_name"] == kgs_name
       user.rank = games[0]["black_player_rank"]
+      user.save
+    elsif games[0]["black_player_name_2"] == kgs_name
+      user.rank = games[0]["black_player_rank_2"]
       user.save
     end
     
@@ -436,8 +487,23 @@ module ApplicationHelper
         invalid_reason << "review game not permitted"
         valid_game = false
       end
+      
+      if (row["game_type"] == "Demonstration") and (@rules.demonstration == false)
+        invalid_reason << "demonstration game not permitted"
+        valid_game = false
+      end
+      
+      if (row["game_type"] == "Rated") and (@rules.rated == false)
+        invalid_reason << "rated game not permitted"
+        valid_game = false
+      end
+      
+      if (row["game_type"] == "Free") and (@rules.free == false)
+        invalid_reason << "free game not permitted"
+        valid_game = false
+      end
 
-      if row["handi"] != @rules.handicap
+      if (not @rules.handicap.split(', ').include? row["handi"].to_s) and (@rules.handicap_boolean == true)
         invalid_reason << "incorrect handicap; expected: #{@rules.handicap}; was: #{row["handi"]}"
         valid_game = false
       end
@@ -464,8 +530,18 @@ module ApplicationHelper
       player1 = row["black_player_name"]
       player2 = row["white_player_name"]
       
-      whereResult = Match.where('(black_player_name=? OR white_player_name=?) AND (black_player_name=? OR white_player_name=?)', player1, player1, player2, player2)
-
+      if row["game_type"] == "Rengo"
+        player3 = row["black_player_name_2"]
+        player4 = row["white_player_name_2"]
+        
+        whereResult = Match.where('(black_player_name=? OR black_player_name_2=? OR white_player_name=? OR white_player_name_2=?) AND (black_player_name=? OR black_player_name_2=? OR white_player_name=? OR white_player_name_2=?) AND (black_player_name=? OR black_player_name_2=? OR white_player_name=? OR white_player_name_2=?) AND (black_player_name=? OR black_player_name_2=? OR white_player_name=? OR white_player_name_2=?)', player1, player1, player1, player1, player2, player2, player2, player2, player3, player3, player3, player3, player4, player4, player4, player4)  
+        
+      else
+      
+        whereResult = Match.where('(black_player_name=? OR white_player_name=?) AND (black_player_name=? OR white_player_name=?)', player1, player1, player2, player2)
+      
+      end
+      
       matchnum = @rules.max_games - whereResult.length
       matchnum = 0 if matchnum < 0
       
@@ -475,7 +551,65 @@ module ApplicationHelper
       end
       
       # Points attribution
-      if valid_game == true
+      if (valid_game == true) and (row["game_type"] == "Rengo")
+        if row["result_boolean"] == false
+          winner1 = User.find_by_kgs_names(row["black_player_name"])
+          winner2 = User.find_by_kgs_names(row["black_player_name_2"])
+          loser1 = User.find_by_kgs_names(row["white_player_name"])
+          loser2 = User.find_by_kgs_names(row["white_player_name_2"])
+        else
+          winner1 = User.find_by_kgs_names(row["white_player_name"])
+          winner2 = User.find_by_kgs_names(row["black_player_name_2"])
+          loser1 = User.find_by_kgs_names(row["black_player_name"])
+          loser2 = User.find_by_kgs_names(row["white_player_name_2"])
+        end
+        
+        if winner1.points.nil?
+          winner1.points = 0
+        end
+        if winner1.month_points.nil?
+          winner1.month_points = 0
+        end
+        if loser1.points.nil?
+          loser1.points = 0
+        end
+        if loser1.month_points.nil?
+          loser1.month_points = 0
+        end
+        if winner2.points.nil?
+          winner2.points = 0
+        end
+        if winner2.month_points.nil?
+          winner2.month_points = 0
+        end
+        if loser2.points.nil?
+          loser2.points = 0
+        end
+        if loser2.month_points.nil?
+          loser2.month_points = 0
+        end
+        
+        winner1.points += @rules.points_per_win * matchnum
+        winner1.month_points += @rules.points_per_win * matchnum
+        loser1.points += @rules.points_per_loss * matchnum
+        loser1.month_points += @rules.points_per_loss * matchnum
+        winner2.points += @rules.points_per_win * matchnum
+        winner2.month_points += @rules.points_per_win * matchnum
+        loser2.points += @rules.points_per_loss * matchnum
+        loser2.month_points += @rules.points_per_loss * matchnum
+
+        puts "#{winner1.kgs_names} +#{@rules.points_per_win * matchnum}"
+        puts "#{loser1.kgs_names} +#{@rules.points_per_loss * matchnum}"
+        
+        puts "#{winner2.kgs_names} +#{@rules.points_per_win * matchnum}"
+        puts "#{loser2.kgs_names} +#{@rules.points_per_loss * matchnum}"
+
+        winner1.save
+        loser1.save
+        winner2.save
+        loser2.save
+        
+      elsif valid_game == true 
         if row["result_boolean"] == false
           winner = User.find_by_kgs_names(row["black_player_name"])
           loser = User.find_by_kgs_names(row["white_player_name"])
@@ -513,8 +647,12 @@ module ApplicationHelper
       puts "Game added to db as #{valid_game}: #{invalid_reason.join(", ").capitalize}"
       rowadd = Match.new(:url => row["url"], :white_player_name => row["white_player_name"],
                                              :white_player_rank => row["white_player_rank"],
+                                             :white_player_name_2 => row["white_player_name_2"],
+                                             :white_player_rank_2 => row["white_player_rank_2"],
                                              :black_player_name => row["black_player_name"], 
-                                             :black_player_rank => row["black_player_rank"], 
+                                             :black_player_rank => row["black_player_rank"],
+                                             :black_player_name_2 => row["black_player_name_2"],
+                                             :black_player_rank_2 => row["black_player_rank_2"],
                                              :result_boolean => row["result_boolean"], 
                                              :score => row["score"], 
                                              :board_size => row["board_size"], 
