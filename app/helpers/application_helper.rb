@@ -101,6 +101,8 @@ module ApplicationHelper
       
       white_black_array = columns[i].content.scan(myRegex)
       
+      i += 1
+      
       if (not white_black_array[0]) or (not white_black_array[1]) or (not white_black_array[2])
         puts "Game discarded due to closed or banned KGS account"
         return false
@@ -154,6 +156,8 @@ module ApplicationHelper
       
       rank_arrayc = columns[i].content.scan(myRegex)[0]
       rank_arrayd = columns[i].content.scan(myRegex)[1]
+      
+      i += 1
       
       if (not rank_array) or (not rank_arrayb) or (not rank_arrayc) or (not rank_arrayd)
         puts "Game discarded due to closed or banned KGS account"
@@ -236,7 +240,7 @@ module ApplicationHelper
     # Parse board size
     board_size_and_handicap = columns[i].content
     boardArray = columns[i].content.scan(/([0-9]+)/)
-    board_size = Integer(boardArray[0])
+    board_size = Integer(boardArray[0][0])
     i += 1
   
     if boardArray.length() == 3
