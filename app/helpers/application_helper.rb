@@ -115,8 +115,6 @@ module ApplicationHelper
         puts "Game discarded, reviewed by someone else"
         return false
       end
-    
-      i += 1
 
       # Calculate black player name and rank - Note that black will ALWAYS be our reviewer for our purposes
       black_player_name = white_black_array[0][0]
@@ -237,7 +235,7 @@ module ApplicationHelper
 
     # Parse board size
     board_size_and_handicap = columns[i].content
-    boardArray = columns[i].content.scan(/[0-9]+/)
+    boardArray = columns[i].content.scan(/([0-9]+)/)
     board_size = Integer(boardArray[0])
     i += 1
   
@@ -345,7 +343,7 @@ module ApplicationHelper
       if over_time[1] == "Byo-Yomi" # Has Byo-yomi
         ot_split = over_time[0].split('x')
 
-        if not @rules.time_system.split(', ').include? "Byo-Yomi"
+        if not @rules.time_system.split(', ').include? "byo-yomi"
           valid_sgf = false
           invalid_reason << "used byo-yomi overtime"
         elsif (ot_split[0].to_i < @rules.byo_yomi_periods) or (ot_split[1].to_i < @rules.byo_yomi_seconds)
