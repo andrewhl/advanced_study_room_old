@@ -209,15 +209,40 @@ module ApplicationHelper
       
     end
 
+    if (columns[5].content == "Rengo")
+      
+      if (not User.find_by_kgs_names(black_player_name)) and (@rules.division_boolean == true)
+        puts "Game discarded due to non-ASR member"
+        return false 
+      end
+      
+      if (not User.find_by_kgs_names(black_player_name_2)) and (@rules.division_boolean == true)
+        puts "Game discarded due to non-ASR member"
+        return false 
+      end
 
-    if not User.find_by_kgs_names(black_player_name)
-      puts "Game discarded due to non-ASR member"
-      return false 
-    end
+      if (not User.find_by_kgs_names(white_player_name)) and (@rules.division_boolean == true)
+        puts "Game discarded due to non-ASR member"
+        return false 
+      end
+      
+      if (not User.find_by_kgs_names(white_player_name_2)) and (@rules.division_boolean == true)
+        puts "Game discarded due to non-ASR member"
+        return false 
+      end
 
-    if not User.find_by_kgs_names(white_player_name)
-      puts "Game discarded due to non-ASR member"
-      return false 
+    else
+      
+      if (not User.find_by_kgs_names(black_player_name)) and (@rules.division_boolean == true)
+        puts "Game discarded due to non-ASR member"
+        return false 
+      end
+
+      if (not User.find_by_kgs_names(white_player_name)) and (@rules.division_boolean == true)
+        puts "Game discarded due to non-ASR member"
+        return false 
+      end
+      
     end
     
     # Check that all users in a rengo game are in the same division
