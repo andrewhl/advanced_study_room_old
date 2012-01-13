@@ -344,18 +344,18 @@ module ApplicationHelper
       over_time = over_time.split(' ')
       time_system = over_time[1]
       
-      if over_time[1] == "Byo-Yomi" # Has Byo-yomi
+      if (over_time[1] == "byo-yomi") and (@rules.ot_boolean == true) # Has Byo-yomi
         ot_split = over_time[0].split('x')
 
-        if not @rules.time_system.split(', ').include? "byo-yomi"
+        if not @rules.time_system.split(', ').include? "Byo-Yomi"
           valid_sgf = false
           invalid_reason << "used byo-yomi overtime"
         elsif (ot_split[0].to_i < @rules.byo_yomi_periods) or (ot_split[1].to_i < @rules.byo_yomi_seconds)
           valid_sgf = false
-          invalid_reason << "incorrect byo-yomi; expected: #{@rules.byo_yomi_periods}x#{@rules.byo_yomi_seconds}; was: #{overtime_periods}x#{overtime_seconds}"
+          invalid_reason << "incorrect byo-yomi; expected: #{@rules.byo_yomi_periods}x#{@rules.byo_yomi_seconds}; was: #{ot_split[0].to_i}x#{ot_split[1].to_i}"
         end
         
-      elsif over_time[1] == "Canadian"  # Has Canadian
+      elsif (over_time[1] == "Canadian") and (@rules.ot_boolean == true) # Has Canadian
         ot_split = over_time[0].split('/')
         
         if not @rules.time_system.split(', ').include? "Canadian"
@@ -363,13 +363,16 @@ module ApplicationHelper
           invalid_reason << "used Canadian overtime"
         elsif (ot_split[0].to_i < @rules.canadian_stones) or (ot_split[1].to_i < @rules.canadian_time)
           valid_sgf = false
-          invalid_reason << "incorrect canadian time settings; expected: #{@rules.canadian_stones}/#{@rules.canadian_time}; was: #{overtime_periods}/#{overtime_seconds}"
+          invalid_reason << "incorrect canadian time settings; expected: #{@rules.canadian_stones}/#{@rules.canadian_time}; was: #{ot_split[0].to_i}/#{ot_split[1].to_i}"
         end
 
       else                          # Mystery Meat
         ot_split = ["0", "0"]
-        valid_sgf = false
-        invalid_reason << "overtime settings were unidentifiable"
+        
+        if @rules.ot_boolean == true
+          valid_sgf = false
+          invalid_reason << "overtime settings were unidentifiable"
+        end
       end
 
       overtime_periods = ot_split[0].to_i # Parse SGF overtime periods
