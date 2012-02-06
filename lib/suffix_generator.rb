@@ -13,11 +13,11 @@ module SuffixGenerator
       
         # No tens column
         if number_of_branch < 10
-          suffix = roman_ones[number_of_branch.to_s[0].chr]
+          suffix = roman_ones[Integer(number_of_branch.to_s[-1].chr)]
           return suffix
         # Tens column
         else
-          suffix = roman_tens[number_of_branch.to_s[1].chr] + roman_ones[number_of_branch.to_s[0].chr]
+          suffix = roman_tens[Integer(number_of_branch.to_s[0].chr)] + roman_ones[Integer(number_of_branch.to_s[-1].chr)]
           return suffix
         end
 
