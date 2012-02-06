@@ -179,7 +179,7 @@ module ApplicationHelper
       # Calculate second black player name and rank
       black_player_name_2 = rank_arrayd[0]
       black_player_rank_2 = rank_convert(rank_arrayd[1])
-
+      
     else
 
       myRegex =  /(\w+) \[(\?|-|\w+)\??\]/
@@ -209,57 +209,56 @@ module ApplicationHelper
       
     end
 
-    if (columns[5].content == "Rengo")
-      
-      if (not User.find_by_kgs_names(black_player_name)) and (@rules.division_boolean == true)
+    if columns[5].content == "Rengo"
+
+      if not User.find_by_kgs_names(black_player_name)
         puts "Game discarded due to non-ASR member"
         return false 
       end
       
-      if (not User.find_by_kgs_names(black_player_name_2)) and (@rules.division_boolean == true)
+      if not User.find_by_kgs_names(black_player_name_2)
         puts "Game discarded due to non-ASR member"
         return false 
       end
 
-      if (not User.find_by_kgs_names(white_player_name)) and (@rules.division_boolean == true)
+      if not User.find_by_kgs_names(white_player_name)
         puts "Game discarded due to non-ASR member"
         return false 
       end
       
-      if (not User.find_by_kgs_names(white_player_name_2)) and (@rules.division_boolean == true)
+      if not User.find_by_kgs_names(white_player_name_2)
         puts "Game discarded due to non-ASR member"
         return false 
       end
 
     else
       
-      if (not User.find_by_kgs_names(black_player_name)) and (@rules.division_boolean == true)
+      if not User.find_by_kgs_names(black_player_name)
         puts "Game discarded due to non-ASR member"
         return false 
       end
 
-      if (not User.find_by_kgs_names(white_player_name)) and (@rules.division_boolean == true)
+      if not User.find_by_kgs_names(white_player_name)
         puts "Game discarded due to non-ASR member"
         return false 
       end
       
-    end
+    end  
     
     # Check that all users in a rengo game are in the same division
     if (columns[5].content == "Rengo") and (@rules.division_boolean == true)
       rengo_divisions = []
       rengo_divisions << User.find_by_kgs_names(black_player_name).division << User.find_by_kgs_names(black_player_name_2).division << User.find_by_kgs_names(white_player_name).division << User.find_by_kgs_names(white_player_name_2).division
-      
       if rengo_divisions.uniq.length != 1
         puts "Game discarded due to members being in different pools"
         return false
       end
-    end  
-    
+    else 
     # Check both users are in the same division
-    if (not User.find_by_kgs_names(black_player_name).division == User.find_by_kgs_names(white_player_name).division) and (@rules.division_boolean == true)
-      puts "Game discarded due to members being in different pools"
-      return false
+      if (not User.find_by_kgs_names(black_player_name).division == User.find_by_kgs_names(white_player_name).division) and (@rules.division_boolean == true) 
+        puts "Game discarded due to members being in different pools"
+        return false
+      end
     end
 
     # Parse board size
@@ -593,7 +592,7 @@ module ApplicationHelper
           loser1 = User.find_by_kgs_names(row["black_player_name"])
           loser2 = User.find_by_kgs_names(row["white_player_name_2"])
         end
-        
+          
         if winner1.points.nil?
           winner1.points = 0
         end

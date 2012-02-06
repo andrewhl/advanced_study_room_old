@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120110173111) do
+ActiveRecord::Schema.define(:version => 20120131205950) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -46,6 +46,26 @@ ActiveRecord::Schema.define(:version => 20120110173111) do
 
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
+
+  create_table "divisions", :force => true do |t|
+    t.string   "division_name"
+    t.string   "bracket_suffix"
+    t.integer  "bracket_players_min"
+    t.integer  "bracket_players_max"
+    t.integer  "bracket_number"
+    t.integer  "division_players_min"
+    t.integer  "division_players_max"
+    t.float    "min_points_required"
+    t.integer  "min_position_required"
+    t.integer  "min_games_required"
+    t.integer  "min_wins_required"
+    t.integer  "max_losses_required"
+    t.boolean  "immunity_boolean"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "demotion_buffer"
+    t.integer  "promotion_buffer"
+  end
 
   create_table "matches", :force => true do |t|
     t.string   "url"
@@ -121,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20120110173111) do
     t.string   "handicap"
     t.string   "board_size"
     t.boolean  "board_size_boolean"
+    t.integer  "number_of_divisions"
   end
 
   create_table "users", :force => true do |t|

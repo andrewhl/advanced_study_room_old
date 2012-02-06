@@ -47,9 +47,16 @@ class ManageController < ApplicationController
     
     # Set the defaults if no rules have been set.
     if Rules.count == 0
-      @rules = Rules.new(:board_size_boolean => true, :division_boolean => true, :time_system => "Byo-Yomi", :canadian_stones => 25, :canadian_time => 300, :max_games => 2, :points_per_win => 1, :points_per_loss => 0.5, :main_time => 1500, :main_time_boolean => true, :tag_phrase => "ASR League", :board_size => "19", :month => "January", :handicap => "0", :handicap_boolean => false, :ruleset => "Japanese", :ruleset_boolean => true, :komi => 6.5, :komi_boolean => true, :tag_pos => 30, :tag_boolean => true, :ot_boolean => true, :byo_yomi_periods => 5, :byo_yomi_seconds => 25, :rengo => false, :teaching => false, :review => false, :free => true, :rated => true, :demonstration => false, :unfinished => false) 
+      @rules = Rules.new(:number_of_divisions => 4, :board_size_boolean => true, :division_boolean => true, :time_system => "Byo-Yomi", :canadian_stones => 25, :canadian_time => 300, :max_games => 2, :points_per_win => 1, :points_per_loss => 0.5, :main_time => 1500, :main_time_boolean => true, :tag_phrase => "ASR League", :board_size => "19", :month => "January", :handicap => "0", :handicap_boolean => false, :ruleset => "Japanese", :ruleset_boolean => true, :komi => 6.5, :komi_boolean => true, :tag_pos => 30, :tag_boolean => true, :ot_boolean => true, :byo_yomi_periods => 5, :byo_yomi_seconds => 25, :rengo => false, :teaching => false, :review => false, :free => true, :rated => true, :demonstration => false, :unfinished => false) 
       @rules.save
     end
+    
+    if Divisions.count == 0
+      @division_defaults = Divisions.new(:division_name => "Alpha", :bracket_suffix => "Roman Numerals", :bracket_players_min => 5, :bracket_players_max => 25, :bracket_number => 1, :division_players_min => 5, :division_players_max => 25, :min_points_required => 8.0, :min_position_required => 4, :min_games_required => 4, :min_wins_required => 1, :max_losses_required => 10, :immunity_boolean => false, :promotion_buffer => 1, :demotion_buffer => 4)
+      @division_defaults.save
+    end
+    
+    @divisions = Divisions.first
     
     # Handle the rules form.
     if params[:commit]
