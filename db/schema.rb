@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120131205950) do
+ActiveRecord::Schema.define(:version => 20120207184949) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(:version => 20120131205950) do
     t.datetime "updated_at"
     t.integer  "demotion_buffer"
     t.integer  "promotion_buffer"
+    t.integer  "rules_id"
+    t.integer  "division_hierarchy"
   end
 
   create_table "matches", :force => true do |t|

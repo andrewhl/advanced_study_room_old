@@ -79,5 +79,5 @@ table.results td.advance.odd { background-color: #27EA0E; }
 table.results td.advance.even { background-color: #B1F7A8; }
 table.results td.demote.odd { background-color: #FCB737; }
 table.results td.demote.even { background-color: #F9D390; }
-
+table p { margin-bottom: 0px; }
 

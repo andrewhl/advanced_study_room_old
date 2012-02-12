@@ -21,6 +21,9 @@ module SuffixGenerator
           return suffix
         end
 
+      elsif number_of_branch == 100
+        suffix = "C"
+        return suffix
       end
 
     elsif suffix_type == "Alpha"
