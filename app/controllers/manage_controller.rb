@@ -122,7 +122,7 @@ class ManageController < ApplicationController
   def divisions
     
     if Divisions.count == 0 
-      @division = @rule.divisions.create(:division_name => "Alpha",
+      @division = Divisions.create(:division_name => "Alpha",
                                          :bracket_suffix => "I",
                                          :bracket_players_min => 10,
                                          :bracket_players_max => 25,
@@ -142,7 +142,9 @@ class ManageController < ApplicationController
     if params[:commit]
       @new_division = Divisions.new
       @new_division.save
+      render :partial => "viewName"
     end
+    
     @divisions = Divisions.all
     @rule = Rules.last
     @divisions_number = Rules.last.number_of_divisions
