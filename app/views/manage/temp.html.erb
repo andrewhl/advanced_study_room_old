@@ -1,0 +1,17 @@
+<h2>Division Rules</h2>
+
+<%= form_tag('/divisions', :method => "post", :remote => true, :action => "divisions") %>
+<table class="divisions_table">
+	<tr>
+		<th>Options</th>
+		<th>Divisions</th>
+	</tr>
+	<%= render 'division' %>
+	<tr>
+		<td colspan="2"><div style="text-align: center;"><%= submit_tag "Create new division", :class => "submit" %></div></td>
+	</tr>
+</table>
+
+<%= link_to 'Highlight something', :confirm => 'Are you sure?',
+  :method => :divisions, :remote => true %>
+

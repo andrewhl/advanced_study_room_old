@@ -3,8 +3,6 @@ include NameGenerator
 
 class ManageController < ApplicationController
   
-  respond_to :html, :xml, :json
-  
   helper_method :sort_column, :sort_direction
   def index
     params[:sort] ||= "kgs_names"
@@ -15,9 +13,6 @@ class ManageController < ApplicationController
   end
   
   def new
-  end
-  
-  def create
   end
   
   def edit
@@ -139,17 +134,36 @@ class ManageController < ApplicationController
                                          :division_hierarchy => 1)
     end
     
-    if params[:commit]
-      @new_division = Divisions.new
-      @new_division.save
-      render :partial => "viewName"
-    end
+    # if params[:commit]
+    #   @new_division = Divisions.new
+    #   @new_division.save
+    #   render :partial => "division"
+    # end
     
     @divisions = Divisions.all
-    @rule = Rules.last
-    @divisions_number = Rules.last.number_of_divisions
-    @suffix = makeSuffix(@divisions_number, "Roman Numerals")
-    @division_names = createNames(@divisions_number, "Greek")
+    @division = Divisions.new
+    
+    respond_to do |format|
+      format.html
+    end
+    # @rule = Rules.last
+    # @divisions_number = Rules.last.number_of_divisions
+    # @suffix = makeSuffix(@divisions_number, "Roman Numerals")
+    # @division_names = createNames(@divisions_number, "Greek")
+  end
+  
+  def create
+    @division = Divisions.new # (params[:post])
+
+    respond_to do |format|
+      if @division.save
+        format.html { redirect_to(divisions_url,
+                    :notice => 'Division was successfully created.') }
+        format.js
+      else
+        format.html { redirect_to(divisions_url) }
+      end
+    end
   end
   
   def destroy
