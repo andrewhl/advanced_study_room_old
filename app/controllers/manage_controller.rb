@@ -145,6 +145,7 @@ class ManageController < ApplicationController
     
     respond_to do |format|
       format.html
+      format.js
     end
     # @rule = Rules.last
     # @divisions_number = Rules.last.number_of_divisions
