@@ -116,8 +116,8 @@ class ManageController < ApplicationController
   
   def divisions
     
-    if Divisions.count == 0 
-      @division = Divisions.create(:division_name => "Alpha",
+    if Division.count == 0 
+      @division = Division.create(:division_name => "Alpha",
                                          :bracket_suffix => "I",
                                          :bracket_players_min => 10,
                                          :bracket_players_max => 25,
@@ -140,8 +140,8 @@ class ManageController < ApplicationController
     #   render :partial => "division"
     # end
     
-    @divisions = Divisions.all
-    @division = Divisions.new
+    @divisions = Division.all
+    @division = Division.new
     
     respond_to do |format|
       format.html
@@ -153,7 +153,7 @@ class ManageController < ApplicationController
   end
   
   def create
-    @division = Divisions.new # (params[:post])
+    @division = Division.new # (params[:post])
 
     respond_to do |format|
       if @division.save
