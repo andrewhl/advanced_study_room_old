@@ -11,7 +11,7 @@ Asr::Application.routes.draw do
   match '/manage', :to => 'manage#index'
   match '/update', :to => 'manage#update'
   match '/rules', :to => 'manage#rules'
-  match 'divisions', :to => 'manage#divisions'
+  match '/divisions', :to => 'manage#divisions'
   
   match '/contact', :to => 'pages#contact'
   match '/home', :to => 'pages#home'
