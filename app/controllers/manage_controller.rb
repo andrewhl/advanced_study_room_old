@@ -141,7 +141,7 @@ class ManageController < ApplicationController
     # end
     
     @divisions = Division.all
-    @division = Division.new
+    @division = Division.new(params[:post])
     
     respond_to do |format|
       format.html
@@ -167,6 +167,13 @@ class ManageController < ApplicationController
   end
   
   def destroy
+    @division = Division.find(params[:id])
+    @division.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(division_url) }
+      format.js
+    end
   end
   
   private
