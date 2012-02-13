@@ -1,43 +1,6 @@
-	<% @divisions.each do |division| %>
-		<tr class="division_row">
-			<td><p><%= division.division_name %> Division Name:</p>
-			<p><%= text_field_tag('division_name', division.division_name) %></p>
+<%= content_tag_for(:li, division) do %>
+  <%= post.division_name %>
+  (<%= link_to 'Delete', division, :confirm => 'Are you sure?',
+  :method => :delete, :remote => true %>)
+<% end %>
 
-			<p><%= division.division_name %> Bracket Suffix Type:</p>
-			<p><%= select_tag "bracket_suffix", options_for_select(["Alpha", "Roman Numerals"], division.bracket_suffix) %></p>
-
-			<p>Minimum Number of Players Per Bracket:</p>
-			<p><%= number_field_tag('bracket_players_min', division.bracket_players_min, :min => 1) %></p>
-
-			<p>Maximum Number of Players Per Bracket:</p>
-			<p><%= number_field_tag('bracket_players_max', division.bracket_players_max, :min => 1) %></p>
-
-			<p>Number of Brackets:</p>
-			<p><%= number_field_tag('bracket_number', division.bracket_number, :min => 1) %></p>
-
-			<p>Minimum Points Requirement (e.g., to advance):</p>
-			<p><%= number_field_tag('min_points_required', division.min_points_required, :min => 0) %></p>
-
-			<p>Minimum Games Requirement (e.g., to advance):</p>
-			<p><%= number_field_tag('min_games_required', division.min_games_required, :min => 0) %></p>
-
-			<p>Minimum Wins Requirement (e.g., to advance):</p>
-			<p><%= number_field_tag('min_wins_required', division.min_wins_required, :min => 0) %></p>
-
-			<p>Maximum Losses Requirement (e.g., before being removed):</p>
-			<p><%= number_field_tag('max_losses_required', division.max_losses_required, :min => 0) %></p>
-
-			<p>Immunity Boolean (players will not be removed):</p>
-			<p>
-				<% if division.immunity_boolean == true %>
-					<%= radio_button_tag 'immunity_boolean', true, :checked => true %>True<br />
-					<%= radio_button_tag 'immunity_boolean', false %>False
-				<% else %>
-					<%= radio_button_tag 'immunity_boolean', true %>True<br />
-					<%= radio_button_tag 'immunity_boolean', false, :checked => true %>False		
-				<% end %>
-			</p>
-</td>
-			<td><%= division.division_name %></td>
-		</tr>
-	<% end %>
