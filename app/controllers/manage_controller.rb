@@ -141,7 +141,7 @@ class ManageController < ApplicationController
     # end
     
     @divisions = Division.all
-    @division = Division.new(params[:post])
+    @division = Division.new(params[:division])
     
     respond_to do |format|
       format.html

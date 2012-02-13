@@ -1,3 +1,4 @@
 // $("#division_table").html("<%= escape_javascript(render(@divisions))%>");
-
-$('.division_row > tr > p:first').effect('highlight', {}, 3000);
+$('#divisions').prepend('<%= escape_javascript(render(@division)) %>');
+$('#divisions > li:first').effect('highlight', {}, 3000);
+$('#division_form > form')[0].reset();
