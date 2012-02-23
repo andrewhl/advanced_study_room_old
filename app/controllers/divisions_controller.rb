@@ -4,8 +4,8 @@ include NameGenerator
 class DivisionsController < ApplicationController
   def index
     
-    if Divisions.count == 0 
-      @division = Divisions.create(:division_name => "Alpha",
+    if Division.count == 0 
+      @division = Division.create(:division_name => "Alpha",
                                          :bracket_suffix => "I",
                                          :bracket_players_min => 10,
                                          :bracket_players_max => 25,
@@ -22,19 +22,29 @@ class DivisionsController < ApplicationController
                                          :division_hierarchy => 1)
     end
     
-    @divisions = Divisions.all
-    @division = Divisions.new(params[:division])
+    @divisions = Division.all
+    @division = Division.new(params[:division])
     @division.save
     
   end
 
   def create
-    @division = Divisions.new(params[:division]) # (params[:post])
+    @division = Division.new(params[:division]) # (params[:post])
 
     if @division.save
-      render :index, :notice => "Division was successfully created."
+      if request.xhr?
+        render @division
+      else
+        flash[:notice] = "Division added"
+        render :index
+      end
     else
-      render :index, :alert => "Division was not created."
+      if request.xhr?
+        render :status => 403
+      else
+        flash[:error] = "Division could not be added."
+        render :index
+      end
     end
   end
 
@@ -45,7 +55,7 @@ class DivisionsController < ApplicationController
   end
 
   def destroy
-    @division = Divisions.find(params[:id])
+    @division = Division.find(params[:id])
     @division.destroy
     
     render :index
@@ -54,8 +64,8 @@ class DivisionsController < ApplicationController
   
   def divisions
     
-    if Divisions.count == 0 
-      @division = Divisions.create(:division_name => "Alpha",
+    if Division.count == 0 
+      @division = Division.create(:division_name => "Alpha",
                                          :bracket_suffix => "I",
                                          :bracket_players_min => 10,
                                          :bracket_players_max => 25,
@@ -78,8 +88,8 @@ class DivisionsController < ApplicationController
     #   render :partial => "division"
     # end
     
-    @divisions = Divisions.all
-    @division = Divisions.new(params[:division])
+    @divisions = Division.all
+    @division = Division.new(params[:division])
     @division.save
     
     # respond_to do |format|
