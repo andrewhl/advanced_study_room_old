@@ -142,11 +142,12 @@ class ManageController < ApplicationController
     
     @divisions = Division.all
     @division = Division.new(params[:division])
+    @division.save
     
-    respond_to do |format|
-      format.html
-      format.js
-    end
+    # respond_to do |format|
+    #   format.html
+    #   format.js
+    # end
     # @rule = Rules.last
     # @divisions_number = Rules.last.number_of_divisions
     # @suffix = makeSuffix(@divisions_number, "Roman Numerals")
