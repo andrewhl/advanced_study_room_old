@@ -1,4 +1,4 @@
-<%= form_for @division, :remote => true, :html => {:id => "division_form"} do |f| %>
+<%= form_for @division, :remote => true, :method => :post, :html => {:id => "division_form"} do |f| %>
   <div class="field">
     <%= f.text_area :division_name %>
   </div>
