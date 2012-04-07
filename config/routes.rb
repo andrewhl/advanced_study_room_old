@@ -28,6 +28,8 @@ Asr::Application.routes.draw do
   match '/gamma_iv', :to => 'pages#gamma_iv'
   match '/delta', :to => 'pages#delta'
   
+  match '/division_form', :to => 'divisions#division_form'
+  
   root :to => "pages#home"
 
   # The priority is based upon order of creation:

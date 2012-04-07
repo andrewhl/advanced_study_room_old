@@ -1,5 +1,4 @@
 <%= content_tag_for(:li, @division) do %>
   <%= @division.division_name %>
-  (<%= link_to 'Delete', @division, :confirm => 'Are you sure?',
-  :method => :delete, :remote => true %>)
-<% end %>
+  (<%= link_to 'Delete', @division, :method => :delete, :class => 'delete_link' %>)
+<% end %>	

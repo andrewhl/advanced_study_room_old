@@ -1,9 +1,9 @@
-<%= form_for @division, :remote => true, :method => :post, :html => {:id => "division_form"} do |f| %>
+<%= form_for @division, :html => {:id => "division_form"} do |f| %>
   <div class="field">
-    <%= f.text_area :division_name %>
+    <%= f.text_field :division_name %>
   </div>
   <div class="actions">
     <%= f.submit %>
   </div>
-	<span class="ajax_message">&nbsp;</span>
+  <span class="ajax_message">
 <% end %>

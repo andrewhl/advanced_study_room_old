@@ -1,12 +1,18 @@
-<p>Test</p>
+<p>Divisions</p>
 
 <div id="divisions">
+	<% @divisions.each do |division| %>
+		<% @division = division %>
+		<%= render 'division' %>
+	<% end %>
 </div>
 
 <div>
   <%= render 'form' %>
 </div>
 
-<ul id="divisions_stuff">
-  <%= render 'division' %>
-</ul>
+<!-- <script type="text/javascript">
+$('#division_form').submit(function() {
+             $(this).unbind('submit').submit();
+});
+</script> -->
