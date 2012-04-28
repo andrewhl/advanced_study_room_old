@@ -83,7 +83,6 @@ class KGSValidator < ActiveModel::Validator
 
 end
 
-
 class User < ActiveRecord::Base
   
   validates_presence_of :username
@@ -100,4 +99,3 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :username, :kgs_names
 
 end
-

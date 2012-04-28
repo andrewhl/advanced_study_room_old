@@ -1,11 +1,20 @@
 <p>Divisions</p>
 
-<div id="divisions">
-	<% @divisions.each do |division| %>
-		<% @division = division %>
-		<%= render 'division' %>
-	<% end %>
-</div>
+<table>
+	<tr>
+		<th>Divisions</th>
+		<th>Settings</th>
+	</tr>
+	
+		<% @divisions.each do |division| %>
+		<tr>
+			<% @division = division %>
+			<%= render 'division' %>
+		</tr>
+		<% end %>
+	
+</table>
+
 
 <div>
   <%= render 'form' %>

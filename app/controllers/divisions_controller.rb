@@ -8,10 +8,20 @@ class DivisionsController < ApplicationController
     @division = Division.new
     
   end
+  
+  def update
+    @division = Division.find(params[:id])
+    @division.update_attributes(params[:division])
+    redirect_to :action => 'index'
+    flash[:success] = "Division updated"
+  end
 
   def create
     @division = Division.create(params[:division])
-    redirect_to :action => 'index'
+    if params[:submit]
+      redirect_to :action => 'index'
+    end
+    # render :index
   end
 
   def destroy
