@@ -1,14 +1,22 @@
+
 <%= content_tag_for(:td, @division) do %>
   <%= @division.division_name %>
+
   (<%= link_to 'Delete', @division, :method => :delete, :class => 'delete_link' %>)
 <% end %>	
 
 <td>
 	<%= form_for @division, :html => {:id => "division_" + "#{@division.id}"} do |f| %>
+	<div style="clear: both;">Division name: <%= @division.division_name %></div>
+	<div class="field">
+		<%= f.label "Division name: " %>
+	    <%= f.text_field :division_name %>
+	</div>
+	<hr>
 	<div style="clear: both;">Bracket suffix: <%= @division.bracket_suffix.presence || "None" %></div>
 	<div class="field">
-		<%= f.label :bracket_suffix %>
-	    <%= f.text_field :bracket_suffix %>
+		<%= f.label "Bracket suffix: " %>
+		<%= select_tag "division[bracket_suffix]", options_for_select(["Alpha", "Roman Numerals"], @division.bracket_suffix) %>
 	</div>
 	<hr>
 	<div style="clear: both;">Bracket players minimum: <%= @division.bracket_players_min.presence || "None" %></div>

@@ -4,6 +4,10 @@ include NameGenerator
 class DivisionsController < ApplicationController
 
   def index
+    if !user_signed_in?
+      redirect_to :root
+      flash[:notice] = "Sorry, you must be signed in to view that page."
+    end
     @divisions = Division.all
     @division = Division.new
     
@@ -13,7 +17,7 @@ class DivisionsController < ApplicationController
     @division = Division.find(params[:id])
     @division.update_attributes(params[:division])
     redirect_to :action => 'index'
-    flash[:success] = "Division updated"
+    flash[:success] = "#{@division.division_name} division updated"
   end
 
   def create

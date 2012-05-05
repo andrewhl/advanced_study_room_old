@@ -1,4 +1,4 @@
-<p>Divisions</p>
+<h2>Division Management</h2>
 
 <table>
 	<tr>
@@ -9,7 +9,11 @@
 		<% @divisions.each do |division| %>
 		<tr>
 			<% @division = division %>
-			<%= render 'division' %>
+			<% if !Bracket.find_by_division_id(division.id).nil? %>
+				<%= render 'division' %>
+			<% else %>
+				<p>No brackets have been created yet.</p>
+			<% end %>
 		</tr>
 		<% end %>
 	

@@ -87,6 +87,8 @@ class User < ActiveRecord::Base
   
   validates_presence_of :username
   validates_presence_of :kgs_names
+  belongs_to :division
+  belongs_to :bracket
 
   validates_with KGSValidator, :on => :create
   
