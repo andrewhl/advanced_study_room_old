@@ -10,6 +10,8 @@ gem 'squeel'
 gem 'gravatar_image_tag'
 gem 'whenever', :require => false
 gem 'mechanize'
+gem 'therubyracer'
+gem 'less-rails-bootstrap'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'

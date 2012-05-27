@@ -1,0 +1,22 @@
+
+
+  <% division.brackets.each do |b| %>
+	<p>Bracket name: <%= b.name %></p>
+	(<%= link_to 'Delete', b, :method => :delete, :class => 'delete_link' %>)
+  <% end %>
+
+  
+
+
+	<%= form_for bracket, :html => {:id => "bracket" + "#{bracket.id}"} do |f| %>
+	<hr>
+	  <div class="actions">
+		<% puts @bracket.inspect %>
+	    <%= f.submit :update %>
+	  </div>
+	  <span class="ajax_message">
+	<% end %>
+
+
+
+

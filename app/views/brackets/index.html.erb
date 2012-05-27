@@ -1,0 +1,37 @@
+<h2>Bracket Management</h2>
+
+<table>
+	<tr>
+		<th>Division</th>
+		<th>Brackets</th>
+		<th>Settings</th>
+	</tr>
+	
+		<% @divisions.each do |division| %>
+		<tr>
+			<td><%= division.division_name %></td>
+			
+		
+			<td>
+				<p>Division #: <%= division.id %></p>
+			<% if !Bracket.find_by_division_id(division.id).nil? %>
+				<%= render :partial => 'bracket', :locals => { :bracket => @bracket, :division => division } %>
+			<% else %>
+				<p>No brackets have been created yet.</p>
+
+				<%= render :partial => 'new', :locals => { :division_id => division.id } %>
+			<% end %>
+			</td>
+			<td>
+			</td>
+
+		</tr>
+		<% end %>
+	
+</table>
+
+<!-- <script type="text/javascript">
+$('#division_form').submit(function() {
+             $(this).unbind('submit').submit();
+});
+</script> -->

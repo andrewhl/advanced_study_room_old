@@ -10,7 +10,10 @@ class DivisionsController < ApplicationController
     end
     @divisions = Division.all
     @division = Division.new
-    
+  end
+  
+  def edit
+    @division = Division.find(params[:id])
   end
   
   def update
@@ -22,8 +25,9 @@ class DivisionsController < ApplicationController
 
   def create
     @division = Division.create(params[:division])
-    if params[:submit]
-      redirect_to :action => 'index'
+    flash[:success] = "#{@division.division_name} created"
+    if params[:commit]
+      redirect_to :action => "index"
     end
     # render :index
   end
@@ -31,6 +35,7 @@ class DivisionsController < ApplicationController
   def destroy
     @division = Division.find(params[:id])
     @division.destroy
+    flash[:success] = "#{@division.division_name} successfully destroyed"
     
     respond_to do |format|  
       format.html { redirect_to :action => 'index' }  
@@ -39,11 +44,15 @@ class DivisionsController < ApplicationController
     
   end
   
-  def division_form
-    @division = Division.new(params[:division])
-    @division.save
-    
-    render :partial => "division"
+  def show
+    @division = Division.find params[:id]
   end
+  
+  # def division_form
+  #   @division = Division.new(params[:division])
+  #   @division.save
+  #   
+  #   render :partial => "division"
+  # end
   
 end

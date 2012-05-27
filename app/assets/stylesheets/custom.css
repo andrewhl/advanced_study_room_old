@@ -1,31 +1,11 @@
 body {
-	margin-left: auto;
-	margin-right: auto;
-	width: 960px;
-	background-color: #E6E6E6;
-	padding-bottom: 20px;
+  padding-top: 60px;
+  padding-bottom: 40px;
 }
-
-header {
-  padding-top: 20px;
+.sidebar-nav {
+  padding: 9px 0;
 }
-
-.container {
-	
-	border: 1px solid silver;
-	-webkit-border-radius: 10px; /* Saf3-4, iOS 1-3.2, Android <e;1.6 */
-     -moz-border-radius: 10px; /* FF1-3.6 */
-          border-radius: 10px; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */
-	padding: 15px;
-	margin-top: 15px;
-	background-color: white;
-}
-header nav { float: right; }
-nav ul { 
-	list-style-type: none;
-	display: inline-block;
-}
-nav ul li { float: left; margin-right: 15px; }
+h1 { font-size: 0.8em; }
 div.select { float: left; }
 select.kgs_names { height: 400px; width: 80px; font-size: 12px; }
 select.division { clear: both; display: block; }

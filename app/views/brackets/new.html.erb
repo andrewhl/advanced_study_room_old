@@ -1,0 +1,12 @@
+<%= form_for @bracket, :html => {:id => "bracket_create_form"} do |f| %>
+  <div class="field">
+    <p>Bracket name: <%= f.text_field :name %></p>
+	<p>Min Players: <%= f.text_field :min_players %></p>
+	
+	<%= f.hidden_field :division_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit :create %>
+  </div>
+  <span class="ajax_message">
+<% end %>

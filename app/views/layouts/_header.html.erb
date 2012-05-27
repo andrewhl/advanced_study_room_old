@@ -1,22 +1,68 @@
-<header>
 
- <div class="prepend-10">
-  <nav class="round">
-    <ul>
-		<li><%= link_to "Home", root_path %></li>
-		<% if user_signed_in? %>
-			<li><%= link_to "My Home", user_path(current_user.kgs_names) %></li>
-			<li><%= link_to "Divisions", divisions_path %></li>
-			<li><%= link_to "Rules", rules_path %></li>
-		<% end %>
-		<li><%= link_to "Users", users_path %></li>
-		<li><%= link_to "Contact", contact_path %></li>
-		<li><%= link_to "About", about_path %></li>
-		<li><%= link_to "League", league_path %></li>
-		<li><%= link_to "Results", results_path %></li>
-		<li><%= link_to "Prizes", prizes_path %></li>
-		<li><%= link_to "News", news_path %></li>
-    </ul>
-  </nav>
-</div>
-</header>
+	<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <%= link_to "Advanced Study Room", root_path, :class => "brand" %>
+        <div class="btn-group pull-right">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="icon-user"></i><% if user_signed_in? %><%= current_user.kgs_names %>
+				<% else %>
+					Sign in
+				<% end %>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+			<% if user_signed_in? %>
+            <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+            <li class="divider"></li>
+			<li><%= link_to "My Profile", user_path(current_user.kgs_names) %></li>
+			<% else %>
+            <li><%= link_to "sign in", new_user_session_path %></li>
+			<% end %>
+          </ul>
+        </div>
+
+        <div class="nav-collapse">
+          <ul class="nav nav-pills">
+			<% if user_signed_in? %>
+				<li><%= link_to "My Profile", user_path(current_user.kgs_names) %></li>
+
+			
+			<li class="dropdown" id="menu1">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">Admin Stuff
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><%= link_to "Divisions", divisions_path %></li>
+					<li><%= link_to "Brackets", brackets_path %></li>
+					<li><%= link_to "Rules", rules_path %></li>
+				</ul>
+			</li>
+			<% end %>
+			<li class="dropdown" id="menu2">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#menu2">League Stuff
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><%= link_to "League", league_path %></li>
+					<li><%= link_to "Results", results_path %></li>
+					<li><%= link_to "Prizes", prizes_path %></li>
+					<li><%= link_to "News", news_path %></li>
+				</ul>
+			</li>
+			<li><%= link_to "Users", users_path %></li>
+			<li><%= link_to "Contact", contact_path %></li>
+			<li><%= link_to "About", about_path %></li>
+			<li></li>
+			
+
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>

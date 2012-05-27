@@ -3,7 +3,10 @@ Asr::Application.routes.draw do
   ActiveAdmin.routes(self)
   devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users
-  resources :pages, :users, :admin, :manage, :divisions
+  resources :pages, :users, :admin, :manage, :brackets
+  resources :divisions do
+    resources :brackets
+  end
   
   match '/manage', :to => 'manage#index'
   match '/update', :to => 'manage#update'
