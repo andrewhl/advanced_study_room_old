@@ -7,103 +7,136 @@
 
 <td>
 	<%= form_for @division, :html => {:id => "division_" + "#{@division.id}"} do |f| %>
-	<div style="clear: both;">Division name: <%= @division.division_name %></div>
-	<div class="field">
-		<%= f.label "Division name: " %>
-	    <%= f.text_field :division_name %>
-	</div>
-	<hr>
-	<div style="clear: both;">Bracket suffix: <%= @division.bracket_suffix.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Bracket suffix: " %>
-		<%= select_tag "division[bracket_suffix]", options_for_select(["Alpha", "Roman Numerals"], @division.bracket_suffix) %>
-	</div>
-	<hr>
-	<div style="clear: both;">Bracket players minimum: <%= @division.bracket_players_min.presence || "None" %></div>
-	<div class="field">
-		<%= f.label :bracket_players_min %>
-	    <%= f.number_field :bracket_players_min %>
-	</div>
-	<hr>
-	<div style="clear: both;">Bracket players maximum: <%= @division.bracket_players_max.presence || "None" %></div>
-	<div class="field">
-		<%= f.label :bracket_players_max %>
-	    <%= f.number_field :bracket_players_max %>
-	</div>
-	<hr>
-	<div style="clear: both;">Bracket number: <%= @division.bracket_number.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Number of brackets: " %>
-	    <%= f.number_field :bracket_number %>
-	</div>
-	<hr>
-	<div style="clear: both;">Division players minimum: <%= @division.division_players_min.presence || "None" %></div>
-	<div class="field">
-		<%= f.label :division_players_min %>
-	    <%= f.number_field :division_players_min %>
-	</div>
-	<hr>
-	<div style="clear: both;">Division players maximum: <%= @division.division_players_max.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Maximum number of players in division: " %>
-	    <%= f.number_field :division_players_max %>
-	</div>
-	<hr>
-	<div style="clear: both;">Minimum points required: <%= @division.min_points_required.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Minimum points required: " %>
-	    <%= f.number_field :min_points_required %>
-	</div>
-	<hr>
-	<div style="clear: both;">Minimum position required: <%= @division.min_position_required.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Minimum position required to advance: " %>
-	    <%= f.number_field :min_position_required %>
-	</div>
-	<hr>
-	<div style="clear: both;">Minimum games required: <%= @division.min_games_required.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Minimum number of games required to advance: " %>
-	    <%= f.number_field :min_games_required %>
-	</div>
-	
-	<hr>
-	<div style="clear: both;">Minimum wins required: <%= @division.min_wins_required.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Minimum number of wins required to advance: " %>
-	    <%= f.number_field :min_wins_required %>
-	</div>
-	<hr>
-	<div style="clear: both;">Maximum losses required: <%= @division.max_losses_required.presence || "Not set" %></div>
-	<div class="field">
-		<%= f.label "Maximum number of losses permitted before demotion: " %>
-	    <%= f.number_field :max_losses_required %>
-	</div>
-	<hr>
-	<div style="clear: both;">Immunity boolean: <%= @division.immunity_boolean.presence || "False" %></div>
-	<div class="field">
-    	<%= radio_button "division", "immunity_boolean", true %>True <br />
-		<%= radio_button "division", "immunity_boolean", false %>False
-  	</div>
-	<hr>
-	<div style="clear: both;">Demotion buffer: <%= @division.demotion_buffer.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Demotion buffer: " %>
-	    <%= f.number_field :demotion_buffer %>
-	</div>
-	<hr>
-	<div style="clear: both;">Promotion buffer: <%= @division.promotion_buffer.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Promotion buffer: " %>
-	    <%= f.number_field :promotion_buffer %>
-	</div>
-	<hr>
-	<div style="clear: both;">Division hierarchy: <%= @division.division_hierarchy.presence || "None" %></div>
-	<div class="field">
-		<%= f.label "Division hierarchy: " %>
-	    <%= f.number_field :division_hierarchy %>
-	</div>
-	<hr>
+	<div class="container">
+		<div class="row-fluid">
+		  <div class="span4">
+		  	<div style="clear: both;">Division name: <%= @division.division_name %></div>
+				<div class="field">
+					<%= f.label "Division name: " %>
+				  <%= f.text_field :division_name %>
+				</div>
+		  </div><!-- /.span4 -->
+		  <div class="span4">
+				<div style="clear: both;">Bracket suffix: <%= @division.bracket_suffix.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Bracket suffix: " %>
+					<%= select_tag "division[bracket_suffix]", options_for_select(["Alpha", "Roman Numerals"], @division.bracket_suffix) %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Bracket players minimum: <%= @division.bracket_players_min.presence || "None" %></div>
+				<div class="field">
+					<%= f.label :bracket_players_min %>
+				  <%= f.number_field :bracket_players_min %>
+				</div>
+			</div><!-- /.span4 -->
+		</div><!-- /.row-fluid -->
+		<div class="row-fluid">
+			<div class="span4">
+				<div style="clear: both;">Bracket players maximum: <%= @division.bracket_players_max.presence || "None" %></div>
+				<div class="field">
+					<%= f.label :bracket_players_max %>
+				  <%= f.number_field :bracket_players_max %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Bracket number: <%= @division.bracket_number.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Number of brackets: " %>
+			    <%= f.number_field :bracket_number %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Division players minimum: <%= @division.division_players_min.presence || "None" %></div>
+				<div class="field">
+					<%= f.label :division_players_min %>
+			    <%= f.number_field :division_players_min %>
+				</div>
+			</div><!-- /.span4 -->
+		</div><!-- /.row-fluid -->
+		
+		<div class="row-fluid">
+			<div class="span4">
+				<div style="clear: both;">Division players maximum: <%= @division.division_players_max.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Maximum number of players in division: " %>
+			    <%= f.number_field :division_players_max %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Minimum points required: <%= @division.min_points_required.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Minimum points required: " %>
+			    <%= f.number_field :min_points_required %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Minimum position required: <%= @division.min_position_required.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Minimum position required to advance: " %>
+			    <%= f.number_field :min_position_required %>
+				</div>
+			</div><!-- /.span4 -->
+		</div><!-- /.row-fluid -->
+		
+		<div class="row-fluid">
+			<div class="span4">
+				<div style="clear: both;">Minimum games required: <%= @division.min_games_required.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Minimum number of games required to advance: " %>
+			    <%= f.number_field :min_games_required %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Minimum wins required: <%= @division.min_wins_required.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Minimum number of wins required to advance: " %>
+			    <%= f.number_field :min_wins_required %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Maximum losses required: <%= @division.max_losses_required.presence || "Not set" %></div>
+				<div class="field">
+					<%= f.label "Maximum number of losses permitted before demotion: " %>
+			    <%= f.number_field :max_losses_required %>
+				</div>
+			</div><!-- /.span4 -->
+		</div><!-- /.row-fluid -->
+		
+		<div class="row-fluid">
+			<div class="span4">
+				<div style="clear: both;">Immunity boolean: <%= @division.immunity_boolean.presence || "False" %></div>
+				<div class="field">
+		    	<%= radio_button "division", "immunity_boolean", true %>True <br />
+					<%= radio_button "division", "immunity_boolean", false %>False
+			  	</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Demotion buffer: <%= @division.demotion_buffer.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Demotion buffer: " %>
+			    <%= f.number_field :demotion_buffer %>
+				</div>
+			</div><!-- /.span4 -->
+			<div class="span4">
+				<div style="clear: both;">Promotion buffer: <%= @division.promotion_buffer.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Promotion buffer: " %>
+			    <%= f.number_field :promotion_buffer %>
+				</div>
+			</div><!-- /.span4 -->
+		</div><!-- /.row-fluid -->
+		
+		<div class="row-fluid">
+			<div class="span4 offset8">
+				<div style="clear: both;">Division hierarchy: <%= @division.division_hierarchy.presence || "None" %></div>
+				<div class="field">
+					<%= f.label "Division hierarchy: " %>
+			    <%= f.number_field :division_hierarchy %>
+				</div>
+			</div><!-- /.span4 -->
+		</div><!-- /.row-fluid -->
+
 	  <div class="actions">
 	    <%= f.submit :update %>
 	  </div>

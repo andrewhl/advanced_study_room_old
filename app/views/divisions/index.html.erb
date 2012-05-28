@@ -1,11 +1,13 @@
-<h2>Division Management</h2>
+<%= provide(:title, "Division Management") %>
 
-<table>
+<table class="table table-striped">
+	<thead>
 	<tr>
 		<th>Divisions</th>
 		<th>Settings</th>
 	</tr>
-	
+	</thead>
+	<tbody>
 		<% @divisions.each do |division| %>
 		<tr>
 			<% @division = division %>
@@ -13,7 +15,7 @@
 
 		</tr>
 		<% end %>
-	
+	</tbody>
 </table>
 
 

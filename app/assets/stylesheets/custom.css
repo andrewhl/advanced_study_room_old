@@ -5,7 +5,8 @@ body {
 .sidebar-nav {
   padding: 9px 0;
 }
-h1 { font-size: 0.8em; }
+.hero-unit { padding: 15px; }
+.hero-unit h1 { font-size: 2em; }
 div.select { float: left; }
 select.kgs_names { height: 400px; width: 80px; font-size: 12px; }
 select.division { clear: both; display: block; }
