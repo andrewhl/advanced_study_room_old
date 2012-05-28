@@ -18,10 +18,11 @@
 				<p>Division #: <%= division.id %></p>
 			<% if !Bracket.find_by_division_id(division.id).nil? %>
 				<%= render :partial => 'bracket', :locals => { :bracket => @bracket, :division => division } %>
+				<%= render :partial => 'new', :locals => { :division => division } %>
 			<% else %>
 				<p>No brackets have been created yet.</p>
 
-				<%= render :partial => 'new', :locals => { :division_id => division.id } %>
+				<%= render :partial => 'new', :locals => { :division => division } %>
 			<% end %>
 			</td>
 			<td>

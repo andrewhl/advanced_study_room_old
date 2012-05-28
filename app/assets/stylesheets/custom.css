@@ -63,10 +63,10 @@ table.results td.demote.even { background-color: #F9D390; }
 table p { margin-bottom: 0px; }
 
 .success {
-    background: none repeat scroll 0 0 #E6EFC2;
-    border-color: #C6D880;
+    background: none repeat scroll 0 0 #DFF0D8;
+    border-color: #D6E9C6;
     clear: both;
-    color: #264409;
+    color: #468847;
     margin: 0 auto;
     text-align: center;
 }

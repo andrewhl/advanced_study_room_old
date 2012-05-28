@@ -1,8 +1,6 @@
-<%= form_for @bracket, :url => division_brackets_path(division_id), :html => {:id => "bracket_create_form"} do |f| %>
+<%= form_for @bracket, :url => division_brackets_path(division), :html => {:id => "bracket_create_form"} do |f| %>
   <div class="field">
     <%= f.text_field :name %>
-	<%= f.hidden_field :division_id %>
-	<p>Bracket.division_id: <%= division_id %></p>
   </div>
   <div class="actions">
     <%= f.submit :create %>

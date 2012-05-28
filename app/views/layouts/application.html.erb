@@ -7,7 +7,7 @@
   <%= csrf_meta_tags %>
 
 </head>
-<body>
+<body class="<%= yield(:css_class) %>">
    	
 
 	<%= render 'layouts/header' %>
@@ -46,10 +46,8 @@
 
 			
           </div>
-
-					<% flash.each do |key, value| %>
-					  <%= content_tag(:div, value, :class => "alert alert-#{key}") %>
-					<% end %>
+					<%= render :partial => "shared/flash_messages", :locals => {:flash => flash} %>
+					
 					<div class="row-fluid">
 						<%= yield %>
           

@@ -12,6 +12,17 @@ module ApplicationHelper
   def sub_title
     "#{@title}"
   end
+  
+  def twitterized_type(type)
+    case type
+      when :alert
+        "warning"
+      when :notice
+        "info"
+      else
+        type.to_s
+    end
+  end
       
   def sortable(column, title = nil)
     title ||= column.titleize

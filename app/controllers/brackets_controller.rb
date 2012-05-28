@@ -26,9 +26,12 @@ class BracketsController < ApplicationController
     
     @division = Division.find(params[:division_id])
     @bracket = Bracket.create(params[:bracket])
+    @bracket.division_id = params[:division_id]
+    @bracket.save
+    puts params.inspect
     flash[:success] = "#{@bracket.name} created"
     if params[:commit]
-      redirect_to @division
+      redirect_to brackets_path
     end
     # render :index
   end
