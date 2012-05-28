@@ -1,12 +1,14 @@
 <%= provide(:title, "Bracket Management") %>
 
-<table>
+<table class="table table-striped">
+	<thead>
 	<tr>
 		<th>Division</th>
 		<th>Brackets</th>
 		<th>Settings</th>
 	</tr>
-	
+	</thead>
+	<tbody>
 		<% @divisions.each do |division| %>
 		<tr>
 			<td><%= division.division_name %></td>
@@ -27,6 +29,7 @@
 
 		</tr>
 		<% end %>
+	</tbody>
 	
 </table>
 
