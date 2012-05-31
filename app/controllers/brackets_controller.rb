@@ -2,9 +2,10 @@ include SuffixGenerator
 include NameGenerator
 
 class BracketsController < ApplicationController
+  before_filter :find_division, :only => [:new, :create]
+  before_filter :find_bracket, :only => [:show, :destroy]
 
   def new
-    @division = Division.find(params[:division_id])
     @bracket = Bracket.new :division_id => params[:division_id] # @division.brackets.build
     # @bracket = @division.brackets.build
   end
@@ -24,7 +25,6 @@ class BracketsController < ApplicationController
   
   def create
     
-    @division = Division.find(params[:division_id])
     @bracket = Bracket.create(params[:bracket])
     @bracket.division_id = params[:division_id]
     @bracket.save
@@ -37,7 +37,6 @@ class BracketsController < ApplicationController
   end
   
   def destroy
-    @bracket = Bracket.find(params[:id])
     @bracket.destroy
     flash[:success] = "#{@bracket.name} successfully removed"
     
@@ -47,5 +46,18 @@ class BracketsController < ApplicationController
     end
     
   end
+  
+  def show
+    
+  end
+  
+  protected
+    def find_division
+      @division = Division.find(params[:division_id])
+    end
+    
+    def find_bracket
+      @bracket = Bracket.find(params[:id])
+    end
   
 end

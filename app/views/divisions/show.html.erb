@@ -1,2 +1,5 @@
-<%= render @division.brackets %>
-<%= link_to "New Bracket", new_division_bracket_path(@division) %>
+<%= provide(:title, @division.division_name) %>
+
+<% @division.brackets.each do |bracket| %>
+	<p><%= bracket.name %></p>
+<% end %>

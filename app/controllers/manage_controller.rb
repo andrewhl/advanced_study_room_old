@@ -20,7 +20,16 @@ class ManageController < ApplicationController
   
   def update
     # To do: create an array and fill it with all the divisions, and then drop that into a query that iterates through each division in the array
-    @unassigned = User.where("division is NULL OR division = 'Waiting List'")
+    @divisions = Division.all
+    @bracket_names = []
+    @divisions.each do |division|
+      division.brackets.each do |bracket|
+        @bracket_names << bracket.name
+      end
+    end
+    @unassigned = User.where("bracket_id is NULL OR division = 'Waiting List'")
+    
+    
     @alpha = User.where(:division => "Alpha")
     @betaI = User.where(:division => "Beta I")
     @betaII = User.where(:division => "Beta II")
@@ -31,13 +40,13 @@ class ManageController < ApplicationController
     @delta = User.where(:division => "Delta")
     @user = User.all
     if params[:kgs_names] != nil
-      new_division = params[:division]
+      new_bracket = params[:bracket]
       kgs_names = params[:kgs_names]
     
       for x in kgs_names
         user = User.where(:kgs_names => x)
         user.each do |y|
-          y.division = new_division
+          y.bracket = new_bracket
           y.save
         end
       end

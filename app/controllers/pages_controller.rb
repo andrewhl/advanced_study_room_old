@@ -19,10 +19,10 @@ class PagesController < ApplicationController
   def results    
     # Default value for displaying division
     
-    params[:division] ||= "Alpha"
-    
-    @division = User.where(:division => params[:division]).order("kgs_names ASC")
-    @division_count = User.where(:division => params[:division]).count
+    # params[:bracket] ||= "Alpha I"
+    @divisions = Division.all
+    # @bracket = Bracket.where(:name => params[:bracket]).order("kgs_names ASC")
+    # @bracket_count = @bracket.users.count
     
     # Default values for the page sorting.
     params[:sort] ||= "points"
@@ -32,14 +32,14 @@ class PagesController < ApplicationController
     # If you didn't want to hardcode the values, you could rewrite this to do a dynamic check to see if the column name exists in the model.
     # But currently it's hardcoded for convenience.
     if params[:sort] == ("username" or "points")
-      big_division = User.where(:division => params[:division]).order(sort_column + ' ' + sort_direction)
+      big_bracket = User.where(:bracket => params[:bracket]).order(sort_column + ' ' + sort_direction)
     else
-      big_division = User.where(:division => params[:division])
+      big_bracket = User.where(:bracket => params[:bracket])
     end
 
     # We're gonna loop through all the users now, and put the information we want into @deltaArr so we can access it on the page
-    @big_division = []
-    big_division.each do |player|
+    @big_bracket = []
+    big_bracket.each do |player|
       
       # Calculates all our dynamic shit
       white_wins = Match.where("white_player_name=? AND result_boolean=? AND valid_game=?", player.kgs_names, true, true).length
@@ -49,7 +49,7 @@ class PagesController < ApplicationController
       losses = total_games - wins
 
       # Puts all our shit into @big_division
-      @big_division << [player.kgs_names, player.points, total_games, wins, losses]
+      @big_bracket << [player.kgs_names, player.points, total_games, wins, losses]
     end
 
     # A big statment checking for hardcoded column names. No way around this, unless you use numbers
@@ -79,7 +79,10 @@ class PagesController < ApplicationController
 
     # Other misc shit
     @title = "Results"
-    divisions = ["Alpha", "Beta I", "Beta II", "Gamma I", "Gamma II", "Gamma III", "Gamma IV", "Delta"]
+    divisions = []
+    @divisions.each do |division|
+      divisions << division.division_name
+    end
     @division_players = User.where(:division => divisions)
         
   end

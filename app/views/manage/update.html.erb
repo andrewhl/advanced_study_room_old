@@ -1,11 +1,31 @@
+<%= provide(:title, "Assign Users") %>
+
 <%= form_tag('/update', :method => "post") %>
-<div class="span-24">
-	<div class="span-6">
-	<h3>Unassigned</h3>
-<%= select_tag "kgs_names", options_from_collection_for_select(@unassigned, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
-	</div>
+<div class="container">
+	<div class="row-fluid">
+		<div class="span3">
+				<h3>Unassigned</h3>
+			<%= select_tag "kgs_names", options_from_collection_for_select(@unassigned, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+		</div><!-- /.span3 -->				
+		<div class="span3">
+			<%= select_tag "bracket", options_for_select(["Waiting List", @bracket_names]), :class => "bracket" %>
+		</div><!-- /.span3 -->
+	</div><!-- /.row-fluid -->
+			
+			<div class="row-fluid">
+				<% @divisions.each do |division| %>
+					<% division.brackets.each do |bracket| %>
+						<div class="span3">
+							<h3><%= bracket.name %></h3>
+							<%= select_tag "kgs_names", options_from_collection_for_select(bracket, "kgs_names", "kgs_names"), :multiple => true, :class => "kgs_names" %>
+						</div><!-- /.span3 -->
+					<% end %>
+				<% end %>
+			</div><!-- /.row-fluid -->
+			
+		</div><!-- /.container -->
 	<div class="span-6 last">
-		<%= select_tag "division", options_for_select(["Waiting List", "Alpha", "Beta I", "Beta II", "Gamma I", "Gamma II", "Gamma III", "Gamma IV", "Delta"]), :class => "division" %>
+		
 	</div>
 </div>
 <div class="span-24">
